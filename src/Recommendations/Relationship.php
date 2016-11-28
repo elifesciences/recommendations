@@ -3,7 +3,7 @@
 namespace eLife\Recommendations;
 
 /**
- * Relationship
+ * Relationship.
  *
  * Example:
  * Podcast episodes that contain articles.
@@ -21,5 +21,4 @@ interface Relationship
      * Returns the target of the relationship to be placed on the owning side.
      */
     public function getSubject() : RuleModel;
-
 }

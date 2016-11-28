@@ -5,7 +5,7 @@ namespace eLife\Recommendations;
 interface Rule
 {
     /**
-     * Resolve Relations
+     * Resolve Relations.
      *
      * Given a model (type + id) from SQS, calculate which entities need relations added
      * for the specific domain rule.
@@ -17,15 +17,15 @@ interface Rule
     public function resolveRelations(RuleModel $input) : array;
 
     /**
-     * Upsert relations
+     * Upsert relations.
      *
      * Given an `input` and an `on` it will persist this relationship for retrieval
      * in recommendation results.
      */
-    public function upsert(RuleModel $input, RuleModel $on);
+    public function upsert(Relationship $relationship);
 
     /**
-     * Prune relations
+     * Prune relations.
      *
      * Given an `input` this will go through the persistence layer and remove old non-existent relation ships
      * for this given `input`. Its possible some logic will be shared with resolve relations, but this is up
