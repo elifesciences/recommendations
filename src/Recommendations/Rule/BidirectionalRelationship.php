@@ -10,9 +10,8 @@ use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
 use eLife\Sdk\Article;
 
-class BidirectionalRelationship implements Rule
+final class BidirectionalRelationship implements Rule
 {
-
     private $sdk;
     private $type;
 
@@ -24,7 +23,7 @@ class BidirectionalRelationship implements Rule
         $this->type = $type;
     }
 
-    protected function getArticle(string $id) : Article
+    protected function getArticle(string $id): Article
     {
         return new Article($this->sdk->articles()->get($id)->wait(true));
     }
@@ -40,7 +39,7 @@ class BidirectionalRelationship implements Rule
      * given a podcast containing articles it would return an array where the
      * podcast is every `input` and each article is the `output`.
      */
-    public function resolveRelations(RuleModel $input) : array
+    public function resolveRelations(RuleModel $input): array
     {
         $article = $this->getArticle($input->getId());
         $related = $article->getRelatedArticles();
@@ -51,8 +50,9 @@ class BidirectionalRelationship implements Rule
                 return $article->getType() === $type;
             })
             ->map(function (ArticleVersion $article) use ($input) {
-                return new ManyToManyRelationship($input, new RuleModel($article->getId(), $article->getType()));
-            })->toArray();
+                return new ManyToManyRelationship($input, new RuleModel($article->getId(), $article->getType(), $article->getPublishedDate()));
+            })
+            ->toArray();
     }
 
     /**
