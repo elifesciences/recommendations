@@ -1,6 +1,6 @@
 <?php
 /**
- * Rule processing.
+ * The one Rule to ring them all.
  *
  * This class will take in a set of rules, run through them and return a
  * list of RuleModels.
@@ -10,13 +10,42 @@
 
 namespace eLife\Recommendations\Process;
 
-use Assert\Assertion;
 use eLife\Recommendations\Rule;
+use eLife\Recommendations\RuleModel;
+use MongoDB\Driver\Exception\LogicException;
 
 final class Rules
 {
-    public function __construct(array $rules)
+    private $rules;
+
+    public function __construct(Rule ...$rules)
     {
-        Assertion::allIsInstanceOf(Rule::class, $rules);
+        $this->rules = $rules;
+    }
+
+    public function import(RuleModel $model, bool $upsert = true, bool $prune = false)
+    {
+        foreach ($this->rules as $rule) {
+            $relations = $rule->resolveRelations($model);
+            if ($upsert) {
+                $rule->upsert($relations);
+                if ($prune) {
+                    $rule->prune($model, $relations);
+                }
+            } elseif ($prune) {
+                throw new LogicException('You must upsert first in order to prune.');
+            }
+        }
+    }
+
+    public function getRecommendations(RuleModel $model)
+    {
+        $next = [];
+        foreach ($this->rules as $rule) {
+            $prev = $next;
+            $next = $rule->addRelations($model, $prev);
+        }
+
+        return $next;
     }
 }

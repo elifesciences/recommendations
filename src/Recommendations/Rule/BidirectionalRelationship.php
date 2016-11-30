@@ -67,18 +67,6 @@ final class BidirectionalRelationship implements Rule
     }
 
     /**
-     * Prune relations.
-     *
-     * Given an `input` this will go through the persistence layer and remove old non-existent relation ships
-     * for this given `input`. Its possible some logic will be shared with resolve relations, but this is up
-     * to each implementation.
-     */
-    public function prune(RuleModel $input)
-    {
-        // TODO: Implement prune() method.
-    }
-
-    /**
      * Add relations for model to list.
      *
      * This will be what is used when constructing the recommendations. Given a model (id, type) we return an array
@@ -88,5 +76,19 @@ final class BidirectionalRelationship implements Rule
     public function addRelations(RuleModel $model, array $list): array
     {
         // TODO: Implement addRelations() method.
+    }
+
+    /**
+     * Prune relations.
+     *
+     * Given an `input` this will go through the persistence layer and remove old non-existent relation ships
+     * for this given `input`. Its possible some logic will be shared with resolve relations, but this is up
+     * to each implementation.
+     *
+     * Optionally gets passed the relationships returned from resolve relationships
+     */
+    public function prune(RuleModel $input, array $relationships = null)
+    {
+        // TODO: Implement prune() method.
     }
 }

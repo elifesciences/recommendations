@@ -30,8 +30,10 @@ interface Rule
      * Given an `input` this will go through the persistence layer and remove old non-existent relation ships
      * for this given `input`. Its possible some logic will be shared with resolve relations, but this is up
      * to each implementation.
+     *
+     * Optionally gets passed the relationships returned from resolve relationships
      */
-    public function prune(RuleModel $input);
+    public function prune(RuleModel $input, array $relationships = null);
 
     /**
      * Add relations for model to list.
