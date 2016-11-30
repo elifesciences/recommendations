@@ -2,12 +2,28 @@
 
 namespace eLife\Recommendations\Rule;
 
+use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Collection;
 use eLife\Recommendations\Relationship;
+use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
 
 final class CollectionContents implements Rule
 {
+    private $sdk;
+
+    public function __construct(ApiSdk $sdk)
+    {
+        $this->sdk = $sdk;
+    }
+
+    public function getCollection(string $id): Collection
+    {
+        return $this->sdk->collections()->get($id);
+    }
+
     /**
      * Resolve Relations.
      *
@@ -20,7 +36,21 @@ final class CollectionContents implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
-        // TODO: Implement resolveRelations() method.
+        if ($input->getType() !== 'collection') {
+            return [];
+        }
+        $collection = $this->getCollection($input->getId());
+
+        return $collection->getContent()
+            ->filter(function ($item) {
+                // @todo change to just `Article` once SDK updated.
+                return $item instanceof ArticleVersion;
+            })
+            ->map(function (ArticleVersion $article) use ($input) {
+                // Add collection TO article.
+                return new ManyToManyRelationship(new RuleModel($article->getId(), $article->getType(), $article->getPublishedDate()), $input);
+            })
+            ->toArray();
     }
 
     /**
