@@ -2,6 +2,7 @@
 
 namespace eLife\Recommendations\Rule;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Recommendations\Relationship;
@@ -63,7 +64,14 @@ final class BidirectionalRelationship implements Rule
      */
     public function upsert(Relationship $relationship)
     {
-        // TODO: Implement upsert() method.
+        // Add this
+        $subject = $relationship->getSubject();
+        // To this.
+        $on = $relationship->getOn();
+        // So when I ask for...
+        $result = $this->addRelations($on, []);
+        // I get...
+        $result = [$subject, /* ... */];
     }
 
     /**
@@ -87,6 +95,10 @@ final class BidirectionalRelationship implements Rule
      */
     public function addRelations(RuleModel $model, array $list): array
     {
-        // TODO: Implement addRelations() method.
+        $type = $model->getType(); // Convert this into database name
+        $id = $model->getId(); // Query that database with the type + ID
+        // Get the results and make some new RuleModels
+        $list[] = new RuleModel('12445', 'research-article', new DateTimeImmutable());
+        return $list;
     }
 }
