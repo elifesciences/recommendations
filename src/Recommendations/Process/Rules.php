@@ -36,6 +36,8 @@ final class Rules
                 }
             } elseif ($prune) {
                 throw new LogicException('You must upsert first in order to prune.');
+            } else {
+                return $relations;
             }
         }
     }

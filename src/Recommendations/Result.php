@@ -10,4 +10,5 @@ use JMS\Serializer\Annotation as Serializer;
  */
 interface Result
 {
+    public function getType() : string;
 }

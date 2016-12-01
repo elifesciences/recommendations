@@ -20,7 +20,7 @@ final class PodcastEpisodeContents implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
-        // TODO: Implement resolveRelations() method.
+        return [];
     }
 
     /**
