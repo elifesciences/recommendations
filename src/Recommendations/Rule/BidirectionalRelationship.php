@@ -71,7 +71,7 @@ final class BidirectionalRelationship implements Rule
         // So when I ask for...
         $result = $this->addRelations($on, []);
         // I get...
-        $result = [$subject, /* ... */];
+        $result = [$subject/* ... */];
     }
 
     /**
@@ -87,6 +87,7 @@ final class BidirectionalRelationship implements Rule
         $id = $model->getId(); // Query that database with the type + ID
         // Get the results and make some new RuleModels
         $list[] = new RuleModel('12445', 'research-article', new DateTimeImmutable());
+
         return $list;
     }
 
