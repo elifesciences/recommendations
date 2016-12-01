@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
 
-final class PodcastEpisode implements Snippet, Response
+final class PodcastEpisode implements Snippet, Result
 {
     use SnippetFields;
     use Subjects;

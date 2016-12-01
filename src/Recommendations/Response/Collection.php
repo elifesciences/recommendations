@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
 
-final class Collection implements Snippet, Response
+final class Collection implements Snippet, Result
 {
     use SnippetFields;
     use Subjects;
