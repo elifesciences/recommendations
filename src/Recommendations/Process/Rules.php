@@ -28,7 +28,9 @@ final class Rules
         foreach ($this->rules as $rule) {
             $relations = $rule->resolveRelations($model);
             if ($upsert) {
-                $rule->upsert($relations);
+                foreach ($relations as $relation) {
+                    $rule->upsert($relation);
+                }
                 if ($prune) {
                     $rule->prune($model, $relations);
                 }
