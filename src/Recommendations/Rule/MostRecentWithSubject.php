@@ -2,12 +2,26 @@
 
 namespace eLife\Recommendations\Rule;
 
+use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Recommendations\Relationship;
+use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
 
 final class MostRecentWithSubject implements Rule
 {
+    use GetSdk;
+
+    private $sdk;
+
+    public function __construct(
+        ApiSdk $sdk
+    ) {
+        $this->sdk = $sdk;
+    }
+
     /**
      * Resolve Relations.
      *
@@ -20,7 +34,15 @@ final class MostRecentWithSubject implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
-        // TODO: Implement resolveRelations() method.
+        /** @var ArticleVersion $model Added to stop IDE complaining @todo create hasSubjects interface. */
+        $model = $this->getFromSdk($input->getType(), $input->getId());
+
+        return $model
+            ->getSubjects()
+            ->map(function (Subject $subject) use ($input) {
+                return new ManyToManyRelationship($input, new RuleModel($subject->getId(), 'subject', null, true));
+            })
+            ->toArray();
     }
 
     /**

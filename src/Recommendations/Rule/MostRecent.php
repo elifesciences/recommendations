@@ -17,10 +17,12 @@ final class MostRecent implements Rule
      * Return is an array of tuples containing an input and an on where `input` is the model to be
      * added and `on` is the target node. In plain english given a podcast containing articles it would
      * return an array where the podcast is every `input` and each article is the `output`.
+     *
+     * @note this particular example does not add any relations!
      */
     public function resolveRelations(RuleModel $input): array
     {
-        // TODO: Implement resolveRelations() method.
+        return [];
     }
 
     /**
