@@ -30,6 +30,11 @@ final class Hydration
         return $model;
     }
 
+    /**
+     * @param array $rules
+     *
+     * @return array
+     */
     public function hydrateAll(array $rules) : array
     {
         Assertion::allIsInstanceOf(RuleModel::class, $rules);
