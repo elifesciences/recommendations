@@ -2,7 +2,6 @@
 
 namespace eLife\Recommendations\Response;
 
-use Assert\Assertion;
 use DateTime;
 use eLife\Api\Response\Common\Image;
 use eLife\Api\Response\Common\Published;
@@ -18,6 +17,7 @@ use eLife\ApiSdk\Model\Subject;
 use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
+use Throwable;
 
 final class PodcastEpisode implements Snippet, Result
 {
@@ -48,15 +48,12 @@ final class PodcastEpisode implements Snippet, Result
     private function __construct(
         int $number,
         string $title,
-        string $impactStatement,
+        string $impactStatement = null,
         array $subjects,
         DateTime $published,
         ImageResponse $image,
-        array $sources
+        array $sources = null
     ) {
-        Assertion::allIsInstanceOf(SubjectResponse::class, $subjects);
-        Assertion::allIsInstanceOf(SourcesResponse::class, $sources);
-
         $this->sources = $sources;
         $this->number = $number;
         $this->title = $title;
@@ -68,15 +65,23 @@ final class PodcastEpisode implements Snippet, Result
 
     public static function fromModel(PodcastEpisodeModel $episode)
     {
+        try {
+            $banner = $episode->getBanner();
+            $thumbnail = $episode->getThumbnail();
+        } catch (Throwable $e) {
+            $banner = $banner ?? null;
+            $thumbnail = $thumbnail ?? null;
+        }
+
         return new static (
             $episode->getNumber(),
             $episode->getTitle(),
             $episode->getImpactStatement(),
-            array_map(function (Subject $subject) {
+            $episode->getSubjects()->map(function (Subject $subject) {
                 return SubjectResponse::fromModel($subject);
-            }, $episode->getSubjects()),
+            })->toArray(),
             DateTime::createFromFormat('Y-m-d\TH:i:sP', $episode->getPublishedDate()->format('Y-m-d\TH:i:sP')),
-            ImageResponse::fromModels($episode->getBanner(), $episode->getThumbnail()),
+            ImageResponse::fromModels($banner, $thumbnail),
             array_map(function (PodcastEpisodeSource $source) {
                 return SourcesResponse::fromModel($source);
             }, $episode->getSources())

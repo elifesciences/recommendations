@@ -14,8 +14,8 @@ trait ArticleFromModel
         string $id,
         string $title,
         string $type,
-        string $impactStatement,
-        string $titlePrefix,
+        string $impactStatement = null,
+        string $titlePrefix = null,
         string $authorLine,
         DateTime $statusDate,
         int $volume,
@@ -23,9 +23,9 @@ trait ArticleFromModel
         int $issue,
         string $elocationId,
         string $doi,
-        string $pdf,
+        string $pdf = null,
         array $subjects,
-        ImageResponse $image
+        ImageResponse $image = null
     ) {
         $this->title = $title;
         $this->titlePrefix = $titlePrefix;
@@ -53,16 +53,16 @@ trait ArticleFromModel
             $article instanceof ArticleVoR ? $article->getImpactStatement() : null,
             $article->getTitlePrefix(),
             $article->getAuthorLine(),
-            $article->getStatusDate(),
+            DateTime::createFromFormat('Y-m-d\TH:i:sP', $article->getPublishedDate()->format('Y-m-d\TH:i:sP')),
             $article->getVolume(),
             $article->getVersion(),
             $article->getIssue(),
             $article->getElocationId(),
             $article->getDoi(),
             $article->getPdf(),
-            array_map(function (Subject $subject) {
+            $article->getSubjects()->map(function (Subject $subject) {
                 return SubjectResponse::fromModel($subject);
-            }, $article->getSubjects()),
+            })->toArray(),
             $article instanceof ArticleVoR ? ImageResponse::fromModels($article->getBanner(), $article->getThumbnail()) : null
         );
     }

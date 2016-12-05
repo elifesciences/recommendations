@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Search\Api\Response;
+namespace eLife\Api\Response;
 
 interface ImageVariant
 {

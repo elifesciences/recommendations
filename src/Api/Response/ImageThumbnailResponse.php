@@ -1,8 +1,9 @@
 <?php
 
-namespace eLife\Search\Api\Response;
+namespace eLife\Api\Response;
 
 use Assert\Assertion;
+use eLife\ApiSdk\Model\Image as ImageModel;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
 
@@ -57,5 +58,20 @@ final class ImageThumbnailResponse implements ImageVariant
                 140 => $images[140],
             ],
         ];
+    }
+
+    public static function fromModel(ImageModel $image)
+    {
+        $images = [];
+        foreach ($image->getSizes() as $size) {
+            foreach ($size->getImages() as $res => $url) {
+                $images[$res] = $url;
+            }
+        }
+
+        return new static(
+            $image->getAltText(),
+            $images
+        );
     }
 }
