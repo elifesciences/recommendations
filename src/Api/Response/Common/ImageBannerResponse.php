@@ -3,6 +3,7 @@
 namespace eLife\Api\Response;
 
 use Assert\Assertion;
+use eLife\ApiSdk\Model\Image;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
 
@@ -53,5 +54,18 @@ final class ImageBannerResponse implements ImageVariant
                 1800 => $images[1800],
             ],
         ];
+    }
+
+    public static function fromModel(Image $image)
+    {
+        $images = [];
+        foreach ($image->getSizes() as $size) {
+            $images = array_merge($images, $size->getImages());
+        }
+
+        return new static(
+            $image->getAltText(),
+            $images
+        );
     }
 }

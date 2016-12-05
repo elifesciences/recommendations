@@ -26,7 +26,7 @@ final class Hydration
     private function hydrateOne(RuleModel $model)
     {
         // @todo implementation.
-        // Returns API SDK model.
+        // Returns one of our request models.
         return $model;
     }
 

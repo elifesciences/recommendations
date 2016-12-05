@@ -2,6 +2,7 @@
 
 namespace eLife\Api\Response;
 
+use eLife\ApiSdk\Model\Image;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
 
@@ -25,5 +26,19 @@ final class ImageResponse
         $this->thumbnail = $this->thumbnail ? $this->thumbnail->https() : null;
 
         return $this;
+    }
+
+    private function __construct(ImageBannerResponse $banner = null, ImageThumbnailResponse $thumbnail = null)
+    {
+        $this->banner = $banner;
+        $this->thumbnail = $thumbnail;
+    }
+
+    public static function fromModels(Image $banner = null, Image $thumbnail = null)
+    {
+        return new static(
+            $banner ? ImageBannerResponse::fromModel($banner) : null,
+            $thumbnail ? ImageThumbnailResponse::fromModel($thumbnail) : null
+        );
     }
 }

@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Type;
 trait Image
 {
     /**
-     * @Type(eLife\Search\Api\Response\ImageResponse::class)
+     * @Type(eLife\Api\Response\ImageResponse::class)
      * @Since(version="1")
      */
     public $image;

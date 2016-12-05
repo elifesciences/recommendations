@@ -39,4 +39,22 @@ final class ExternalArticle implements Article, Result
      * @Since(version="1")
      */
     public $uri;
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function __construct(string $articleTitle, string $authorLine, string $uri, Journal $journal)
+    {
+        $this->articleTitle = $articleTitle;
+        $this->authorLine = $authorLine;
+        $this->uri = $uri;
+        $this->journal = $journal;
+    }
+
+    public static function fromModel()
+    {
+        // @todo once we have this built in the API SDK.
+    }
 }
