@@ -40,7 +40,7 @@ final class Kernel implements MinimalKernel
     const ROOT = __DIR__.'/../..';
 
     public static $routes = [
-        '/' => 'indexAction',
+        '/recommendations/{type}/{id}' => 'indexAction',
     ];
 
     private $app;
