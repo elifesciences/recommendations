@@ -11,7 +11,7 @@ final class PoaArticleTest extends PHPUnit_Framework_TestCase
 {
     public function test_collection_can_be_build_from_model()
     {
-        $builder = Builder::for (ArticlePoA::class);
+        $builder = Builder::for(ArticlePoA::class);
         $PoaArticle = $builder->create(ArticlePoA::class)->__invoke();
         PoaArticle::fromModel($PoaArticle);
     }
