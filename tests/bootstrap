@@ -20,6 +20,7 @@ namespace {
     require_once __DIR__ . '/../vendor/elife/api-sdk/test/Serializer/InterviewNormalizerTest.php';
     require_once __DIR__ . '/../vendor/elife/api-sdk/test/Serializer/LabsExperimentNormalizerTest.php';
     require_once __DIR__ . '/../vendor/elife/api-sdk/test/Serializer/SubjectNormalizerTest.php';
+    require_once __DIR__ . '/../vendor/elife/api-sdk/test/Serializer/PodcastEpisodeNormalizerTest.php';
 
     if (!class_exists('GearmanClient')) {
         class GearmanClient

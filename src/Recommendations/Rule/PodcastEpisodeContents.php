@@ -2,12 +2,28 @@
 
 namespace eLife\Recommendations\Rule;
 
+use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Recommendations\Relationship;
+use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
 
-final class PodcastEpisodeContents implements Rule
+class PodcastEpisodeContents implements Rule
 {
+    use GetSdk;
+
+    /**
+     * @var ApiSdk
+     */
+    private $sdk;
+
+    public function __construct(ApiSdk $sdk)
+    {
+        $this->sdk = $sdk;
+    }
+
     /**
      * Resolve Relations.
      *
@@ -20,7 +36,21 @@ final class PodcastEpisodeContents implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
-        return [];
+        /** @var PodcastEpisode $model Added to stop IDE complaining @todo create hasSubjects interface. */
+        $model = $this->getFromSdk($input->getType(), $input->getId());
+        $relations = [];
+        foreach ($model->getChapters() as $chapter) {
+            $content = $chapter->getContent();
+            $relations[] = $content->filter(function ($content) {
+                // Only article for now in this rule.
+                return $content instanceof ArticleVersion;
+            })->map(function (ArticleVersion $article) use ($input) {
+                // Link this podcast TO the related item.
+                return new ManyToManyRelationship(new RuleModel($article->getId(), $article->getType(), $article->getPublishedDate()), $input);
+            })->toArray();
+        }
+
+        return array_reduce($relations, 'array_merge', []);
     }
 
     /**
