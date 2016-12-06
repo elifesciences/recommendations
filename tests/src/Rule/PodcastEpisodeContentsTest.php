@@ -23,6 +23,7 @@ class PodcastEpisodeContentsTest extends PHPUnit_Framework_TestCase
             ->willReturn($podcastEpisode);
 
         $relations = $mock->resolveRelations(new RuleModel('1', 'article'));
+        $this->assertNotEmpty($relations);
         foreach ($relations as $relation) {
             /* @var ManyToManyRelationship $relation */
             $this->assertInstanceOf(ManyToManyRelationship::class, $relation);
