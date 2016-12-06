@@ -74,6 +74,12 @@ trait Article
      * @Type("string")
      * @Since(version="1")
      */
+    public $stage;
+
+    /**
+     * @Type("string")
+     * @Since(version="1")
+     */
     public $pdf;
 
     /**

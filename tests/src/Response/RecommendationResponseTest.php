@@ -2,7 +2,10 @@
 
 namespace eLife\Tests\Response;
 
+use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use eLife\ApiSdk\Model\ArticlePoA;
+use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Collection as CollectionModel;
 use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\ImageSize;
@@ -15,7 +18,6 @@ use JMS\Serializer\EventDispatcher\EventDispatcher;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
 use PHPUnit_Framework_TestCase;
-use Psr;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Component\HttpFoundation\Response;
 use test\eLife\ApiSdk\Builder;
@@ -59,6 +61,7 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
 
     public function validate(Response $response)
     {
+        /* @noinspection PhpParamsInspection */
         $this->validator->validate($this->psr7Bridge->createResponse($response));
     }
 
@@ -87,8 +90,18 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
             )
             ->__invoke();
 
+        $PoaArticle = $builder
+            ->create(ArticlePoA::class)
+            ->withPublished(new DateTimeImmutable())
+            ->__invoke();
+
+        $VoRArticle = $builder
+            ->create(ArticleVoR::class)
+            ->withPublished(new DateTimeImmutable())
+            ->__invoke();
+
         // Build recommendations.
-        $recommendations = RecommendationsResponse::fromModels([$collection, $podcast], 1);
+        $recommendations = RecommendationsResponse::fromModels([$collection, $podcast, $PoaArticle, $VoRArticle], 1);
         // Should not throw.
         $json = $this->serializer->serialize($recommendations, 'json', $this->context);
 

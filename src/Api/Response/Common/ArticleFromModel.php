@@ -17,12 +17,14 @@ trait ArticleFromModel
         string $impactStatement = null,
         string $titlePrefix = null,
         string $authorLine,
+        DateTime $published,
         DateTime $statusDate,
         int $volume,
         int $version,
         int $issue,
         string $elocationId,
         string $doi,
+        string $stage = null,
         string $pdf = null,
         array $subjects,
         ImageResponse $image = null
@@ -39,9 +41,11 @@ trait ArticleFromModel
         $this->issue = $issue;
         $this->elocationId = $elocationId;
         $this->doi = $doi;
+        $this->stage = $stage;
         $this->pdf = $pdf;
         $this->subjects = $subjects;
         $this->image = $image;
+        $this->published = $published;
     }
 
     public static function fromModel(ArticleVersion $article)
@@ -54,11 +58,13 @@ trait ArticleFromModel
             $article->getTitlePrefix(),
             $article->getAuthorLine(),
             DateTime::createFromFormat('Y-m-d\TH:i:sP', $article->getPublishedDate()->format('Y-m-d\TH:i:sP')),
+            DateTime::createFromFormat('Y-m-d\TH:i:sP', $article->getStatusDate()->format('Y-m-d\TH:i:sP')),
             $article->getVolume(),
             $article->getVersion(),
             $article->getIssue(),
             $article->getElocationId(),
             $article->getDoi(),
+            'NOT REAL, WHERE IS STAGE SET?',
             $article->getPdf(),
             $article->getSubjects()->map(function (Subject $subject) {
                 return SubjectResponse::fromModel($subject);
