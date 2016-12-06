@@ -11,6 +11,7 @@ use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Throwable;
 
 final class DefaultController
 {
@@ -33,7 +34,11 @@ final class DefaultController
         if ($contentType === 'application/json') {
             $mediaType = new MediaType(self::MEDIA_TYPE, self::CURRENT_VERSION);
         } else {
-            $mediaType = MediaType::fromString($contentType);
+            try {
+                $mediaType = MediaType::fromString($contentType);
+            } catch (Throwable $e) {
+                throw new NotAcceptableHttpException('Not acceptable');
+            }
             if ($mediaType !== self::MEDIA_TYPE || $mediaType->getVersion() > self::MAX_VERSION) {
                 throw new NotAcceptableHttpException('Not acceptable');
             }
