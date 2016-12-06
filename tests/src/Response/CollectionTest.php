@@ -35,13 +35,15 @@ final class CollectionTest extends PHPUnit_Framework_TestCase
             ->withImpactStatement('Tropical disease impact statement')
             ->withPublishedDate($publishedDate = new DateTimeImmutable())
             ->withPromiseOfBanner(
-                $image = new Image('alt', [new ImageSize('2:1', [
-                    900 => 'https://placehold.it/900x450',
-                    1800 => 'https://placehold.it/900x450',
-                ])])
+                new Image('alt', [
+                    new ImageSize('2:1', [
+                        900 => 'https://placehold.it/900x450',
+                        1800 => 'https://placehold.it/900x450',
+                    ]),
+                ])
             )
             ->withThumbnail(
-                $image = new Image('', [
+                new Image('alt', [
                     new ImageSize('16:9', [
                         250 => 'https://placehold.it/250x140',
                         500 => 'https://placehold.it/500x280',

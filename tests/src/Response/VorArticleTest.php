@@ -12,6 +12,7 @@ final class VorArticleTest extends PHPUnit_Framework_TestCase
     public function test_collection_can_be_build_from_model()
     {
         $builder = Builder::for(ArticleVoR::class);
+        /** @var ArticleVoR $vorArticle */
         $vorArticle = $builder->create(ArticleVoR::class)->__invoke();
         VorArticle::fromModel($vorArticle);
     }
