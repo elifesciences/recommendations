@@ -9,7 +9,7 @@ use test\eLife\ApiSdk\Builder;
 
 final class VorArticleTest extends PHPUnit_Framework_TestCase
 {
-    public function test_collection_can_be_build_from_model()
+    public function test_article_can_be_build_from_model()
     {
         $builder = Builder::for(ArticleVoR::class);
         /** @var ArticleVoR $vorArticle */

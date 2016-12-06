@@ -22,7 +22,7 @@ final class SourcesResponse
     public function __construct(string $mediaType, string $uri)
     {
         $this->mediaType = $mediaType;
-        $this->uri = $uri;
+        $this->uri = str_replace('http://', 'https://', $uri);
     }
 
     public static function fromModel(PodcastEpisodeSource $source)

@@ -51,7 +51,7 @@ final class PodcastEpisode implements Snippet, Result
         string $impactStatement = null,
         array $subjects,
         DateTime $published,
-        ImageResponse $image,
+        ImageResponse $image = null,
         array $sources = null
     ) {
         $this->sources = $sources;
@@ -67,9 +67,12 @@ final class PodcastEpisode implements Snippet, Result
     {
         try {
             $banner = $episode->getBanner();
-            $thumbnail = $episode->getThumbnail();
         } catch (Throwable $e) {
             $banner = $banner ?? null;
+        }
+        try {
+            $thumbnail = $episode->getThumbnail();
+        } catch (Throwable $e) {
             $thumbnail = $thumbnail ?? null;
         }
 

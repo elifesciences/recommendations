@@ -16,7 +16,7 @@ use JMS\Serializer\Annotation\Type;
 final class RecommendationsResponse
 {
     /**
-     * @Type("array<eLife\Recommendations\Result>")
+     * @Type("array<eLife\Recommendations\Response\Result>")
      * @Since(version="1")
      */
     public $items = [];

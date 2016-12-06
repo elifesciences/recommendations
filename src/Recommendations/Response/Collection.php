@@ -46,6 +46,7 @@ final class Collection implements Snippet, Result
     private function __construct(
         string $id,
         string $title,
+        string $impactStatement,
         DateTime $updated,
         ImageResponse $image,
         $selectedCurator,
@@ -53,6 +54,7 @@ final class Collection implements Snippet, Result
     ) {
         $this->id = $id;
         $this->title = $title;
+        $this->impactStatement = $impactStatement;
         $this->updated = $updated;
         $this->image = $image;
         $this->selectedCurator = $selectedCurator;
@@ -64,6 +66,7 @@ final class Collection implements Snippet, Result
         return new static(
             $collection->getId(),
             $collection->getTitle(),
+            $collection->getImpactStatement(),
             DateTime::createFromFormat('Y-m-d\TH:i:sP', $collection->getPublishedDate()->format('Y-m-d\TH:i:sP')),
             ImageResponse::fromModels($collection->getBanner(), $collection->getThumbnail()),
             SelectedCuratorResponse::fromModel($collection->getSelectedCurator(), $collection->getCurators()->count()),

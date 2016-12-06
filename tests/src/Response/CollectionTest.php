@@ -21,6 +21,7 @@ final class CollectionTest extends PHPUnit_Framework_TestCase
         /** @var CollectionModel $model */
         $model = $builder
             ->create(CollectionModel::class)
+            ->withImpactStatement('Tropical disease impact statement')
             ->__invoke();
 
         Collection::fromModel($model);

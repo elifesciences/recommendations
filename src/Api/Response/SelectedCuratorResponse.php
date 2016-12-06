@@ -17,10 +17,17 @@ final class SelectedCuratorResponse extends NamedResponse
      */
     public $etAl = false;
 
-    public function __construct(string $id, array $name, ImageResponse $image, bool $etAl = false)
+    /**
+     * @Type("string")
+     * @Since(version="1")
+     */
+    public $type;
+
+    public function __construct(string $id, array $name, string $type, ImageResponse $image = null, bool $etAl = false)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->type = $type;
         $this->image = $image;
         $this->etAl = $etAl;
     }
@@ -33,6 +40,7 @@ final class SelectedCuratorResponse extends NamedResponse
                 'preferred' => $person->getDetails()->getPreferredName(),
                 'index' => $person->getDetails()->getIndexName(),
             ],
+            $person->getType(),
             ImageResponse::fromModels(null, $person->getImage()),
             $count > 1
         );

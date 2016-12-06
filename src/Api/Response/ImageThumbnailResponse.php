@@ -45,7 +45,7 @@ final class ImageThumbnailResponse implements ImageVariant
 
     public function __construct(string $alt, array $images)
     {
-        Assertion::allInArray(array_flip($images), [250, 500, 70, 140], 'You need to provide all available sizes for this image');
+        Assertion::allInArray(array_flip($images), [250, 500, 70, 140], 'You need to provide all available sizes for this image ['.implode(array_diff(array_flip($images), [250, 500, 70, 140])).']');
 
         $this->alt = $alt;
         $this->sizes = [
@@ -63,9 +63,13 @@ final class ImageThumbnailResponse implements ImageVariant
     public static function fromModel(ImageModel $image)
     {
         $images = [];
-        foreach ($image->getSizes() as $size) {
-            foreach ($size->getImages() as $res => $url) {
-                $images[$res] = $url;
+        foreach ($image->getSizes() as $resolution => $size) {
+            if (is_string($size)) {
+                $images[$resolution] = $size;
+            } else {
+                foreach ($size->getImages() as $res => $url) {
+                    $images[$res] = $url;
+                }
             }
         }
 

@@ -36,6 +36,10 @@ final class ImageResponse
 
     public static function fromModels(Image $banner = null, Image $thumbnail = null)
     {
+        if ($banner === null && $thumbnail === null) {
+            return null;
+        }
+
         return new static(
             $banner ? ImageBannerResponse::fromModel($banner) : null,
             $thumbnail ? ImageThumbnailResponse::fromModel($thumbnail) : null

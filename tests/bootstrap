@@ -28,6 +28,9 @@ namespace {
 
         define('GEARMAN_SUCCESS', 'GEARMAN_SUCCESS');
     }
+    function dpm($json) {
+        var_dump(json_encode(json_decode($json), JSON_PRETTY_PRINT));exit;
+    }
 }
 
 namespace Csa\Bundle\GuzzleBundle\Cache {
