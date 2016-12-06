@@ -190,7 +190,7 @@ final class Kernel implements MinimalKernel
         };
 
         $app['default_controller'] = function (Application $app) {
-            return new DefaultController($app['rules.process']);
+            return new DefaultController($app['rules.process'], null, $app['serializer']);
         };
     }
 
