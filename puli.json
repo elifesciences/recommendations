@@ -15,8 +15,7 @@
         },
         "clue/block-react": {
             "install-path": "vendor/clue/block-react",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "crell/api-problem": {
             "install-path": "vendor/crell/api-problem",
@@ -24,8 +23,7 @@
         },
         "doctrine/annotations": {
             "install-path": "vendor/doctrine/annotations",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "doctrine/cache": {
             "install-path": "vendor/doctrine/cache",
@@ -33,18 +31,11 @@
         },
         "doctrine/instantiator": {
             "install-path": "vendor/doctrine/instantiator",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "doctrine/lexer": {
             "install-path": "vendor/doctrine/lexer",
-            "installer": "composer",
-            "env": "dev"
-        },
-        "elasticsearch/elasticsearch": {
-            "install-path": "vendor/elasticsearch/elasticsearch",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "elife/api": {
             "install-path": "vendor/elife/api",
@@ -74,16 +65,6 @@
             "install-path": "vendor/guzzlehttp/psr7",
             "installer": "composer"
         },
-        "guzzlehttp/ringphp": {
-            "install-path": "vendor/guzzlehttp/ringphp",
-            "installer": "composer",
-            "env": "dev"
-        },
-        "guzzlehttp/streams": {
-            "install-path": "vendor/guzzlehttp/streams",
-            "installer": "composer",
-            "env": "dev"
-        },
         "hamcrest/hamcrest-php": {
             "install-path": "vendor/hamcrest/hamcrest-php",
             "installer": "composer",
@@ -91,18 +72,15 @@
         },
         "jms/metadata": {
             "install-path": "vendor/jms/metadata",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "jms/parser-lib": {
             "install-path": "vendor/jms/parser-lib",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "jms/serializer": {
             "install-path": "vendor/jms/serializer",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "justinrainbow/json-schema": {
             "install-path": "vendor/justinrainbow/json-schema",
@@ -110,8 +88,7 @@
         },
         "kevinrob/guzzle-cache-middleware": {
             "install-path": "vendor/kevinrob/guzzle-cache-middleware",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "mockery/mockery": {
             "install-path": "vendor/mockery/mockery",
@@ -137,8 +114,7 @@
         },
         "phpcollection/phpcollection": {
             "install-path": "vendor/phpcollection/phpcollection",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "phpdocumentor/reflection-common": {
             "install-path": "vendor/phpdocumentor/reflection-common",
@@ -157,8 +133,7 @@
         },
         "phpoption/phpoption": {
             "install-path": "vendor/phpoption/phpoption",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "phpspec/prophecy": {
             "install-path": "vendor/phpspec/prophecy",
@@ -204,11 +179,6 @@
             "install-path": "vendor/pimple/pimple",
             "installer": "composer"
         },
-        "propel/propel": {
-            "install-path": "vendor/propel/propel",
-            "installer": "composer",
-            "env": "dev"
-        },
         "psr/http-message": {
             "install-path": "vendor/psr/http-message",
             "installer": "composer"
@@ -239,18 +209,15 @@
         },
         "react/event-loop": {
             "install-path": "vendor/react/event-loop",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "react/promise": {
             "install-path": "vendor/react/promise",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "react/promise-timer": {
             "install-path": "vendor/react/promise-timer",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "sebastian/code-unit-reverse-lookup": {
             "install-path": "vendor/sebastian/code-unit-reverse-lookup",
@@ -319,15 +286,9 @@
             "installer": "composer",
             "env": "dev"
         },
-        "symfony/config": {
-            "install-path": "vendor/symfony/config",
-            "installer": "composer",
-            "env": "dev"
-        },
         "symfony/console": {
             "install-path": "vendor/symfony/console",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "symfony/debug": {
             "install-path": "vendor/symfony/debug",
@@ -346,11 +307,6 @@
             "install-path": "vendor/symfony/filesystem",
             "installer": "composer"
         },
-        "symfony/finder": {
-            "install-path": "vendor/symfony/finder",
-            "installer": "composer",
-            "env": "dev"
-        },
         "symfony/http-foundation": {
             "install-path": "vendor/symfony/http-foundation",
             "installer": "composer"
@@ -361,6 +317,10 @@
         },
         "symfony/polyfill-mbstring": {
             "install-path": "vendor/symfony/polyfill-mbstring",
+            "installer": "composer"
+        },
+        "symfony/polyfill-php70": {
+            "install-path": "vendor/symfony/polyfill-php70",
             "installer": "composer"
         },
         "symfony/process": {
@@ -383,19 +343,9 @@
             "install-path": "vendor/symfony/stopwatch",
             "installer": "composer"
         },
-        "symfony/translation": {
-            "install-path": "vendor/symfony/translation",
-            "installer": "composer",
-            "env": "dev"
-        },
         "symfony/twig-bridge": {
             "install-path": "vendor/symfony/twig-bridge",
             "installer": "composer"
-        },
-        "symfony/validator": {
-            "install-path": "vendor/symfony/validator",
-            "installer": "composer",
-            "env": "dev"
         },
         "symfony/var-dumper": {
             "install-path": "vendor/symfony/var-dumper",
