@@ -59,6 +59,15 @@ final class Kernel implements MinimalKernel
             'validate' => false,
             'annotation_cache' => true,
             'ttl' => 3600,
+            'db' => [
+                'driver' => 'pdo_mysql',
+                'host' => '127.0.0.1',
+                'port' => '3306',
+                'dbname' => 'recommendations',
+                'user' => 'eLife',
+                'password' => '',
+                'charset'   => 'utf8mb4'
+            ]
         ], $config);
         // Annotations.
         AnnotationRegistry::registerAutoloadNamespace(
@@ -76,15 +85,7 @@ final class Kernel implements MinimalKernel
         }
 
         $app->register(new DoctrineServiceProvider, array(
-            'db.options' => array(
-                'driver' => 'pdo_mysql',
-                'host' => '127.0.0.1',
-                'port' => '3306',
-                'dbname' => 'recommendations',
-                'user' => 'eLife',
-                'password' => 'Password1',
-                'charset'   => 'utf8mb4'
-            ),
+            'db.options' => $app['config']['db'],
         ));
 
 //        $app->register(new DoctrineOrmServiceProvider, array(

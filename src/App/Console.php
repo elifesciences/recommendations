@@ -35,6 +35,7 @@ final class Console
         $this->console = $console;
         $this->app = $app;
         $this->root = __DIR__.'/../..';
+        $this->db = $app->get('db');
 
         $this->console->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev'));
     }
