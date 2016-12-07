@@ -3,6 +3,7 @@
 namespace eLife\App;
 
 use Closure;
+use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
@@ -28,15 +29,13 @@ use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
 use Kevinrob\GuzzleCache\Strategy\PublicCacheStrategy;
 use Silex\Application;
 use Silex\Provider;
+use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\VarDumperServiceProvider;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Webmozart\Json\JsonDecoder;
-use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
-use Silex\Provider\DoctrineServiceProvider;
-
 
 final class Kernel implements MinimalKernel
 {
@@ -59,15 +58,15 @@ final class Kernel implements MinimalKernel
             'validate' => false,
             'annotation_cache' => true,
             'ttl' => 3600,
-            'db' => [
+            'db' => array_merge([
                 'driver' => 'pdo_mysql',
                 'host' => '127.0.0.1',
                 'port' => '3306',
                 'dbname' => 'recommendations',
                 'user' => 'eLife',
                 'password' => '',
-                'charset'   => 'utf8mb4'
-            ]
+                'charset' => 'utf8mb4',
+            ], $config['db'] ?? []),
         ], $config);
         // Annotations.
         AnnotationRegistry::registerAutoloadNamespace(
@@ -84,7 +83,7 @@ final class Kernel implements MinimalKernel
             ]);
         }
 
-        $app->register(new DoctrineServiceProvider, array(
+        $app->register(new DoctrineServiceProvider(), array(
             'db.options' => $app['config']['db'],
         ));
 
@@ -106,7 +105,6 @@ final class Kernel implements MinimalKernel
 //                ),
 //            ),
 //        ));
-
 
         // DI.
         $this->dependencies($app);
