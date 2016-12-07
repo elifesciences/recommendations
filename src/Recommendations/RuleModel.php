@@ -10,11 +10,22 @@ namespace eLife\Recommendations;
 
 use DateTimeImmutable;
 
+/**
+ * @Entity
+ * @Table(name="RuleModels")
+ */
 class RuleModel
 {
+    /** @Column(type="integer") */
     private $id;
+
+    /** @Column(length=140) */
     private $type;
+
+    /** @Column(type="boolean") */
     private $isSynthetic;
+
+    /** @Column(type="boolean") */
     private $published;
 
     public function __construct(string $id, string $type, DateTimeImmutable $published = null, bool $isSynthetic = false)

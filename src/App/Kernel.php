@@ -34,6 +34,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Webmozart\Json\JsonDecoder;
+use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+use Silex\Provider\DoctrineServiceProvider;
+
 
 final class Kernel implements MinimalKernel
 {
@@ -71,6 +74,39 @@ final class Kernel implements MinimalKernel
                 'profiler.mount_prefix' => '/_profiler', // this is the default
             ]);
         }
+
+        $app->register(new DoctrineServiceProvider, array(
+            'db.options' => array(
+                'driver' => 'pdo_mysql',
+                'host' => '127.0.0.1',
+                'port' => '3306',
+                'dbname' => 'recommendations',
+                'user' => 'eLife',
+                'password' => 'Password1',
+                'charset'   => 'utf8mb4'
+            ),
+        ));
+
+//        $app->register(new DoctrineOrmServiceProvider, array(
+//            'orm.proxies_dir' => '/path/to/proxies',
+//            'orm.em.options' => array(
+//                'mappings' => array(
+//                    // Using actual filesystem paths
+//                    array(
+//                        'type' => 'annotation',
+//                        'namespace' => 'Foo\Entities',
+//                        'path' => __DIR__.'/src/Foo/Entities',
+//                    ),
+//                    array(
+//                        'type' => 'xml',
+//                        'namespace' => 'Bat\Entities',
+//                        'path' => __DIR__.'/src/Bat/Resources/mappings',
+//                    ),
+//                ),
+//            ),
+//        ));
+
+
         // DI.
         $this->dependencies($app);
         // Add to class once set up.
