@@ -10,6 +10,7 @@ use eLife\Recommendations\RuleModel;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Throwable;
 
@@ -39,7 +40,7 @@ final class DefaultController
             } catch (Throwable $e) {
                 throw new NotAcceptableHttpException('Not acceptable');
             }
-            if ($mediaType !== self::MEDIA_TYPE || $mediaType->getVersion() > self::MAX_VERSION) {
+            if ($mediaType->getType() !== self::MEDIA_TYPE || $mediaType->getVersion() > self::MAX_VERSION) {
                 throw new NotAcceptableHttpException('Not acceptable');
             }
         }
@@ -50,9 +51,14 @@ final class DefaultController
     public function indexAction(Request $request, string $type, string $id)
     {
         $mediaType = $this->acceptableResponse($request->headers->get('Accept'));
+        $version = $mediaType->getVersion() || self::CURRENT_VERSION;
         $recommendations = $this->rules->getRecommendations(new RuleModel($id, $type));
-        $items = $this->hydrator->hydrateAll($recommendations);
-        $this->context->setVersion($mediaType->getVersion() || self::CURRENT_VERSION);
-        $this->serializer->serialize(RecommendationsResponse::fromModels($items, count($items)), 'json', $this->context);
+        $items = $this->hydrator ? $this->hydrator->hydrateAll($recommendations) : [];
+        $this->context->setVersion($version);
+        $json = $this->serializer->serialize(RecommendationsResponse::fromModels($items, count($items)), 'json', $this->context);
+
+        return new Response($json, 200, [
+            'Content-Type' => (string) (new MediaType(self::MEDIA_TYPE, $version)),
+        ]);
     }
 }
