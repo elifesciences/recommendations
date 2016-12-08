@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "54778a2d5b04991d5b9f98b4327bcfec",
-    "content-hash": "da63a48b87bf25a7e8cf945290da7cd9",
+    "hash": "40596b10cbef2dd3f8bbaa6feac563dc",
+    "content-hash": "2a588741fb5348f252c32c37227ad2b3",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -909,7 +909,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/b3b1321",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/6b9e8fda78dfd21aa0208c0137c83e87adad2f38",
                 "reference": "b3b1321",
                 "shasum": ""
             },
@@ -988,7 +988,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/ea6d0d1",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/ea6d0d19cb28753731d68f7ed370a997792a0225",
                 "reference": "ea6d0d1",
                 "shasum": ""
             },

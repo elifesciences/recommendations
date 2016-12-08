@@ -10,30 +10,36 @@ namespace eLife\Recommendations;
 
 use DateTimeImmutable;
 
-/**
- * @Entity
- * @Table(name="RuleModels")
- */
 class RuleModel
 {
-    /** @Column(type="integer") */
+    private $rule_id;
     private $id;
-
-    /** @Column(length=140) */
     private $type;
-
-    /** @Column(type="boolean") */
     private $isSynthetic;
-
-    /** @Column(type="boolean") */
     private $published;
 
-    public function __construct(string $id, string $type, DateTimeImmutable $published = null, bool $isSynthetic = false)
+    public function __construct(string $id, string $type, DateTimeImmutable $published = null, bool $isSynthetic = false, string $rule_id = null)
     {
         $this->id = $id;
         $this->type = $type;
         $this->isSynthetic = $isSynthetic;
         $this->published = $published;
+        $this->rule_id = $rule_id;
+    }
+
+    public function setRuleId(string $id)
+    {
+        $this->rule_id = $id;
+    }
+
+    public function isFromDatabase() : bool
+    {
+        return (bool) $this->rule_id;
+    }
+
+    public function getRuleId() : string
+    {
+        return $this->rule_id;
     }
 
     /**
@@ -64,7 +70,7 @@ class RuleModel
         return $this->type;
     }
 
-    public function getPublished(): DateTimeImmutable
+    public function getPublished()
     {
         return $this->published;
     }
