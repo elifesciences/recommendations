@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Webmozart\Json\JsonDecoder;
+use Sorien\Provider\DoctrineProfilerServiceProvider;
 
 final class Kernel implements MinimalKernel
 {
@@ -81,6 +82,7 @@ final class Kernel implements MinimalKernel
                 'profiler.cache_dir' => self::ROOT.'/cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
             ]);
+            $app->register(new DoctrineProfilerServiceProvider());
         }
 
         $app->register(new DoctrineServiceProvider(), array(

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "54778a2d5b04991d5b9f98b4327bcfec",
-    "content-hash": "da63a48b87bf25a7e8cf945290da7cd9",
+    "hash": "869173d1829d7dfb57e03197670768ab",
+    "content-hash": "f4809c41e7bdf910ace4aa8ab9510728",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2594,6 +2594,54 @@
             "description": "A WebProfiler for Silex",
             "homepage": "http://silex.sensiolabs.org/",
             "time": "2016-11-21 23:51:53"
+        },
+        {
+            "name": "sorien/silex-dbal-profiler",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sorien/silex-dbal-profiler.git",
+                "reference": "315300ed841543bbda4521aa03bbf2b3f515cf1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sorien/silex-dbal-profiler/zipball/315300ed841543bbda4521aa03bbf2b3f515cf1e",
+                "reference": "315300ed841543bbda4521aa03bbf2b3f515cf1e",
+                "shasum": ""
+            },
+            "require": {
+                "silex/silex": "~2.0",
+                "silex/web-profiler": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sorien": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stanislav Turza",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Doctrine DBAL Profiler for Silex",
+            "keywords": [
+                "dbal",
+                "doctrine",
+                "profiler",
+                "silex"
+            ],
+            "time": "2016-05-19 13:19:25"
         },
         {
             "name": "symfony/console",
