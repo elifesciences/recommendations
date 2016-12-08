@@ -3,6 +3,7 @@
 namespace eLife\Recommendations\Rule;
 
 use DateTimeImmutable;
+use Doctrine\ORM\QueryBuilder;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Recommendations\Relationship;
