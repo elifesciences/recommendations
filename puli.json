@@ -305,6 +305,10 @@
             "install-path": "vendor/silex/web-profiler/Silex/Provider",
             "installer": "composer"
         },
+        "sorien/silex-dbal-profiler": {
+            "install-path": "vendor/sorien/silex-dbal-profiler",
+            "installer": "composer"
+        },
         "symfony/browser-kit": {
             "install-path": "vendor/symfony/browser-kit",
             "installer": "composer",

@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "40596b10cbef2dd3f8bbaa6feac563dc",
-    "content-hash": "2a588741fb5348f252c32c37227ad2b3",
+    "hash": "bb9b89cbeca97a13b9b213122b03e189",
+    "content-hash": "d4902b4af441ab20a79f9790a6379cff",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.20.2",
+            "version": "3.20.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "22e4ff095a78a7d82d6ac17c94ca5042be195684"
+                "reference": "da0d8955770c3c84007bfe7c652351af2c031068"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/22e4ff095a78a7d82d6ac17c94ca5042be195684",
-                "reference": "22e4ff095a78a7d82d6ac17c94ca5042be195684",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/da0d8955770c3c84007bfe7c652351af2c031068",
+                "reference": "da0d8955770c3c84007bfe7c652351af2c031068",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2016-12-06 21:04:43"
+            "time": "2016-12-07 22:50:22"
         },
         {
             "name": "beberlei/assert",
@@ -1032,12 +1032,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "6dc70d71f5212588c3851b3b26e50474839bcffd"
+                "reference": "6dc70d7"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/6dc70d71f5212588c3851b3b26e50474839bcffd",
-                "reference": "6dc70d71f5212588c3851b3b26e50474839bcffd",
+                "reference": "6dc70d7",
                 "shasum": ""
             },
             "require": {
@@ -2594,6 +2594,54 @@
             "description": "A WebProfiler for Silex",
             "homepage": "http://silex.sensiolabs.org/",
             "time": "2016-11-21 23:51:53"
+        },
+        {
+            "name": "sorien/silex-dbal-profiler",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sorien/silex-dbal-profiler.git",
+                "reference": "315300ed841543bbda4521aa03bbf2b3f515cf1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sorien/silex-dbal-profiler/zipball/315300ed841543bbda4521aa03bbf2b3f515cf1e",
+                "reference": "315300ed841543bbda4521aa03bbf2b3f515cf1e",
+                "shasum": ""
+            },
+            "require": {
+                "silex/silex": "~2.0",
+                "silex/web-profiler": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sorien": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stanislav Turza",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Doctrine DBAL Profiler for Silex",
+            "keywords": [
+                "dbal",
+                "doctrine",
+                "profiler",
+                "silex"
+            ],
+            "time": "2016-05-19 13:19:25"
         },
         {
             "name": "symfony/console",
