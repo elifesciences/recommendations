@@ -19,7 +19,7 @@ final class CollectionContents implements Rule
         $this->sdk = $sdk;
     }
 
-    public function getCollection(string $id): Collection
+    public function getCollection(string $id)
     {
         return $this->sdk->collections()->get($id);
     }

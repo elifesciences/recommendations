@@ -19,6 +19,7 @@ use eLife\Recommendations\Rule\CollectionContents;
 use eLife\Recommendations\Rule\MostRecent;
 use eLife\Recommendations\Rule\MostRecentWithSubject;
 use eLife\Recommendations\Rule\PodcastEpisodeContents;
+use eLife\Recommendations\RuleModelRepository;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
@@ -31,12 +32,12 @@ use Silex\Application;
 use Silex\Provider;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\VarDumperServiceProvider;
+use Sorien\Provider\DoctrineProfilerServiceProvider;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Webmozart\Json\JsonDecoder;
-use Sorien\Provider\DoctrineProfilerServiceProvider;
 
 final class Kernel implements MinimalKernel
 {
@@ -171,22 +172,25 @@ final class Kernel implements MinimalKernel
                 new JsonDecoder()
             );
         };
+        $app['rules.repository'] = function (Application $app) {
+            return new RuleModelRepository($app['db']);
+        };
 
         //#####################################################
         // ------------------ Rule Process --------------------
         //#####################################################
         $app['rules.process'] = function (Application $app) {
             return new Rules(
-                /* 1 */ new BidirectionalRelationship($app['api.sdk'], 'retraction'),
-                /* 2 */ new BidirectionalRelationship($app['api.sdk'], 'correction'),
+                /* 1 */ new BidirectionalRelationship($app['api.sdk'], 'retraction', $app['rules.repository']),
+                /* 2 */ new BidirectionalRelationship($app['api.sdk'], 'correction', $app['rules.repository']),
                 /* 3 is part of BidirectionalRelationship. */
-                /* 4 */ new BidirectionalRelationship($app['api.sdk'], 'research-article'),
-                /* 5 */ new BidirectionalRelationship($app['api.sdk'], 'research-exchange'),
-                /* 6 */ new BidirectionalRelationship($app['api.sdk'], 'research-advance'),
-                /* 7 */ new BidirectionalRelationship($app['api.sdk'], 'tools-resources'),
-                /* 8 */ new BidirectionalRelationship($app['api.sdk'], 'feature'),
-                /* 9 */ new BidirectionalRelationship($app['api.sdk'], 'insight'),
-                /* 10 */ new BidirectionalRelationship($app['api.sdk'], 'editorial'),
+                /* 4 */ new BidirectionalRelationship($app['api.sdk'], 'research-article', $app['rules.repository']),
+                /* 5 */ new BidirectionalRelationship($app['api.sdk'], 'research-exchange', $app['rules.repository']),
+                /* 6 */ new BidirectionalRelationship($app['api.sdk'], 'research-advance', $app['rules.repository']),
+                /* 7 */ new BidirectionalRelationship($app['api.sdk'], 'tools-resources', $app['rules.repository']),
+                /* 8 */ new BidirectionalRelationship($app['api.sdk'], 'feature', $app['rules.repository']),
+                /* 9 */ new BidirectionalRelationship($app['api.sdk'], 'insight', $app['rules.repository']),
+                /* 10 */ new BidirectionalRelationship($app['api.sdk'], 'editorial', $app['rules.repository']),
                 /* 11 */ new CollectionContents($app['api.sdk']),
                 /* 12 */ new PodcastEpisodeContents($app['api.sdk']),
                 /* 13 */ new MostRecent(),
