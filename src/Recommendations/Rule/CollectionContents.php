@@ -43,7 +43,7 @@ final class CollectionContents implements Rule
         if ($input->getType() !== 'collection') {
             return [];
         }
-        $collection = $this->getCollection($input->getId());
+        $collection = $this->getCollection($input->getId())->wait(true);
 
         return $collection->getContent()
             ->filter(function ($item) {
