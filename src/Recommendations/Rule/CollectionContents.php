@@ -5,18 +5,22 @@ namespace eLife\Recommendations\Rule;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Collection;
-use eLife\Recommendations\Relationship;
 use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
+use eLife\Recommendations\RuleModelRepository;
 
 final class CollectionContents implements Rule
 {
-    private $sdk;
+    use PersistRule;
 
-    public function __construct(ApiSdk $sdk)
+    private $sdk;
+    private $repo;
+
+    public function __construct(ApiSdk $sdk, RuleModelRepository $repo)
     {
         $this->sdk = $sdk;
+        $this->repo = $repo;
     }
 
     public function getCollection(string $id)
@@ -54,29 +58,6 @@ final class CollectionContents implements Rule
     }
 
     /**
-     * Upsert relations.
-     *
-     * Given an `input` and an `on` it will persist this relationship for retrieval
-     * in recommendation results.
-     */
-    public function upsert(Relationship $relationship)
-    {
-        // TODO: Implement upsert() method.
-    }
-
-    /**
-     * Prune relations.
-     *
-     * Given an `input` this will go through the persistence layer and remove old non-existent relation ships
-     * for this given `input`. Its possible some logic will be shared with resolve relations, but this is up
-     * to each implementation.
-     */
-    public function prune(RuleModel $input, array $relationships = null)
-    {
-        // TODO: Implement prune() method.
-    }
-
-    /**
      * Add relations for model to list.
      *
      * This will be what is used when constructing the recommendations. Given a model (id, type) we return an array
@@ -86,5 +67,10 @@ final class CollectionContents implements Rule
     public function addRelations(RuleModel $model, array $list): array
     {
         return [];
+    }
+
+    protected function getRepository(): RuleModelRepository
+    {
+        return $this->repo;
     }
 }

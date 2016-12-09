@@ -191,10 +191,10 @@ final class Kernel implements MinimalKernel
                 /* 8 */ new BidirectionalRelationship($app['api.sdk'], 'feature', $app['rules.repository']),
                 /* 9 */ new BidirectionalRelationship($app['api.sdk'], 'insight', $app['rules.repository']),
                 /* 10 */ new BidirectionalRelationship($app['api.sdk'], 'editorial', $app['rules.repository']),
-                /* 11 */ new CollectionContents($app['api.sdk']),
-                /* 12 */ new PodcastEpisodeContents($app['api.sdk']),
+                /* 11 */ new CollectionContents($app['api.sdk'], $app['rules.repository']),
+                /* 12 */ new PodcastEpisodeContents($app['api.sdk'], $app['rules.repository']),
                 /* 13 */ new MostRecent(),
-                /* 14 */ new MostRecentWithSubject($app['api.sdk'])
+                /* 14 */ new MostRecentWithSubject($app['api.sdk'], $app['rules.repository'])
             );
         };
 
