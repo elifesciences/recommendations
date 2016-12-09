@@ -6,6 +6,8 @@ use Closure;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySQL57Platform;
 use Doctrine\DBAL\Schema\Schema;
+use eLife\Api\Command\CliLogger;
+use eLife\Recommendations\Command\PopulateRulesCommand;
 use Exception;
 use LogicException;
 use Psr\Log\LoggerInterface;
@@ -45,6 +47,8 @@ final class Console
         $this->setDb($app->get('db'));
 
         $this->console->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev'));
+
+        $this->console->add(new PopulateRulesCommand($app->get('api.sdk'), $app->get('rules.repository'), $app->get('rules.process')));
     }
 
     private function setDb(Connection $connection)

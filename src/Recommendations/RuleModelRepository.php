@@ -4,6 +4,7 @@ namespace eLife\Recommendations;
 
 use Doctrine\DBAL\Connection;
 use eLife\Recommendations\Relationships\ManyToManyRelationship;
+use PDO;
 use Rhumsaa\Uuid\Uuid;
 
 class RuleModelRepository
@@ -34,6 +35,12 @@ class RuleModelRepository
             'type' => $ruleModel->getType(),
             'published' => $ruleModel->getPublished() ?? null,
             'isSynthetic' => $ruleModel->isSynthetic() ? 1 : 0,
+        ], [
+            PDO::PARAM_STR,
+            PDO::PARAM_STR,
+            PDO::PARAM_STR,
+            'datetime',
+            'boolean',
         ]);
 
         return $ruleModel;
@@ -72,6 +79,9 @@ class RuleModelRepository
             $this->db->insert($this->db->quoteIdentifier('References'), [
                 'on_id' => $on->getRuleId(),
                 'subject_id' => $subject->getRuleId(),
+            ], [
+                PDO::PARAM_STR,
+                PDO::PARAM_STR,
             ]);
         }
     }

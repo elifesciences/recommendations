@@ -5,6 +5,7 @@ namespace eLife\Recommendations\Rule;
 use eLife\Recommendations\Relationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
+use eLife\Sdk\Article;
 
 final class MostRecent implements Rule
 {
@@ -58,5 +59,26 @@ final class MostRecent implements Rule
     public function addRelations(RuleModel $model, array $list): array
     {
         return [];
+    }
+
+    /**
+     * Returns item types that are supported by rule.
+     */
+    public static function supports(): array
+    {
+        return [
+            'correction',
+            'editorial',
+            'feature',
+            'insight',
+            'research-advance',
+            'research-article',
+            'research-exchange',
+            'retraction',
+            'registered-report',
+            'replication-study',
+            'short-report',
+            'tools-resources',
+        ];
     }
 }
