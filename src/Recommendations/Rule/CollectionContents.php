@@ -25,7 +25,7 @@ final class CollectionContents implements Rule
 
     public function getCollection(string $id)
     {
-        return $this->sdk->collections()->get($id);
+        return $this->sdk->collections()->get($id)->wait(true);
     }
 
     /**
@@ -43,7 +43,7 @@ final class CollectionContents implements Rule
         if ($input->getType() !== 'collection') {
             return [];
         }
-        $collection = $this->getCollection($input->getId())->wait(true);
+        $collection = $this->getCollection($input->getId());
 
         return $collection->getContent()
             ->filter(function ($item) {
