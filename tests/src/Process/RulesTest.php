@@ -23,7 +23,13 @@ final class RulesTest extends PHPUnit_Framework_TestCase
             ->andReturnUsing(function ($_, $in) {
                 return array_merge($in, [['type' => 'podcast-episode', 'id' => 1]]);
             });
+        $this->rule1
+            ->shouldReceive('supports')
+            ->andReturn(['podcast-episode']);
         $this->rule2 = Mockery::mock(Rule::class);
+        $this->rule2
+            ->shouldReceive('supports')
+            ->andReturn(['article']);
         $this->rule2
             ->shouldReceive('addRelations')
             ->andReturnUsing(function ($_, $in) {

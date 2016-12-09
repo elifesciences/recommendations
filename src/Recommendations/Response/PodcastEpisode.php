@@ -70,11 +70,9 @@ final class PodcastEpisode implements Snippet, Result
         } catch (Throwable $e) {
             $banner = $banner ?? null;
         }
-        try {
-            $thumbnail = $episode->getThumbnail();
-        } catch (Throwable $e) {
-            $thumbnail = $thumbnail ?? null;
-        }
+
+        // There will always be a thumbnail.
+        $thumbnail = $episode->getThumbnail();
 
         return new static (
             $episode->getNumber(),

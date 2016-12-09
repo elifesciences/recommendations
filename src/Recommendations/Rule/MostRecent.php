@@ -64,7 +64,7 @@ final class MostRecent implements Rule
     /**
      * Returns item types that are supported by rule.
      */
-    public static function supports(): array
+    public function supports(): array
     {
         return [
             'correction',

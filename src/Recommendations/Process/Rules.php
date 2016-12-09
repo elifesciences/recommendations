@@ -23,10 +23,15 @@ final class Rules
         $this->rules = $rules;
     }
 
+    public function isSupported(RuleModel $model, Rule $rule)
+    {
+        return in_array($model->getType(), $rule->supports()) === false;
+    }
+
     public function import(RuleModel $model, bool $upsert = true, bool $prune = false)
     {
         foreach ($this->rules as $rule) {
-            if (in_array($model->getType(), $rule::supports()) === false) {
+            if ($this->isSupported($model, $rule) === false) {
                 continue;
             }
             $relations = $rule->resolveRelations($model);
@@ -54,16 +59,5 @@ final class Rules
         }
 
         return $next;
-    }
-
-    private function supports(array $supports, $model) : bool
-    {
-        foreach ($supports as $className) {
-            if (is_a($model, $className)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
