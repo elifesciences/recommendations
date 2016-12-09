@@ -11,7 +11,7 @@ use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
 use eLife\Sdk\Article;
 
-final class BidirectionalRelationship implements Rule
+class BidirectionalRelationship implements Rule
 {
     use PersistRule;
 

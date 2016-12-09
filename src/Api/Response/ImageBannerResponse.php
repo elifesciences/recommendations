@@ -59,6 +59,7 @@ final class ImageBannerResponse implements ImageVariant
     {
         $images = [];
         foreach ($image->getSizes() as $resolution => $size) {
+            // @todo make sure API SDK does not do this anymore and remove.
             if (is_string($size)) {
                 $images[$resolution] = $size;
             } else {

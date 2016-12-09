@@ -12,7 +12,7 @@ use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
 use eLife\Sdk\Article;
 
-final class MostRecentWithSubject implements Rule
+class MostRecentWithSubject implements Rule
 {
     use GetSdk;
     use PersistRule;
