@@ -36,11 +36,12 @@ final class PopulateRulesCommand extends PopulateCommand
     {
         if ($model instanceof PodcastEpisode) {
             // Import podcast.
-            $ruleModel = new RuleModel($model->getNumber(), $type);
+            $ruleModel = new RuleModel($model->getNumber(), $type, $model->getPublishedDate());
             $logger->debug("We got $type with {$model->getNumber()}");
         } elseif (method_exists($model, 'getId')) {
+            $published = method_exists($model, 'getPublishedDate') ? $model->getPublishedDate() : null;
             // Import et al.
-            $ruleModel = new RuleModel($model->getId(), $type);
+            $ruleModel = new RuleModel($model->getId(), $type, $published);
             $logger->debug("We got $type with {$model->getId()}");
         } else {
             // Not good, not et al.
