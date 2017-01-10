@@ -16,7 +16,7 @@ class PodcastEpisodeContentsTest extends PHPUnit_Framework_TestCase
      */
     public function test(PodcastEpisodeModel $podcastEpisode)
     {
-        /** @var PodcastEpisodeContents & PHPUnit_Framework_MockObject_MockBuilder $mock */
+        /** @var PodcastEpisodeContents | \PHPUnit_Framework_MockObject_MockObject $mock */
         $mock = $this->createPartialMock(PodcastEpisodeContents::class, ['getFromSdk']);
         $mock->expects($this->exactly(1))
             ->method('getFromSdk')

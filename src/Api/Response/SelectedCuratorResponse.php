@@ -41,7 +41,7 @@ final class SelectedCuratorResponse extends NamedResponse
                 'index' => $person->getDetails()->getIndexName(),
             ],
             $person->getType(),
-            ImageResponse::fromModels(null, $person->getImage()),
+            $person->getThumbnail() ? ImageThumbnailResponse::fromModel($person->getThumbnail()) : null,
             $count > 1
         );
     }

@@ -17,10 +17,10 @@ class Article
         $this->article = $article;
     }
 
-    public function getRelatedArticles() : Sequence
-    {
-        return new ArraySequence([]);
-    }
+//    public function getRelatedArticles() : Sequence
+//    {
+//        return new ArraySequence([]);
+//    }
 
     protected function getSubject()
     {

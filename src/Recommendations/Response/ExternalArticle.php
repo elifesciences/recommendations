@@ -3,6 +3,7 @@
 namespace eLife\Recommendations\Response;
 
 use eLife\Api\Response\Journal;
+use eLife\ApiSdk\Model\ExternalArticle as ExternalArticleModel;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
@@ -53,8 +54,13 @@ final class ExternalArticle implements Article, Result
         $this->journal = $journal;
     }
 
-    public static function fromModel()
+    public static function fromModel(ExternalArticleModel $externalArticle)
     {
-        // @todo once we have this built in the API SDK.
+        return new static(
+            $externalArticle->getArticleTitle(),
+            $externalArticle->getAuthorLine(),
+            $externalArticle->getUri(),
+            Journal::fromModel($externalArticle->getJournal())
+        );
     }
 }

@@ -33,7 +33,16 @@ final class Console
         'echo' => ['description' => 'Example of asking a question'],
         'cache:clear' => ['description' => 'Clears cache'],
         'debug:params' => ['description' => 'Lists current parameters'],
-        'generatedatabase' => ['description' => 'Generates Database'],
+        'generate:database' => [
+            'description' => 'Generates Database',
+            'opt' => [
+                [
+                    'name' => 'drop',
+                    'default' => false,
+                    'mode' => InputOption::VALUE_OPTIONAL,
+                ],
+            ],
+        ],
     ];
 
     /** @var Connection */
@@ -110,7 +119,7 @@ final class Console
         $logger->debug('This is working');
     }
 
-    public function generatedatabaseCommand(InputInterface $input, OutputInterface $output, LoggerInterface $logger)
+    public function generateDatabaseCommand(InputInterface $input, OutputInterface $output, LoggerInterface $logger)
     {
         $schema = new Schema();
         $rules = $schema->createTable('Rules');
@@ -127,8 +136,10 @@ final class Console
         $references->setPrimaryKey(['on_id', 'subject_id']);
         $references->addForeignKeyConstraint($rules, ['on_id'], ['rule_id'], ['onUpdate' => 'CASCADE']);
         $references->addForeignKeyConstraint($rules, ['subject_id'], ['rule_id'], ['onUpdate' => 'CASCADE']);
-
-        $drops = $schema->toDropSql(new MySQL57Platform());
+        $drops = [];
+        if ($input->getOption('drop')) {
+            $drops = $schema->toDropSql(new MySQL57Platform());
+        }
         $arrayOfSqlQueries = array_merge($drops, $schema->toSql(new MySQL57Platform()));
 
         foreach ($arrayOfSqlQueries as $query) {
@@ -170,6 +181,11 @@ final class Console
             if (isset($cmd['args'])) {
                 foreach ($cmd['args'] as $arg) {
                     $command->addArgument($arg['name'], $arg['mode'] ?? null, $arg['description'] ?? '', $arg['default'] ?? null);
+                }
+            }
+            if (isset($cmd['opt'])) {
+                foreach ($cmd['opt'] as $opt) {
+                    $command->addOption($opt['name'], $opt['shortcut'] ?? null, $opt['mode'] ?? null, $opt['description'] ?? '', $opt['default'] ?? null);
                 }
             }
         }

@@ -17,7 +17,7 @@ class MostRecentWithSubjectTest extends PHPUnit_Framework_TestCase
      */
     public function test(ArticleVersion $article)
     {
-        /** @var MostRecentWithSubject & PHPUnit_Framework_MockObject_MockBuilder $mock */
+        /** @var MostRecentWithSubject | \PHPUnit_Framework_MockObject_MockObject $mock */
         $mock = $this->createPartialMock(MostRecentWithSubject::class, ['getFromSdk']);
         $mock->expects($this->exactly(1))
             ->method('getFromSdk')

@@ -12,7 +12,6 @@ namespace eLife\Recommendations\Process;
 
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
-use LogicException;
 
 final class Rules
 {
@@ -28,26 +27,25 @@ final class Rules
         return in_array($model->getType(), $rule->supports());
     }
 
-    public function import(RuleModel $model, bool $upsert = true, bool $prune = false)
+    public function import(RuleModel $model, bool $upsert = true, bool $prune = false) : array
     {
+        assert($upsert === true || $prune === false, 'You must upsert in order to prune.');
+        $all = [];
         foreach ($this->rules as $rule) {
             if ($this->isSupported($model, $rule) === false) {
                 continue;
             }
             $relations = $rule->resolveRelations($model);
             if ($upsert) {
-                foreach ($relations as $relation) {
-                    $rule->upsert($relation);
-                }
-                if ($prune) {
-                    $rule->prune($model, $relations);
-                }
-            } elseif ($prune) {
-                throw new LogicException('You must upsert first in order to prune.');
-            } else {
-                return $relations;
+                array_map([$rule, 'upsert'], $relations);
             }
+            if ($prune) {
+                $rule->prune($model, $relations);
+            }
+            $all = array_merge($all, $relations);
         }
+
+        return $all;
     }
 
     public function getRecommendations(RuleModel $model)

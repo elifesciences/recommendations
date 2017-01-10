@@ -102,7 +102,7 @@ final class RulesTest extends PHPUnit_Framework_TestCase
         $this->rule2
             ->shouldReceive('supports')
             ->andReturn(['article']);
-        $this->expectException(LogicException::class);
+        $this->expectException('PHPUnit_Framework_Error_Warning');
         $rules = new Rules($this->rule2);
         $rules->import(new RuleModel('1', 'article'), false, true);
     }

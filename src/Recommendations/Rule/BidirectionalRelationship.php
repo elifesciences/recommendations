@@ -4,12 +4,12 @@ namespace eLife\Recommendations\Rule;
 
 use DateTimeImmutable;
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Article;
+use eLife\ApiSdk\Model\ExternalArticle as ExternalArticleModel;
 use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
-use eLife\Sdk\Article;
 
 class BidirectionalRelationship implements Rule
 {
@@ -31,7 +31,7 @@ class BidirectionalRelationship implements Rule
 
     protected function getArticle(string $id): Article
     {
-        return new Article($this->sdk->articles()->get($id)->wait(true));
+        return $this->sdk->articles()->get($id)->wait(true);
     }
 
     /**
@@ -52,10 +52,14 @@ class BidirectionalRelationship implements Rule
         $type = $this->type;
 
         return $related
-            ->filter(function (ArticleVersion $article) use ($type) {
+            ->filter(function (Article $article) use ($type) {
+                if ($article instanceof ExternalArticleModel) {
+                    return $type === 'external-article';
+                }
+
                 return $article->getType() === $type;
             })
-            ->map(function (ArticleVersion $article) use ($input) {
+            ->map(function (Article $article) use ($input) {
                 return new ManyToManyRelationship($input, new RuleModel($article->getId(), $article->getType(), $article->getPublishedDate()));
             })
             ->toArray();

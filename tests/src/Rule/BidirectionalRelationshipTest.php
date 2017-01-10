@@ -7,23 +7,23 @@ use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule\BidirectionalRelationship;
 use eLife\Recommendations\Rule\PodcastEpisodeContents;
 use eLife\Recommendations\RuleModel;
-use eLife\Sdk\Article;
 use PHPUnit_Framework_TestCase;
 use test\eLife\ApiSdk\Serializer\ArticlePoANormalizerTest;
 use test\eLife\ApiSdk\Serializer\ArticleVoRNormalizerTest;
+use eLife\ApiSdk\Model\Article;
 
 class BidirectionalRelationshipTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getArticleData
      */
-    public function test(ArticleVersion $article)
+    public function test(Article $article)
     {
-        /** @var PodcastEpisodeContents & PHPUnit_Framework_MockObject_MockBuilder $mock */
+        /** @var PodcastEpisodeContents | \PHPUnit_Framework_MockObject_MockObject $mock */
         $mock = $this->createPartialMock(BidirectionalRelationship::class, ['getArticle']);
         $mock->expects($this->exactly(1))
             ->method('getArticle')
-            ->willReturn(new Article($article));
+            ->willReturn($article);
 
         $this->assertTrue(in_array($article->getType(), $mock->supports()));
 
