@@ -131,7 +131,7 @@ abstract class PopulateCommand extends Command
         if ($this->showProgressBar) {
             $progress = new ProgressBar($this->output, $count);
         }
-        foreach ($items->slice(0, 100) as $item) {
+        foreach ($items as $item) {
             if ($progress) {
                 $progress->advance();
             }
