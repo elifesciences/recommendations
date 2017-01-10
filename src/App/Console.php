@@ -39,7 +39,7 @@ final class Console
                 [
                     'name' => 'drop',
                     'default' => false,
-                    'mode' => InputOption::VALUE_OPTIONAL,
+                    'mode' => InputOption::VALUE_NONE,
                 ],
             ],
         ],
