@@ -38,7 +38,6 @@ final class Console
             'opt' => [
                 [
                     'name' => 'drop',
-                    'default' => false,
                     'mode' => InputOption::VALUE_NONE,
                 ],
             ],
