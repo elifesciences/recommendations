@@ -10,6 +10,7 @@ use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
+use Psr\Log\LoggerInterface;
 
 class BidirectionalRelationship implements Rule
 {
@@ -18,15 +19,18 @@ class BidirectionalRelationship implements Rule
     private $sdk;
     private $type;
     private $repo;
+    public $logger;
 
     public function __construct(
         ApiSdk $sdk,
         string $type,
-        RuleModelRepository $repo
+        RuleModelRepository $repo,
+        LoggerInterface $logger
     ) {
         $this->sdk = $sdk;
         $this->type = $type;
         $this->repo = $repo;
+        $this->logger = $logger;
     }
 
     protected function getArticle(string $id): Article
@@ -47,19 +51,29 @@ class BidirectionalRelationship implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
+        $this->logger->debug('Starting to resolve relations for article with id ' . $input->getId());
         $article = $this->getArticle($input->getId());
+        if ($article instanceof ExternalArticleModel) {
+            return [];
+        }
         $related = $article->getRelatedArticles();
+        $this->logger->debug('Found related articles (' . $related->count() . ')');
         $type = $this->type;
-
+        $this->logger->debug('Starting to loop through articles');
         return $related
             ->filter(function (Article $article) use ($type) {
+                if (method_exists($article, 'getId')) {
+                    $this->logger->debug('Found related article id: ' . $article->getId() . ' and type: ' . $type);
+                }
                 if ($article instanceof ExternalArticleModel) {
-                    return $type === 'external-article';
+//                    return $type === 'external-article';
+                    return false;
                 }
 
                 return $article->getType() === $type;
             })
             ->map(function (Article $article) use ($input) {
+                $this->logger->debug('Mapping to relation ' . $input->getId());
                 return new ManyToManyRelationship($input, new RuleModel($article->getId(), $article->getType(), $article->getPublishedDate()));
             })
             ->toArray();

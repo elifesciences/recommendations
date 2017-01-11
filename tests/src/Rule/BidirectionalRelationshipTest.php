@@ -8,6 +8,7 @@ use eLife\Recommendations\Rule\BidirectionalRelationship;
 use eLife\Recommendations\Rule\PodcastEpisodeContents;
 use eLife\Recommendations\RuleModel;
 use PHPUnit_Framework_TestCase;
+use Psr\Log\NullLogger;
 use test\eLife\ApiSdk\Serializer\ArticlePoANormalizerTest;
 use test\eLife\ApiSdk\Serializer\ArticleVoRNormalizerTest;
 use eLife\ApiSdk\Model\Article;

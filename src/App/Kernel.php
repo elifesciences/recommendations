@@ -28,6 +28,11 @@ use JMS\Serializer\SerializerBuilder;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
 use Kevinrob\GuzzleCache\Strategy\PublicCacheStrategy;
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Handler\FilterHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Processor\ProcessIdProcessor;
 use Silex\Application;
 use Silex\Provider;
 use Silex\Provider\DoctrineServiceProvider;
@@ -60,6 +65,8 @@ final class Kernel implements MinimalKernel
             'validate' => false,
             'annotation_cache' => true,
             'ttl' => 3600,
+            'file_log_path' => self::ROOT.'/var/logs/all.log',
+            'file_error_log_path' => self::ROOT.'/var/logs/error.log',
             'db' => array_merge([
                 'driver' => 'pdo_mysql',
                 'host' => '127.0.0.1',
@@ -80,7 +87,7 @@ final class Kernel implements MinimalKernel
             $app->register(new Provider\ServiceControllerServiceProvider());
             $app->register(new Provider\TwigServiceProvider());
             $app->register(new Provider\WebProfilerServiceProvider(), [
-                'profiler.cache_dir' => self::ROOT.'/cache/profiler',
+                'profiler.cache_dir' => self::ROOT.'/var/cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
             ]);
             $app->register(new DoctrineProfilerServiceProvider());
@@ -129,7 +136,7 @@ final class Kernel implements MinimalKernel
                     // Configure discriminators and subscribers here.
                     $dispatcher->addSubscriber(new RecommendationResultDiscriminator());
                 })
-                ->setCacheDir(self::ROOT.'/cache')
+                ->setCacheDir(self::ROOT.'/var/cache')
                 ->build();
         };
         $app['serializer.context'] = function () {
@@ -147,7 +154,7 @@ final class Kernel implements MinimalKernel
         };
         // General cache.
         $app['cache'] = function () {
-            return new FilesystemCache(self::ROOT.'/cache');
+            return new FilesystemCache(self::ROOT.'/var/cache');
         };
         // Annotation reader.
         $app['annotations.reader'] = function (Application $app) {
@@ -172,25 +179,45 @@ final class Kernel implements MinimalKernel
                 new JsonDecoder()
             );
         };
+
+        $app['logger'] = function (Application $app) {
+            $logger = new Logger('recommendations-api');
+            if ($app['config']['file_log_path']) {
+                $stream = new StreamHandler($app['config']['file_log_path'], Logger::DEBUG);
+                $stream->pushProcessor(new ProcessIdProcessor());
+                $stream->setFormatter(new JsonFormatter());
+                $logger->pushHandler($stream);
+            }
+            if ($app['config']['file_error_log_path']) {
+                $stream = new StreamHandler($app['config']['file_error_log_path'], Logger::ERROR);
+                $stream->pushProcessor(new ProcessIdProcessor());
+                $detailedFormatter = new JsonFormatter();
+                $detailedFormatter->includeStacktraces();
+                $stream->setFormatter($detailedFormatter);
+                $logger->pushHandler($stream);
+            }
+            return $logger;
+        };
+
+        //######################################################
+        // ------------------ Rule Specific --------------------
+        //######################################################
         $app['rules.repository'] = function (Application $app) {
             return new RuleModelRepository($app['db']);
         };
 
-        //#####################################################
-        // ------------------ Rule Process --------------------
-        //#####################################################
         $app['rules.process'] = function (Application $app) {
             return new Rules(
-                /* 1 */ new BidirectionalRelationship($app['api.sdk'], 'retraction', $app['rules.repository']),
-                /* 2 */ new BidirectionalRelationship($app['api.sdk'], 'correction', $app['rules.repository']),
+                /* 1 */ new BidirectionalRelationship($app['api.sdk'], 'retraction', $app['rules.repository'], $app['logger']),
+                /* 2 */ new BidirectionalRelationship($app['api.sdk'], 'correction', $app['rules.repository'], $app['logger']),
                 /* 3 is part of BidirectionalRelationship. */
-                /* 4 */ new BidirectionalRelationship($app['api.sdk'], 'research-article', $app['rules.repository']),
-                /* 5 */ new BidirectionalRelationship($app['api.sdk'], 'research-exchange', $app['rules.repository']),
-                /* 6 */ new BidirectionalRelationship($app['api.sdk'], 'research-advance', $app['rules.repository']),
-                /* 7 */ new BidirectionalRelationship($app['api.sdk'], 'tools-resources', $app['rules.repository']),
-                /* 8 */ new BidirectionalRelationship($app['api.sdk'], 'feature', $app['rules.repository']),
-                /* 9 */ new BidirectionalRelationship($app['api.sdk'], 'insight', $app['rules.repository']),
-                /* 10 */ new BidirectionalRelationship($app['api.sdk'], 'editorial', $app['rules.repository']),
+                /* 4 */ new BidirectionalRelationship($app['api.sdk'], 'research-article', $app['rules.repository'], $app['logger']),
+                /* 5 */ new BidirectionalRelationship($app['api.sdk'], 'research-exchange', $app['rules.repository'], $app['logger']),
+                /* 6 */ new BidirectionalRelationship($app['api.sdk'], 'research-advance', $app['rules.repository'], $app['logger']),
+                /* 7 */ new BidirectionalRelationship($app['api.sdk'], 'tools-resources', $app['rules.repository'], $app['logger']),
+                /* 8 */ new BidirectionalRelationship($app['api.sdk'], 'feature', $app['rules.repository'], $app['logger']),
+                /* 9 */ new BidirectionalRelationship($app['api.sdk'], 'insight', $app['rules.repository'], $app['logger']),
+                /* 10 */ new BidirectionalRelationship($app['api.sdk'], 'editorial', $app['rules.repository'], $app['logger']),
                 /* 11 */ new CollectionContents($app['api.sdk'], $app['rules.repository']),
                 /* 12 */ new PodcastEpisodeContents($app['api.sdk'], $app['rules.repository']),
                 /* 13 */ new MostRecent(),
