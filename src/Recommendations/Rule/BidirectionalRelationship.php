@@ -2,7 +2,6 @@
 
 namespace eLife\Recommendations\Rule;
 
-use DateTimeImmutable;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleVersion;
@@ -16,6 +15,7 @@ use Psr\Log\LoggerInterface;
 class BidirectionalRelationship implements Rule
 {
     use PersistRule;
+    use RepoRelations;
 
     private $sdk;
     private $type;
@@ -84,28 +84,6 @@ class BidirectionalRelationship implements Rule
                 return new ManyToManyRelationship($input, new RuleModel($article->getId(), $article->getType(), $article->getPublishedDate()));
             })
             ->toArray();
-    }
-
-    /**
-     * Add relations for model to list.
-     *
-     * This will be what is used when constructing the recommendations. Given a model (id, type) we return an array
-     * of [type, id]'s that will be hydrated into results by the application. The aim is for this function to be
-     * as fast as possible given its executed at run-time.
-     */
-    public function addRelations(RuleModel $model, array $list): array
-    {
-        $type = $model->getType(); // Convert this into database name
-        $id = $model->getId(); // Query that database with the type + ID
-        // Get the results and make some new RuleModels
-        $list[] = new RuleModel('12445', 'research-article', new DateTimeImmutable());
-
-        return $list;
-    }
-
-    protected function getRepository(): RuleModelRepository
-    {
-        return $this->repo;
     }
 
     /**

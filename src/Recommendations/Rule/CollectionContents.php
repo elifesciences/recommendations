@@ -13,6 +13,7 @@ use eLife\Recommendations\RuleModelRepository;
 final class CollectionContents implements Rule
 {
     use PersistRule;
+    use RepoRelations;
 
     private $sdk;
     private $repo;
@@ -28,16 +29,6 @@ final class CollectionContents implements Rule
         return $this->sdk->collections()->get($id)->wait(true);
     }
 
-    /**
-     * Resolve Relations.
-     *
-     * Given a model (type + id) from SQS, calculate which entities need relations added
-     * for the specific domain rule.
-     *
-     * Return is an array of tuples containing an input and an on where `input` is the model to be
-     * added and `on` is the target node. In plain english given a podcast containing articles it would
-     * return an array where the podcast is every `input` and each article is the `output`.
-     */
     public function resolveRelations(RuleModel $input): array
     {
         if ($input->getType() !== 'collection') {
@@ -47,7 +38,6 @@ final class CollectionContents implements Rule
 
         return $collection->getContent()
             ->filter(function ($item) {
-                // @todo change to just `Article` once SDK updated.
                 return $item instanceof ArticleVersion;
             })
             ->map(function (ArticleVersion $article) use ($input) {
@@ -57,26 +47,6 @@ final class CollectionContents implements Rule
             ->toArray();
     }
 
-    /**
-     * Add relations for model to list.
-     *
-     * This will be what is used when constructing the recommendations. Given a model (id, type) we return an array
-     * of [type, id]'s that will be hydrated into results by the application. The aim is for this function to be
-     * as fast as possible given its executed at run-time.
-     */
-    public function addRelations(RuleModel $model, array $list): array
-    {
-        return $list;
-    }
-
-    protected function getRepository(): RuleModelRepository
-    {
-        return $this->repo;
-    }
-
-    /**
-     * Returns item types that are supported by rule.
-     */
     public function supports(): array
     {
         return [
