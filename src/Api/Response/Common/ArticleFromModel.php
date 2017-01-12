@@ -64,7 +64,7 @@ trait ArticleFromModel
             $article->getIssue(),
             $article->getElocationId(),
             $article->getDoi(),
-            'NOT REAL, WHERE IS STAGE SET?',
+            $article->getStage(),
             $article->getPdf(),
             $article->getSubjects()->map(function (Subject $subject) {
                 return SubjectResponse::fromModel($subject);

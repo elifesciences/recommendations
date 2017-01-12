@@ -38,7 +38,9 @@
     },
     "scripts": {
         "server": "php -S 0.0.0.0:8088 -t web web/app_local.php",
-        "server:prod": "php -S 0.0.0.0:8088 -t web web/app_prod.php"
+        "server:prod": "php -S 0.0.0.0:8088 -t web web/app_prod.php",
+        "post-install-cmd": "[ -f ./config/local.php ] && ./bin/build-hook",
+        "post-update-cmd": "[ -f ./config/local.php ] && ./bin/build-hook"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

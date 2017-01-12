@@ -2,6 +2,7 @@
 
 namespace eLife\Recommendations;
 
+use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Recommendations\Response\Article;
 use eLife\Recommendations\Response\Result;
 use JMS\Serializer\EventDispatcher\Events;
@@ -38,7 +39,7 @@ final class RecommendationResultDiscriminator implements EventSubscriberInterfac
         if (is_object($object) && $object instanceof Result) {
             /* @noinspection PhpUndefinedFieldInspection */
             $object->internal_type = $object->getType();
-            if ($object instanceof Article) {
+            if ($object instanceof ArticleVersion) {
                 /* @noinspection PhpUndefinedFieldInspection */
                 $object->internal_type .= '--'.$object->status;
             }

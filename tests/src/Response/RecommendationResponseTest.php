@@ -10,6 +10,7 @@ use eLife\ApiSdk\Model\Collection as CollectionModel;
 use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\ImageSize;
 use eLife\ApiSdk\Model\PodcastEpisode as PodcastEpisodeModel;
+use eLife\ApiSdk\Model\ExternalArticle as ExternalArticleModel;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PuliSchemaFinder;
 use eLife\Recommendations\RecommendationResultDiscriminator;
@@ -18,6 +19,7 @@ use JMS\Serializer\EventDispatcher\EventDispatcher;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
 use PHPUnit_Framework_TestCase;
+use StdClass;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Component\HttpFoundation\Response;
 use test\eLife\ApiSdk\Builder;
@@ -69,6 +71,10 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
     {
         $builder = Builder::for(PodcastEpisodeModel::class);
 
+        $externalArticle = $builder
+            ->create(ExternalArticleModel::class)
+            ->__invoke();
+
         $collection = $builder
             ->create(CollectionModel::class)
             ->withImpactStatement('Tropical disease impact statement')
@@ -101,10 +107,9 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
             ->__invoke();
 
         // Build recommendations.
-        $recommendations = RecommendationsResponse::fromModels([$collection, $podcast, $PoaArticle, $VoRArticle], 1);
+        $recommendations = RecommendationsResponse::fromModels([$collection, $podcast, $PoaArticle, $VoRArticle, $externalArticle, new StdClass()], 1);
         // Should not throw.
         $json = $this->serializer->serialize($recommendations, 'json', $this->context);
-
         $response = new Response($json, 200, [
             'Content-Type' => 'application/vnd.elife.recommendations+json;version=1',
         ]);

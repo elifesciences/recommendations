@@ -38,19 +38,19 @@ final class RecommendationsResponse
     public static function fromModels($models, int $total)
     {
         $items = array_filter(array_map(function ($model) {
-            switch (true) {
-                case $model instanceof ArticlePoA:
+            switch (get_class($model)) {
+                case ArticlePoA::class:
                     return PoaArticle::fromModel($model);
-                case $model instanceof ArticleVoR:
+                case ArticleVoR::class:
                     return VorArticle::fromModel($model);
-                case $model instanceof ExternalArticleModel:
+                case ExternalArticleModel::class:
                     return ExternalArticle::fromModel($model);
-                case $model instanceof CollectionModel:
+                case CollectionModel::class:
                     return Collection::fromModel($model);
-                case $model instanceof PodcastEpisodeModel:
+                case PodcastEpisodeModel::class:
                     return PodcastEpisode::fromModel($model);
                 default:
-                    return null;
+                    return;
             }
         }, $models));
 

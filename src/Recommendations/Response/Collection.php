@@ -24,7 +24,7 @@ final class Collection implements Snippet, Result
     use Image;
 
     /**
-     * @Type("DateTime<'Y-m-d\TH:i:sP'>")
+     * @Type("DateTime<'Y-m-d\TH:i:s\Z'>")
      * @Since(version="1")
      */
     public $updated;

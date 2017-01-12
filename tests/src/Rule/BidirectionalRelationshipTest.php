@@ -2,10 +2,8 @@
 
 namespace tests\eLife\Rule;
 
-use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use eLife\Recommendations\Rule\BidirectionalRelationship;
-use eLife\Recommendations\Rule\PodcastEpisodeContents;
 use eLife\Recommendations\RuleModel;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\NullLogger;
@@ -20,8 +18,9 @@ class BidirectionalRelationshipTest extends PHPUnit_Framework_TestCase
      */
     public function test(Article $article)
     {
-        /** @var PodcastEpisodeContents | \PHPUnit_Framework_MockObject_MockObject $mock */
+        /** @var BidirectionalRelationship | \PHPUnit_Framework_MockObject_MockObject $mock */
         $mock = $this->createPartialMock(BidirectionalRelationship::class, ['getArticle']);
+        $mock->setLogger(new NullLogger());
         $mock->expects($this->exactly(1))
             ->method('getArticle')
             ->willReturn($article);
