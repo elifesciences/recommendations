@@ -27,7 +27,7 @@ final class Rules
         return in_array($model->getType(), $rule->supports());
     }
 
-    public function import(RuleModel $model, bool $upsert = true, bool $prune = false) : array
+    public function import(RuleModel $model, bool $upsert = true, bool $prune = false): array
     {
         assert($upsert === true || $prune === false, 'You must upsert in order to prune.');
         $all = [];

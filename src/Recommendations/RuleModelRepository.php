@@ -2,6 +2,7 @@
 
 namespace eLife\Recommendations;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use eLife\Recommendations\Relationships\ManyToManyRelationship;
 use PDO;
@@ -14,6 +15,24 @@ class RuleModelRepository
     public function __construct(Connection $conn)
     {
         $this->db = $conn;
+    }
+
+    public function getAll(RuleModel $ruleModel)
+    {
+        $model = $this->get($ruleModel);
+        $prepared = $this->db->prepare('
+          SELECT Rules.rule_id, Rules.id, Rules.type, Rules.published, Rules.isSynthetic 
+          FROM Rules
+          LEFT JOIN `References` as R ON Rules.rule_id = R.subject_id
+          WHERE R.on_id = ?
+          ORDER BY Rules.published;
+        ');
+        $prepared->bindParam(1, $model['rule_id']);
+        $prepared->execute();
+
+        return array_map(function ($item) {
+            return new RuleModel($item['id'], $item['type'], new DateTimeImmutable($item['published']), $item['isSynthetic'], $item['rule_id']);
+        }, $prepared->fetchAll());
     }
 
     public function get(RuleModel $ruleModel)

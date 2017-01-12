@@ -67,7 +67,7 @@ final class Hydration
 
     public function hydrateOne(RuleModel $model)
     {
-        return $this->getModel($model, true);
+        return $this->getModel($model);
     }
 
     /**
@@ -77,7 +77,7 @@ final class Hydration
      */
     public function hydrateAll(array $rules) : array
     {
-        Assertion::allIsInstanceOf(RuleModel::class, $rules);
+        Assertion::allIsInstanceOf($rules, RuleModel::class);
         $entities = array_map([$this, 'hydrateOne'], $rules);
 
         return all($entities)->wait(true);

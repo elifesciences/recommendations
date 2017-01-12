@@ -60,7 +60,7 @@ class MostRecentWithSubject implements Rule
      */
     public function addRelations(RuleModel $model, array $list): array
     {
-        return [];
+        return $list;
     }
 
     protected function getRepository(): RuleModelRepository

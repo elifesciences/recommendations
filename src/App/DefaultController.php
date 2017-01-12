@@ -22,7 +22,7 @@ final class DefaultController
     const CURRENT_VERSION = 1;
     const MAX_VERSION = 1;
 
-    public function __construct(Rules $rules, Hydration $hydrator = null, Serializer $serializer)
+    public function __construct(Rules $rules, Hydration $hydrator, Serializer $serializer)
     {
         $this->rules = $rules;
         $this->hydrator = $hydrator;
@@ -53,7 +53,7 @@ final class DefaultController
         $mediaType = $this->acceptableResponse($request->headers->get('Accept'));
         $version = $mediaType->getVersion() || self::CURRENT_VERSION;
         $recommendations = $this->rules->getRecommendations(new RuleModel($id, $type));
-        $items = $this->hydrator ? $this->hydrator->hydrateAll($recommendations) : [];
+        $items = $this->hydrator->hydrateAll($recommendations);
         $this->context->setVersion($version);
         $json = $this->serializer->serialize(RecommendationsResponse::fromModels($items, count($items)), 'json', $this->context);
 

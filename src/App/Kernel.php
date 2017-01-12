@@ -12,12 +12,14 @@ use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PuliSchemaFinder;
+use eLife\Recommendations\Process\Hydration;
 use eLife\Recommendations\Process\Rules;
 use eLife\Recommendations\RecommendationResultDiscriminator;
 use eLife\Recommendations\Rule\BidirectionalRelationship;
 use eLife\Recommendations\Rule\CollectionContents;
 use eLife\Recommendations\Rule\MostRecent;
 use eLife\Recommendations\Rule\MostRecentWithSubject;
+use eLife\Recommendations\Rule\NormalizedPersistence;
 use eLife\Recommendations\Rule\PodcastEpisodeContents;
 use eLife\Recommendations\RuleModelRepository;
 use GuzzleHttp\Client;
@@ -29,7 +31,6 @@ use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
 use Kevinrob\GuzzleCache\Strategy\PublicCacheStrategy;
 use Monolog\Formatter\JsonFormatter;
-use Monolog\Handler\FilterHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\ProcessIdProcessor;
@@ -196,6 +197,7 @@ final class Kernel implements MinimalKernel
                 $stream->setFormatter($detailedFormatter);
                 $logger->pushHandler($stream);
             }
+
             return $logger;
         };
 
@@ -208,18 +210,21 @@ final class Kernel implements MinimalKernel
 
         $app['rules.process'] = function (Application $app) {
             return new Rules(
-                /* 1 */ new BidirectionalRelationship($app['api.sdk'], 'retraction', $app['rules.repository'], $app['logger']),
-                /* 2 */ new BidirectionalRelationship($app['api.sdk'], 'correction', $app['rules.repository'], $app['logger']),
-                /* 3 is part of BidirectionalRelationship. */
-                /* 4 */ new BidirectionalRelationship($app['api.sdk'], 'research-article', $app['rules.repository'], $app['logger']),
-                /* 5 */ new BidirectionalRelationship($app['api.sdk'], 'research-exchange', $app['rules.repository'], $app['logger']),
-                /* 6 */ new BidirectionalRelationship($app['api.sdk'], 'research-advance', $app['rules.repository'], $app['logger']),
-                /* 7 */ new BidirectionalRelationship($app['api.sdk'], 'tools-resources', $app['rules.repository'], $app['logger']),
-                /* 8 */ new BidirectionalRelationship($app['api.sdk'], 'feature', $app['rules.repository'], $app['logger']),
-                /* 9 */ new BidirectionalRelationship($app['api.sdk'], 'insight', $app['rules.repository'], $app['logger']),
-                /* 10 */ new BidirectionalRelationship($app['api.sdk'], 'editorial', $app['rules.repository'], $app['logger']),
-                /* 11 */ new CollectionContents($app['api.sdk'], $app['rules.repository']),
-                /* 12 */ new PodcastEpisodeContents($app['api.sdk'], $app['rules.repository']),
+                new NormalizedPersistence(
+                    $app['rules.repository'],
+                    /* 1 */ new BidirectionalRelationship($app['api.sdk'], 'retraction', $app['rules.repository'], $app['logger']),
+                    /* 2 */ new BidirectionalRelationship($app['api.sdk'], 'correction', $app['rules.repository'], $app['logger']),
+                    /* 3 is part of BidirectionalRelationship. */
+                    /* 4 */ new BidirectionalRelationship($app['api.sdk'], 'research-article', $app['rules.repository'], $app['logger']),
+                    /* 5 */ new BidirectionalRelationship($app['api.sdk'], 'research-exchange', $app['rules.repository'], $app['logger']),
+                    /* 6 */ new BidirectionalRelationship($app['api.sdk'], 'research-advance', $app['rules.repository'], $app['logger']),
+                    /* 7 */ new BidirectionalRelationship($app['api.sdk'], 'tools-resources', $app['rules.repository'], $app['logger']),
+                    /* 8 */ new BidirectionalRelationship($app['api.sdk'], 'feature', $app['rules.repository'], $app['logger']),
+                    /* 9 */ new BidirectionalRelationship($app['api.sdk'], 'insight', $app['rules.repository'], $app['logger']),
+                    /* 10 */ new BidirectionalRelationship($app['api.sdk'], 'editorial', $app['rules.repository'], $app['logger']),
+                    /* 11 */ new CollectionContents($app['api.sdk'], $app['rules.repository']),
+                    /* 12 */ new PodcastEpisodeContents($app['api.sdk'], $app['rules.repository'])
+                ),
                 /* 13 */ new MostRecent(),
                 /* 14 */ new MostRecentWithSubject($app['api.sdk'], $app['rules.repository'])
             );
@@ -257,8 +262,12 @@ final class Kernel implements MinimalKernel
             );
         };
 
+        $app['hydration'] = function (Application $app) {
+            return new Hydration($app['api.sdk']);
+        };
+
         $app['default_controller'] = function (Application $app) {
-            return new DefaultController($app['rules.process'], null, $app['serializer']);
+            return new DefaultController($app['rules.process'], $app['hydration'], $app['serializer']);
         };
     }
 
