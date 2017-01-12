@@ -23,12 +23,11 @@ final class SelectedCuratorResponse extends NamedResponse
      */
     public $type;
 
-    public function __construct(string $id, array $name, string $type, ImageResponse $image = null, bool $etAl = false)
+    public function __construct(string $id, array $name, string $type, bool $etAl = false)
     {
         $this->id = $id;
         $this->name = $name;
         $this->type = $type;
-        $this->image = $image;
         $this->etAl = $etAl;
     }
 
@@ -41,7 +40,6 @@ final class SelectedCuratorResponse extends NamedResponse
                 'index' => $person->getDetails()->getIndexName(),
             ],
             $person->getType(),
-            $person->getThumbnail() ? ImageThumbnailResponse::fromModel($person->getThumbnail()) : null,
             $count > 1
         );
     }

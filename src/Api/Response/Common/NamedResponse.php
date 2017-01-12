@@ -7,8 +7,6 @@ use JMS\Serializer\Annotation\Type;
 
 abstract class NamedResponse
 {
-    use Image;
-
     /**
      * @Type("string")
      * @Since(version="1")

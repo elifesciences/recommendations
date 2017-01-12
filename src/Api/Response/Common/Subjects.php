@@ -10,13 +10,13 @@ trait Subjects
 {
     /**
      * @Type("array<eLife\Api\Response\Common\SubjectResponse>")
-     * @Accessor(setter="setSubjects")
+     * @Accessor(getter="getSubjects")
      * @Since(version="1")
      */
     public $subjects;
 
-    public function setSubjects($subjects)
+    public function getSubjects()
     {
-        $this->subjects = empty($subjects) ? null : $subjects;
+        return empty($this->subjects) ? null : $this->subjects;
     }
 }

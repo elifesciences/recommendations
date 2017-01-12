@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d24c613badbb59c956b2f6cae27f84b2",
+    "hash": "b8f731c9095147ad800298e4017e8570",
     "content-hash": "b5160ddac8f8f43745c91418dde556a4",
     "packages": [
         {
@@ -905,12 +905,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "6ed114556d3c0d8173d5ce9f164a2e64cf3f2467"
+                "reference": "ae737c5afd08aa16ed7670a4b9d007cb08959225"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/6ed114556d3c0d8173d5ce9f164a2e64cf3f2467",
-                "reference": "6ed114556d3c0d8173d5ce9f164a2e64cf3f2467",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/ae737c5afd08aa16ed7670a4b9d007cb08959225",
+                "reference": "ae737c5afd08aa16ed7670a4b9d007cb08959225",
                 "shasum": ""
             },
             "require": {
@@ -922,7 +922,7 @@
                 "GPL-3.0+"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2016-12-21 08:28:54"
+            "time": "2017-01-12 07:00:55"
         },
         {
             "name": "elife/api-client",
@@ -3639,16 +3639,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.0.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "2a86dde1288d7270169083d0e078dc7ebe0f48b6"
+                "reference": "9062992538bc5855a683c6737257bfa18d25a4b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/2a86dde1288d7270169083d0e078dc7ebe0f48b6",
-                "reference": "2a86dde1288d7270169083d0e078dc7ebe0f48b6",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9062992538bc5855a683c6737257bfa18d25a4b8",
+                "reference": "9062992538bc5855a683c6737257bfa18d25a4b8",
                 "shasum": ""
             },
             "require": {
@@ -3662,7 +3662,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.1-dev"
                 }
             },
             "autoload": {
@@ -3697,7 +3697,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-01-05 17:12:02"
+            "time": "2017-01-11 19:39:01"
         },
         {
             "name": "webmozart/assert",
