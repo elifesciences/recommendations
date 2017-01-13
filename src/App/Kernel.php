@@ -58,6 +58,11 @@ final class Kernel implements MinimalKernel
     public function __construct($config = [])
     {
         $app = new Application();
+        if (file_exists(self::ROOT.'/config/db.ini')) {
+            $ini = parse_ini_string(file_get_contents(self::ROOT.'/config/db.ini'), true);
+            // @todo make prettier.
+            $config['db'] = array_merge($config['db'] ?? [], $ini['db'] ?? []);
+        }
         // Load config
         $app['config'] = array_merge([
             'cli' => false,
