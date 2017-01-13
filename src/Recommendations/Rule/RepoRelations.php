@@ -8,7 +8,6 @@ use LogicException;
 
 trait RepoRelations
 {
-    protected $rules = [];
     protected $repository;
 
     public function addRelations(RuleModel $model, array $list): array
