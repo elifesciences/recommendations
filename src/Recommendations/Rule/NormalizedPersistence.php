@@ -12,7 +12,6 @@ class NormalizedPersistence implements CompoundRule
     use RepoRelations;
 
     private $rules;
-    private $repository;
 
     public function __construct(RuleModelRepository $repository, Rule ...$rules)
     {
