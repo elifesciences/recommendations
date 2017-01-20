@@ -33,25 +33,32 @@ final class Rules
         return in_array($model->getType(), $rule->supports());
     }
 
-    public function importFromSdk(Model $model)
+    public function importFromSdk(Model $model, string $type = null)
     {
+        if ($type === null) {
+            $type = method_exists($model, 'getType') ? $model->getType() : null;
+        }
+        $ruleModel = null;
         if ($model instanceof PodcastEpisode) {
             // Import podcast.
-            $ruleModel = new RuleModel($model->getNumber(), $type, $model->getPublishedDate());
+            $ruleModel = new RuleModel($model->getNumber(), 'podcast-episode', $model->getPublishedDate());
             $this->logger->debug("We got $type with {$model->getNumber()}");
-        } elseif (method_exists($model, 'getId')) {
+        } elseif (method_exists($model, 'getId') && $type) {
             $published = method_exists($model, 'getPublishedDate') ? $model->getPublishedDate() : null;
             // Import et al.
             $ruleModel = new RuleModel($model->getId(), $type, $published);
-            $this->logger->debug("We got $type with {$model->getId()}");
+            $this->logger->debug("We got {$type} with {$model->getId()}");
         } else {
             // Not good, not et al.
-            $this->logger->alert('Unknown model type', ['model' => $model, 'type' => $type]);
-
-            return;
+            $this->logger->alert('Unknown model type', [
+                'model' => $model,
+                'type' => $type,
+            ]);
         }
-        // Import.
-        $this->import($ruleModel);
+        if ($ruleModel) {
+            // Import.
+            $this->import($ruleModel);
+        }
     }
 
     public function import(RuleModel $model, bool $upsert = true, bool $prune = false): array

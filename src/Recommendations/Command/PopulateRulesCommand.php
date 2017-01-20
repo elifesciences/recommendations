@@ -4,10 +4,8 @@ namespace eLife\Recommendations\Command;
 
 use eLife\Api\Command\PopulateCommand;
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Logging\Monitoring;
 use eLife\Recommendations\Process\Rules;
-use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
 use Psr\Log\LoggerInterface;
 
@@ -42,22 +40,6 @@ final class PopulateRulesCommand extends PopulateCommand
 
     public function processModel(string $type, $model)
     {
-        if ($model instanceof PodcastEpisode) {
-            // Import podcast.
-            $ruleModel = new RuleModel($model->getNumber(), $type, $model->getPublishedDate());
-            $this->logger->debug("We got $type with {$model->getNumber()}");
-        } elseif (method_exists($model, 'getId')) {
-            $published = method_exists($model, 'getPublishedDate') ? $model->getPublishedDate() : null;
-            // Import et al.
-            $ruleModel = new RuleModel($model->getId(), $type, $published);
-            $this->logger->debug("We got $type with {$model->getId()}");
-        } else {
-            // Not good, not et al.
-            $this->logger->alert('Unknown model type', ['model' => $model, 'type' => $type]);
-
-            return;
-        }
-        // Import.
-        $this->rules->import($ruleModel);
+        $this->rules->importFromSdk($model, $type);
     }
 }
