@@ -31,6 +31,7 @@ final class Console
         // Add custom commands.
         $this->console->add($app->get('console.populate_rules'));
         $this->console->add($app->get('console.generate_database'));
+        $this->console->add($app->get('console.queue'));
         // Set up logger.
         $this->logger = $app->get('logger');
     }
