@@ -79,6 +79,7 @@ final class Kernel implements MinimalKernel
             'validate' => false,
             'annotation_cache' => true,
             'ttl' => 3600,
+            'process_memory_limit' => 200,
             'file_logs_path' => self::ROOT.'/var/logs',
             'db' => array_merge([
                 'driver' => 'pdo_mysql',
@@ -298,7 +299,7 @@ final class Kernel implements MinimalKernel
         };
 
         $app['console.queue'] = function (Application $app) {
-            return new MysqlRepoQueueCommand($app['rules.repository'], $app['logger'], $app['aws.queue'], $app['aws.queue_transformer'], $app['monitoring'], $app['limit.long_running']);
+            return new MysqlRepoQueueCommand($app['rules.process'], $app['logger'], $app['aws.queue'], $app['aws.queue_transformer'], $app['monitoring'], $app['limit.long_running']);
         };
 
         //#####################################################
