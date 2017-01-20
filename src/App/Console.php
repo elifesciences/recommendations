@@ -25,6 +25,7 @@ final class Console
         $this->console = $console;
         $this->app = $app;
         $this->root = __DIR__.'/../..';
+        $this->config = $this->app->get('config');
 
         $this->console
             ->getDefinition()
@@ -44,13 +45,12 @@ final class Console
 
     public function queueCreateCommand()
     {
-        // aws sqs create-queue --region=us-east-1 --queue-name=eLife-recommendations --endpoint=http://elife_recommendations_sqs:4100
         /** @var SqsClient $queue */
         $queue = $this->app->get('aws.sqs');
 
         $queue->createQueue([
-            'Region' => 'us-east-1',
-            'QueueName' => 'eLife-recommendations',
+            'Region' => $this->config['aws']['region'],
+            'QueueName' => $this->config['aws']['queue_name'],
         ]);
     }
 
