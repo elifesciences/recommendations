@@ -111,7 +111,7 @@ abstract class PopulateCommand extends Command
     {
         $this->logger->info('Importing Research Articles');
         $articles = $this->sdk->articles();
-        $this->iterateSerializeTask($articles, 'research-article', $articles->count());
+        $this->iterateSerializeTask($articles, 'article', $articles->count());
     }
 
     public function importInterviews()
@@ -146,7 +146,6 @@ abstract class PopulateCommand extends Command
             if ($limit()) {
                 throw new RuntimeException('Command cannot complete because: '.implode(', ', $limit->getReasons()));
             }
-            $progress->advance();
             try {
                 $item = $items->current();
                 if ($item === null) {

@@ -49,12 +49,23 @@ trait GetSdk
                 return $this->sdk->collections();
                 break;
 
+            case 'correction':
+            case 'editorial':
+            case 'feature':
+            case 'insight':
+            case 'research-advance':
             case 'research-article':
+            case 'research-exchange':
+            case 'retraction':
+            case 'registered-report':
+            case 'replication-study':
+            case 'short-report':
+            case 'tools-resources':
                 return $this->sdk->articles();
                 break;
 
             default:
-                throw new LogicException('ApiSDK does not exist for that type.');
+                throw new LogicException('ApiSDK does not exist for provided type: '.$type);
         }
     }
 }

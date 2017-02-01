@@ -299,6 +299,7 @@ final class Kernel implements MinimalKernel
             return new PopulateRulesCommand(
                 $app['api.sdk'],
                 $app['rules.repository'],
+                $app['aws.queue'],
                 $app['rules.process'],
                 $app['logger'],
                 $app['monitoring'],

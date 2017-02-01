@@ -4,6 +4,8 @@ namespace eLife\Recommendations\Command;
 
 use eLife\Api\Command\PopulateCommand;
 use eLife\ApiSdk\ApiSdk;
+use eLife\Bus\Queue\InternalSqsMessage;
+use eLife\Bus\Queue\WatchableQueue;
 use eLife\Logging\Monitoring;
 use eLife\Recommendations\Process\Rules;
 use eLife\Recommendations\RuleModelRepository;
@@ -13,10 +15,12 @@ final class PopulateRulesCommand extends PopulateCommand
 {
     private $repo;
     private $rules;
+    private $queue;
 
     public function __construct(
         ApiSdk $sdk,
         RuleModelRepository $repo,
+        WatchableQueue $queue,
         Rules $rules,
         LoggerInterface $logger,
         Monitoring $monitoring,
@@ -25,6 +29,7 @@ final class PopulateRulesCommand extends PopulateCommand
         $this->repo = $repo;
         $this->rules = $rules;
         $this->limit = $limit;
+        $this->queue = $queue;
         parent::__construct($sdk, $logger, $monitoring, $limit);
     }
 
@@ -43,6 +48,10 @@ final class PopulateRulesCommand extends PopulateCommand
         $this->logger->debug("{$this->getName()} Importing model from SDK", [
             'type' => $type,
         ]);
-        $this->rules->importFromSdk($model, $type);
+        $ruleModel = $this->rules->getRuleModelFromSdk($model, $type);
+        if ($ruleModel) {
+            // Add to SQS
+            $this->queue->enqueue(new InternalSqsMessage($ruleModel->getType(), $ruleModel->getId()));
+        }
     }
 }

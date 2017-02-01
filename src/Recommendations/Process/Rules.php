@@ -17,7 +17,6 @@ use eLife\Logging\Monitoring;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 final class Rules
 {
@@ -37,7 +36,7 @@ final class Rules
         return in_array($model->getType(), $rule->supports());
     }
 
-    public function importFromSdk(Model $model, string $type = null)
+    public function getRuleModelFromSdk(Model $model, string $type = null)
     {
         if ($type === null) {
             $type = method_exists($model, 'getType') ? $model->getType() : null;
@@ -59,31 +58,31 @@ final class Rules
                 'type' => $type,
             ]);
         }
-        if ($ruleModel) {
-            $this->monitoring->nameTransaction("Importing {$ruleModel->getType()}<{$ruleModel->getId()}>");
-            $this->monitoring->startTransaction();
-            try {
-                // Import.
-                $this->import($ruleModel);
-            } catch (Throwable $e) {
-                $this->monitoring->recordException($e);
-                throw $e;
-            }
-            $this->monitoring->endTransaction();
-        }
+
+        return $ruleModel;
     }
 
     public function import(RuleModel $model, bool $upsert = true, bool $prune = false): array
     {
+        $this->monitoring->nameTransaction("Importing {$model->getType()}<{$model->getId()}>");
+        $this->monitoring->startTransaction();
         if ($upsert === false && $prune === true) {
             throw new BadMethodCallException('You must upsert in order to prune.');
         }
         $all = [];
         foreach ($this->rules as $rule) {
             if ($this->isSupported($model, $rule) === false) {
+                $this->logger->debug('Skipping import for rule '.get_class($rule), [
+                    'model' => $model,
+                ]);
                 continue;
             }
             $relations = $rule->resolveRelations($model);
+            if (!empty($relations)) {
+                $this->logger->debug('Found relations on model', [
+                    'relations' => $relations,
+                ]);
+            }
             if ($upsert) {
                 array_map([$rule, 'upsert'], $relations);
             }
@@ -92,6 +91,7 @@ final class Rules
             }
             $all = array_merge($all, $relations);
         }
+        $this->monitoring->endTransaction();
 
         return $all;
     }

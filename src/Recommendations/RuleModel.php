@@ -9,8 +9,9 @@
 namespace eLife\Recommendations;
 
 use DateTimeImmutable;
+use JsonSerializable;
 
-class RuleModel
+class RuleModel implements JsonSerializable
 {
     private $rule_id;
     private $id;
@@ -32,12 +33,12 @@ class RuleModel
         $this->rule_id = $id;
     }
 
-    public function isFromDatabase() : bool
+    public function isFromDatabase(): bool
     {
         return (bool) $this->rule_id;
     }
 
-    public function getRuleId() : string
+    public function getRuleId(): string
     {
         return $this->rule_id;
     }
@@ -73,5 +74,20 @@ class RuleModel
     public function getPublished()
     {
         return $this->published;
+    }
+
+    public function __toString()
+    {
+        return json_encode($this);
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'published' => $this->published,
+            'isSynthetic' => $this->isSynthetic,
+        ];
     }
 }

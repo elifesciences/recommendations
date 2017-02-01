@@ -59,10 +59,12 @@ class BidirectionalRelationship implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
-        $this->logger->debug('Starting to resolve relations for article with id '.$input->getId());
+        $this->logger->debug('Finding '.$this->type.' articles related to Article<'.$input->getId().'>');
         $article = $this->getArticle($input->getId());
         $related = $article->getRelatedArticles();
-        $this->logger->debug('Found related articles ('.$related->count().')');
+        if ($related->count() > 0) {
+            $this->logger->debug('Found related articles ('.$related->count().')');
+        }
         $type = $this->type;
         $this->logger->debug('Starting to loop through articles');
 

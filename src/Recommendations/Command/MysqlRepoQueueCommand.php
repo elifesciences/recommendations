@@ -26,15 +26,16 @@ final class MysqlRepoQueueCommand extends QueueCommand
     ) {
         $this->rules = $rules;
 
-        parent::__construct($logger, $queue, $transformer, $monitoring, $limit);
+        parent::__construct($logger, $queue, $transformer, $monitoring, $limit, false);
     }
 
-    protected function process(InputInterface $input, QueueItem $model)
+    protected function process(InputInterface $input, QueueItem $model, $entity = null)
     {
+        $type = method_exists($entity, 'getType') ? $entity->getType() : $model->getType();
         $this->logger->debug("{$this->getName()} Adding model to queue", [
-            'type' => $model->getType(),
+            'type' => $type,
             'id' => $model->getId(),
         ]);
-        $this->rules->import(new RuleModel($model->getId(), $model->getType()));
+        $this->rules->import(new RuleModel($model->getId(), $type));
     }
 }

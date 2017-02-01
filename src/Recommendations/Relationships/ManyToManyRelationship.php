@@ -4,8 +4,10 @@ namespace eLife\Recommendations\Relationships;
 
 use eLife\Recommendations\Relationship;
 use eLife\Recommendations\RuleModel;
+use function GuzzleHttp\json_encode;
+use JsonSerializable;
 
-final class ManyToManyRelationship implements Relationship
+final class ManyToManyRelationship implements Relationship, JsonSerializable
 {
     private $on;
     private $subject;
@@ -30,5 +32,18 @@ final class ManyToManyRelationship implements Relationship
     public function getSubject() : RuleModel
     {
         return $this->subject;
+    }
+
+    public function __toString()
+    {
+        return json_encode($this);
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'on' => $this->on,
+            'subject' => $this->subject,
+        ];
     }
 }
