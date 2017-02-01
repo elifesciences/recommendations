@@ -4,8 +4,8 @@ namespace eLife\Recommendations\Relationships;
 
 use eLife\Recommendations\Relationship;
 use eLife\Recommendations\RuleModel;
-use function GuzzleHttp\json_encode;
 use JsonSerializable;
+use function GuzzleHttp\json_encode;
 
 final class ManyToManyRelationship implements Relationship, JsonSerializable
 {
