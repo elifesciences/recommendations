@@ -5,31 +5,58 @@ namespace eLife\Recommendations\Rule;
 use eLife\Recommendations\Relationship;
 use eLife\Recommendations\Rule;
 use eLife\Recommendations\RuleModel;
+use eLife\Recommendations\RuleModelRepository;
 use eLife\Sdk\Article;
+use Psr\Log\LoggerInterface;
 
 final class MostRecent implements Rule
 {
-    /**
-     * Resolve Relations.
-     *
-     * @note this particular example does not add any relations!
-     */
+    private $repo;
+    private $logger;
+
+    public function __construct(RuleModelRepository $repo, LoggerInterface $logger)
+    {
+        $this->repo = $repo;
+        $this->logger = $logger;
+    }
+
     public function resolveRelations(RuleModel $input): array
     {
+        // this particular example does not add any relations.
         return [];
     }
 
     public function upsert(Relationship $relationship)
     {
+        // this particular example does not add any relations.
+        return;
     }
 
     public function prune(RuleModel $input, array $relationships = null)
     {
-        // TODO: Implement prune() method.
+        // this particular example does not add any relations.
     }
 
     public function addRelations(RuleModel $model, array $list): array
     {
+        foreach ($this->repo->getLatestArticle() as $item) {
+            /* @var RuleModel $item */
+            $intersection = array_filter($list, function (RuleModel $listItem) use ($item) {
+                return $listItem->equalTo($item);
+            });
+            if (
+                empty($intersection) &&
+                $item->equalTo($model) === false
+            ) {
+                array_push($list, $item);
+
+                return $list;
+            }
+        }
+        $this->logger->error('Latest article could not be found', [
+            'model' => $model,
+        ]);
+
         return $list;
     }
 

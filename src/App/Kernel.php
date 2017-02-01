@@ -256,8 +256,8 @@ final class Kernel implements MinimalKernel
                     /* 11 */ new CollectionContents($app['api.sdk'], $app['rules.repository']),
                     /* 12 */ new PodcastEpisodeContents($app['api.sdk'], $app['rules.repository'])
                 ),
-                /* 13 */ new MostRecent(),
-                /* 14 */ new MostRecentWithSubject($app['api.sdk'], $app['rules.repository'])
+                /* 13 */ new MostRecent($app['rules.repository'], $app['logger']),
+                /* 14 */ new MostRecentWithSubject($app['api.sdk'], $app['rules.repository'], $app['logger'])
             );
         };
 

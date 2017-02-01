@@ -3,6 +3,7 @@
 namespace eLife\Recommendations\Rule;
 
 use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Recommendations\Relationships\ManyToManyRelationship;
@@ -11,6 +12,7 @@ use eLife\Recommendations\Rule\Common\GetSdk;
 use eLife\Recommendations\Rule\Common\PersistRule;
 use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
+use Psr\Log\LoggerInterface;
 
 class MostRecentWithSubject implements Rule
 {
@@ -19,13 +21,16 @@ class MostRecentWithSubject implements Rule
 
     private $sdk;
     private $repo;
+    private $logger;
 
     public function __construct(
         ApiSdk $sdk,
-        RuleModelRepository $repo
+        RuleModelRepository $repo,
+        LoggerInterface $logger
     ) {
         $this->sdk = $sdk;
         $this->repo = $repo;
+        $this->logger = $logger;
     }
 
     public function resolveRelations(RuleModel $input): array
@@ -46,6 +51,33 @@ class MostRecentWithSubject implements Rule
 
     public function addRelations(RuleModel $model, array $list): array
     {
+        /** @var ArticleVersion $article */
+        $article = $this->getFromSdk($model->getType(), $model->getId());
+        $subjects = $article->getSubjects();
+        /** @var Subject $subject */
+        $subject = $subjects[0] ?? null;
+        // Nope out early.
+        if (!$subject) {
+            return $list;
+        }
+        foreach ($this->repo->getLatestArticleWithSubject($subject->getId()) as $item) {
+            /* @var RuleModel $item */
+            $intersection = array_filter($list, function (RuleModel $listItem) use ($item) {
+                return $listItem->equalTo($item);
+            });
+            if (
+                empty($intersection) &&
+                $item->equalTo($model) === false
+            ) {
+                array_push($list, $item);
+
+                return $list;
+            }
+        }
+        $this->logger->error('Latest article with subject `'.$subject->getId().'` could not be found', [
+            'model' => $model,
+        ]);
+
         return $list;
     }
 

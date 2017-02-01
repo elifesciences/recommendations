@@ -33,6 +33,43 @@ class RuleModelRepository
         );
     }
 
+    public function getLatestArticle()
+    {
+        $prepared = $this->db->prepare('
+          SELECT * FROM Rules 
+          WHERE Rules.type!="subject" 
+          AND Rules.type!="collection" 
+          AND Rules.type!="podcast-episode" 
+          ORDER BY Rules.published DESC
+          LIMIT 40
+        ');
+        $prepared->execute();
+
+        foreach ($prepared->fetchAll() as $item) {
+            yield $this->map($item);
+        }
+    }
+    public function getLatestArticleWithSubject(string $subject)
+    {
+        $prepared = $this->db->prepare('
+          SELECT onRule.rule_id, onRule.id, onRule.type, onRule.published, onRule.isSynthetic 
+          FROM `References` as Ref 
+          JOIN `Rules` onRule on Ref.on_id = onRule.rule_id 
+          JOIN `Rules` subjectRule on Ref.subject_id = subjectRule.rule_id 
+          WHERE subjectRule.type=\'subject\' 
+          AND subjectRule.id=? 
+          ORDER BY onRule.published DESC
+        ');
+        $prepared->bindParam(1, $subject, PDO::PARAM_STR);
+        $prepared->execute();
+
+        foreach ($prepared->fetchAll() as $item) {
+            if ($item) {
+                yield $this->map($item);
+            }
+        }
+    }
+
     public function slice(int $offset, int $count)
     {
         $prepared = $this->db->prepare('

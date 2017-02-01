@@ -81,6 +81,11 @@ class RuleModel implements JsonSerializable
         return json_encode($this);
     }
 
+    public function equalTo(RuleModel $model)
+    {
+        return $model->getId() === $this->getId() && $model->getType() === $this->getType();
+    }
+
     public function jsonSerialize()
     {
         return [
