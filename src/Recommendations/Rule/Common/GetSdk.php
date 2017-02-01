@@ -7,6 +7,9 @@ use JMS\Serializer\Exception\LogicException;
 
 trait GetSdk
 {
+    /** @var ApiSdk */
+    private $sdk;
+
     public function getFromSdk(string $type, string $id)
     {
         if (!isset($this->sdk) || !$this->sdk instanceof ApiSdk) {

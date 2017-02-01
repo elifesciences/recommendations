@@ -14,43 +14,21 @@ use Assert\Assertion;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\HasSubjects;
+use eLife\Recommendations\Rule\Common\GetSdk;
 use eLife\Recommendations\RuleModel;
-use LogicException;
 use function GuzzleHttp\Promise\all;
 
 final class Hydration
 {
+    use GetSdk;
+
     /** @var ApiSdk */
     private $sdk;
     private $cache = [];
 
-    public function getSdk(RuleModel $item)
-    {
-        switch ($item->getType()) {
-            case 'podcast-episode':
-                return $this->sdk->podcastEpisodes();
-                break;
-
-            case 'collection':
-                return $this->sdk->collections();
-                break;
-
-            case 'research-article':
-                return $this->sdk->articles();
-                break;
-
-            case 'subject':
-                return $this->sdk->subjects();
-                break;
-
-            default:
-                throw new LogicException('ApiSDK does not exist for type '.$item->getType().'.');
-        }
-    }
-
     public function transform(RuleModel $item)
     {
-        $sdk = $this->getSdk($item);
+        $sdk = $this->getSdk($item->getType());
         $entity = $sdk->get($item->getId());
 
         return $entity->wait(true);
@@ -66,7 +44,7 @@ final class Hydration
         if (isset($this->cache[$model->getType()][$model->getId()])) {
             return $this->cache[$model->getType()][$model->getId()];
         }
-        $sdk = $this->getSdk($model);
+        $sdk = $this->getSdk($model->getType());
         $entity = $sdk->get($model->getId());
         if ($unwrap) {
             return $entity->wait(true);
