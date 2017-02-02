@@ -146,6 +146,7 @@ abstract class PopulateCommand extends Command
             if ($limit()) {
                 throw new RuntimeException('Command cannot complete because: '.implode(', ', $limit->getReasons()));
             }
+            $progress->advance();
             try {
                 $item = $items->current();
                 if ($item === null) {
