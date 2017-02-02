@@ -39,7 +39,7 @@ final class Console
             $this->console->add($app->get('console.populate_rules'));
             $this->console->add($app->get('console.queue'));
         } catch (SqsException $e) {
-            $this->logger->warning('Something went wrong while connecting to SQS', ['exception' => $e]);
+            $this->logger->debug('Cannot connect to SQS so some commands are not available', ['exception' => $e]);
         }
     }
 
