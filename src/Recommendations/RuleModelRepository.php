@@ -60,7 +60,7 @@ class RuleModelRepository
           AND subjectRule.id=? 
           ORDER BY onRule.published DESC
         ');
-        $prepared->bindParam(1, $subject, PDO::PARAM_STR);
+        $prepared->bindValue(1, $subject, PDO::PARAM_STR);
         $prepared->execute();
 
         foreach ($prepared->fetchAll() as $item) {
@@ -80,8 +80,8 @@ class RuleModelRepository
           LIMIT ? 
           OFFSET ?;
         ');
-        $prepared->bindParam(1, $count, PDO::PARAM_INT);
-        $prepared->bindParam(2, $offset, PDO::PARAM_INT);
+        $prepared->bindValue(1, $count, PDO::PARAM_INT);
+        $prepared->bindValue(2, $offset, PDO::PARAM_INT);
         $prepared->execute();
 
         return $this->mapAll($prepared->fetchAll());
@@ -98,7 +98,7 @@ class RuleModelRepository
           AND Rules.isSynthetic = 0
           ORDER BY Rules.published;
         ');
-        $prepared->bindParam(1, $model['rule_id']);
+        $prepared->bindValue(1, $model['rule_id']);
         $prepared->execute();
 
         return $this->mapAll($prepared->fetchAll());
@@ -152,7 +152,7 @@ class RuleModelRepository
     public function hasRelation(ManyToManyRelationship $relationship)
     {
         $prepared = $this->db->prepare('SELECT on_id, subject_id FROM `References` WHERE on_id = ? AND subject_id = ? LIMIT 1;');
-        $prepared->bindParam(1, $relationship->getOn()->getRuleId());
+        $prepared->bindValue(1, $relationship->getOn()->getRuleId());
         $prepared->bindValue(2, $relationship->getSubject()->getRuleId());
         $prepared->execute();
 
