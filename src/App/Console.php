@@ -35,12 +35,8 @@ final class Console
         $this->console->add($app->get('console.generate_database'));
         // Set up logger.
         $this->logger = $app->get('logger');
-        try {
-            $this->console->add($app->get('console.populate_rules'));
-            $this->console->add($app->get('console.queue'));
-        } catch (SqsException $e) {
-            $this->logger->debug('Cannot connect to SQS so some commands are not available', ['exception' => $e]);
-        }
+        $this->console->add($app->get('console.populate_rules'));
+        $this->console->add($app->get('console.queue'));
     }
 
     public function queueCreateCommand()
