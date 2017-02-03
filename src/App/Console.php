@@ -2,7 +2,6 @@
 
 namespace eLife\App;
 
-use Aws\Sqs\Exception\SqsException;
 use Aws\Sqs\SqsClient;
 use Closure;
 use Exception;
