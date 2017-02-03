@@ -4,6 +4,7 @@ return [
     'debug' => false,
     'validate' => true,
     'ttl' => 0,
+    'api_url' => 'http://localhost:8080',
     'aws' => [
         'queue_name' => 'recommendations--ci',
         'credential_file' => true,
