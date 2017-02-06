@@ -1,2 +1,45 @@
 #!/usr/bin/env bash
-echo "Not implemented yet."
+environment=$1
+
+if [ -z "$environment" ]; then
+    echo "environment needs to be passed as first argument";
+    exit 2;
+fi;
+
+# propagate SIGINT to waiting process
+trap 'kill -INT -$waitingPid' INT
+
+## TODO
+#./bin/console queue:clean --env="$environment"
+# TODO: poll for queue:count == 0, with timeout
+#sleep 5
+
+echo "Starting a queue:watch"
+./bin/console queue:watch --env="$environment" >> /tmp/queue-watch.log 2>&1 &
+queueWatchPid=$!
+echo "queue:watch PID $queueWatchPid"
+
+echo "Starting import"
+./bin/console api:import all --env="$environment"
+echo "Finished launching import"
+
+# will return also on failing conditions such as dead processes
+timeout 60 ./bin/wait-for-empty-queue "$environment" &
+waitingPid=$!
+wait "$waitingPid"
+waitingReturnCode=$?
+# clean up PHP processes
+kill "$queueWatchPid";
+if [ ! "$waitingReturnCode" -eq "0" ]; then
+    echo -e "\e[31mThe script './wait-for-empty-queue' timed out\e[39m"
+    exit "$waitingReturnCode"
+fi
+
+# final verification
+#recommendations=$(curl -v localhost/recommendations/... | jq ".total")
+#echo "Total results in the index: $total"
+#if [ ! "$total" -eq "$expected_results_api_dummy" ]; then
+#    echo "There should be at least $expected_results_api_dummy results in the index"
+#    exit 2
+#fi
+
