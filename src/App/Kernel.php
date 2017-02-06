@@ -12,6 +12,8 @@ use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PuliSchemaFinder;
+use eLife\Bus\Command\QueueCleanCommand;
+use eLife\Bus\Command\QueueCountCommand;
 use eLife\Bus\Limit\CompositeLimit;
 use eLife\Bus\Limit\LoggingMiddleware;
 use eLife\Bus\Limit\MemoryLimit;
@@ -309,6 +311,14 @@ final class Kernel implements MinimalKernel
 
         $app['console.generate_database'] = function (Application $app) {
             return new GenerateDatabaseCommand($app['db'], $app['logger'], $app['monitoring']);
+        };
+
+        $app['console.queue_count'] = function (Application $app) {
+            return new QueueCountCommand($app['aws.queue']);
+        };
+
+        $app['console.queue_clean'] = function (Application $app) {
+            return new QueueCleanCommand($app['aws.queue'], $app['logger']);
         };
 
         $app['console.queue'] = function (Application $app) {
