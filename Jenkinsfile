@@ -14,10 +14,10 @@ elifePipeline {
 
     elifeMainlineOnly {
         stage 'End2end tests', {
-            //elifeEnd2EndTest({
+            elifeEnd2EndTest({
                 builderDeployRevision 'recommendations--end2end', commit
                 builderSmokeTests 'recommendations--end2end', '/srv/recommendations'
-            //}, 'two')
+            }, 'recommendations')
         }
 
         stage 'Approval', {
