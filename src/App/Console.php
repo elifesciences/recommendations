@@ -17,6 +17,12 @@ final class Console
         'cache:clear' => ['description' => 'Clears cache'],
         'debug:params' => ['description' => 'Lists current parameters'],
         'queue:create' => ['description' => 'Lists current parameters'],
+        'query:count' => [
+            'description' => 'Runs query from bin/queries folder',
+            'args' => [
+                ['name' => 'file'],
+            ],
+        ],
     ];
 
     public function __construct(Application $console, Kernel $app)
@@ -36,6 +42,28 @@ final class Console
         $this->logger = $app->get('logger');
         $this->console->add($app->get('console.populate_rules'));
         $this->console->add($app->get('console.queue'));
+    }
+
+    public function queryCountCommand(InputInterface $input)
+    {
+        $file = $input->getArgument('file');
+        $path = $this->root.'/bin/queries/'.$file.'.sql';
+
+        if (!file_exists($path)) {
+            $this->logger->error('Query not found');
+
+            return;
+        }
+
+        $query = file_get_contents($path);
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $this->app->get('db');
+
+        $result = $connection->prepare($query);
+        $result->execute();
+
+        $this->logger->info("Returned {$result->rowCount()} row(s)");
     }
 
     public function queueCreateCommand()
