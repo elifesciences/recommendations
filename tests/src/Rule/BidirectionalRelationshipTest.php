@@ -2,6 +2,7 @@
 
 namespace tests\eLife\Rule;
 
+use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\Recommendations\Rule\BidirectionalRelationship;
 use eLife\Recommendations\RuleModel;
@@ -20,11 +21,11 @@ class BidirectionalRelationshipTest extends PHPUnit_Framework_TestCase
     public function test(Article $article)
     {
         /** @var BidirectionalRelationship | \PHPUnit_Framework_MockObject_MockObject $mock */
-        $mock = $this->createPartialMock(BidirectionalRelationship::class, ['getArticle']);
+        $mock = $this->createPartialMock(BidirectionalRelationship::class, ['getRelatedArticles']);
         $mock->setLogger(new NullLogger());
         $mock->expects($this->exactly(1))
-            ->method('getArticle')
-            ->willReturn($article);
+            ->method('getRelatedArticles')
+            ->willReturn(new ArraySequence([$article]));
 
         $this->assertTrue(in_array($article->getType(), $mock->supports()));
 

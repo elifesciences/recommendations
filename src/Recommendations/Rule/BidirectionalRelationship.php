@@ -3,6 +3,7 @@
 namespace eLife\Recommendations\Rule;
 
 use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ExternalArticle as ExternalArticleModel;
@@ -46,6 +47,11 @@ class BidirectionalRelationship implements Rule
         return $this->sdk->articles()->get($id)->wait(true);
     }
 
+    protected function getRelatedArticles(string $id): Sequence
+    {
+        return $this->sdk->articles()->getRelatedArticles($id);
+    }
+
     /**
      * Resolve Relations.
      *
@@ -59,23 +65,21 @@ class BidirectionalRelationship implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
-        $this->logger->debug('Finding '.$this->type.' articles related to Article<'.$input->getId().'>');
-        $article = $this->getArticle($input->getId());
-        $related = $article->getRelatedArticles();
-        if ($related->count() > 0) {
-            $this->logger->debug('Found related articles ('.$related->count().')');
+        $this->logger->debug('Looking for '.$this->type.' articles related to Article<'.$input->getId().'>');
+        $related = $this->getRelatedArticles($input->getId());
+        if ($related->count() === 0) {
+            return [];
         }
-        $type = $this->type;
-        $this->logger->debug('Starting to loop through articles');
+        $this->logger->debug('Found related articles ('.$related->count().')');
 
         return $related
             ->filter(function ($item) {
                 return $item instanceof Article;
             })
-            ->filter(function (Article $article) use ($type) {
-                $this->logger->debug('Found related article id: '.$article->getId().' and type: '.$type);
+            ->filter(function (Article $article) {
+                $this->logger->debug('Found related article id: '.$article->getId().' and type: '.$this->type);
 
-                return $article->getType() === $type;
+                return $article->getType() === $this->type;
             })
             ->map(function (Article $article) use ($input) {
                 $type = $article instanceof ExternalArticleModel ? 'external-article' : 'research-article';

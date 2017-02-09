@@ -14,6 +14,7 @@ use Assert\Assertion;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\HasSubjects;
+use eLife\ApiSdk\Model\Model;
 use eLife\Recommendations\Rule\Common\GetSdk;
 use eLife\Recommendations\RuleModel;
 use function GuzzleHttp\Promise\all;
@@ -39,6 +40,11 @@ final class Hydration
         $this->sdk = $sdk;
     }
 
+    /**
+     * This is quite a basic model conversion, if we start offering
+     * recommendations for other items such as podcast episodes then
+     * this will have to change. (getId doesn't exist on podcasts).
+     */
     private function getModel(RuleModel $model, $unwrap = false)
     {
         if (isset($this->cache[$model->getType()][$model->getId()])) {
@@ -50,13 +56,10 @@ final class Hydration
             return $entity->wait(true);
         }
 
-        return $entity->then(function ($model) {
-            if (method_exists($model, 'getType')) {
-                $this->cache[$model->getType()][$model->getId()] = $model;
-                // @todo enable if required.
-                // $this->extractRelatedFrom(new RuleModel($model->getId(), $model->getType()));
-            }
-
+        return $entity->then(function (ArticleVersion $model) {
+            $this->cache[$model->getType()][$model->getId()] = $model;
+            // @todo enable if required.
+            // $this->extractRelatedFrom(new RuleModel($model->getId(), $model->getType()));
             return $model;
         });
     }
@@ -80,7 +83,7 @@ final class Hydration
         if ($model instanceof ArticleVersion) {
             $this->cache['related-article'] = $this->cache['related-article'] ?? [];
             /** @var $model ArticleVersion */
-            foreach ($model->getRelatedArticles() as $relatedArticle) {
+            foreach ($this->sdk->articles()->getRelatedArticles($model->getId()) as $relatedArticle) {
                 $this->cache[$relatedArticle->getType()][$relatedArticle->getId()] = $relatedArticle;
             }
         }
