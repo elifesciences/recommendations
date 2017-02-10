@@ -43,7 +43,7 @@ final class DefaultController
     public function acceptableRequest(Request $request)
     {
         $contentType = $request->headers->get('Accept');
-        if ($contentType === 'application/json') {
+        if ($contentType === 'application/json' || $contentType === '*/*') {
             $mediaType = new MediaType(self::MEDIA_TYPE, self::CURRENT_VERSION);
         } else {
             try {
