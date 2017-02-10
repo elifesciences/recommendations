@@ -6,6 +6,8 @@ if [ -z "$environment" ]; then
     exit 2;
 fi;
 
+expected_rules=29
+
 # propagate SIGINT to waiting process
 trap 'kill -INT -$waitingPid' INT
 
@@ -36,10 +38,10 @@ if [ ! "$waitingReturnCode" -eq "0" ]; then
 fi
 
 # final verification
-#recommendations=$(curl -v localhost/recommendations/... | jq ".total")
-#echo "Total results in the index: $total"
-#if [ ! "$total" -eq "$expected_results_api_dummy" ]; then
-#    echo "There should be at least $expected_results_api_dummy results in the index"
-#    exit 2
-#fi
+total_rules=$(php bin/console query:count easy-read-rules --env=$environment)
+echo "Total rules in the index: $total_rules"
+if [ ! "$total_rules" -eq "$expected_rules" ]; then
+    echo "There should be exactly $expected_rules in the database"
+    exit 2
+fi
 
