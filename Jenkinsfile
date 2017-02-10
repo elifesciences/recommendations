@@ -17,6 +17,8 @@ elifePipeline {
             elifeEnd2EndTest({
                 builderDeployRevision 'recommendations--end2end', commit
                 builderSmokeTests 'recommendations--end2end', '/srv/recommendations'
+                builderCmd 'recommendations--end2end', 'cd /srv/recommendations; bin/console api:import all --env=end2end'
+                builderCmd 'recommendations--end2end', 'cd /srv/recommendations; bin/wait-for-empty-queue end2end'
             }, 'recommendations')
         }
 
