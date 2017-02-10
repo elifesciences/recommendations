@@ -7,6 +7,7 @@ use Closure;
 use Exception;
 use LogicException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +21,11 @@ final class Console
         'query:count' => [
             'description' => 'Runs query from bin/queries folder',
             'args' => [
-                ['name' => 'file'],
+                [
+                    'name' => 'file',
+                    'mode' => InputArgument::REQUIRED,
+                    'description' => 'e.g. easy-read-rules',
+                ],
             ],
         ],
     ];
@@ -46,7 +51,7 @@ final class Console
         $this->console->add($app->get('console.queue'));
     }
 
-    public function queryCountCommand(InputInterface $input)
+    public function queryCountCommand(InputInterface $input, OutputInterface $output)
     {
         $file = $input->getArgument('file');
         $path = $this->root.'/bin/queries/'.$file.'.sql';
@@ -65,7 +70,7 @@ final class Console
         $result = $connection->prepare($query);
         $result->execute();
 
-        $this->logger->info("Returned {$result->rowCount()} row(s)");
+        $output->writeln($result->rowCount());
     }
 
     public function queueCreateCommand()
