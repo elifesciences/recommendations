@@ -11,14 +11,17 @@ while true; do
     # `|| true` avoid failing the script when there are no results
     watches=$(pgrep -cf queue:watch || true)
     if [ "$watches" -eq "0" ]; then
-        echo "No alive queue:watch processes, failing"
+        echo "No alive queue:watch processes"
         break
     fi
     sqs_queue=$(bin/console --env=$environment queue:count)
     echo "Job in SQS queue (approximate): $sqs_queue"
     if [ "$sqs_queue" -eq 0 ]; then
         echo "No more SQS messages, finished waiting"
-        break
+        exit 0
     fi
     sleep 1
 done
+
+echo "Failing"
+exit 2
