@@ -79,12 +79,11 @@ class GenerateDatabaseCommand extends Command
             } catch (Throwable $e) {
                 $this->monitoring->recordException($e, 'Problem creating database schema.');
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
+                throw $e;
+            } finally {
                 $this->monitoring->endTransaction();
-
-                return;
             }
         }
-        $this->monitoring->endTransaction();
         $this->logger->info('Database created successfully.');
     }
 }
