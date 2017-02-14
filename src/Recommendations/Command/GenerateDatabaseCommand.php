@@ -2,10 +2,9 @@
 
 namespace eLife\Recommendations\Command;
 
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\Exception\DatabaseObjectExistsException;
-use Doctrine\DBAL\Platforms\MySQL57Platform;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
 use eLife\Logging\Monitoring;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -19,6 +18,7 @@ class GenerateDatabaseCommand extends Command
     private $db;
     private $logger;
     private $monitoring;
+    private $schema;
 
     public function __construct(
         Connection $db,
@@ -28,6 +28,7 @@ class GenerateDatabaseCommand extends Command
         $this->db = $db;
         $this->logger = $logger;
         $this->monitoring = $monitoring;
+        $this->schema = $db->getSchemaManager();
 
         parent::__construct(null);
     }
@@ -40,11 +41,48 @@ class GenerateDatabaseCommand extends Command
             ->addOption('drop', 'd', InputOption::VALUE_NONE);
     }
 
+    private function tableExists(string $table): bool
+    {
+        return in_array($table, $this->schema->listTableNames());
+    }
+
+    private function createTables(bool $drop, Table ...$tables)
+    {
+        foreach ($tables as $table) {
+            if ($drop) {
+                $this->db->getSchemaManager()->dropAndCreateTable($table);
+            } else {
+                $this->db->getSchemaManager()->createTable($table);
+            }
+        }
+    }
+
+    private function allTablesExist(string ...$tables)
+    {
+        $r = true;
+        foreach ($tables as $table) {
+            $r = $this->tableExists($table) && $r;
+        }
+
+        return $r;
+    }
+
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $drop = $input->getOption('drop');
         $this->monitoring->nameTransaction('Scheme creation');
         $this->monitoring->startTransaction();
         $schema = new Schema();
+
+        if (
+            $drop === false &&
+            $this->allTablesExist('Rules', 'References')
+        ) {
+            $this->logger->info('Database already exists, skipping.');
+
+            return;
+        }
+
         $rules = $schema->createTable('Rules');
         $rules->addColumn('rule_id', 'guid');
         $rules->addColumn('id', 'string', ['length' => 64]);
@@ -59,33 +97,16 @@ class GenerateDatabaseCommand extends Command
         $references->setPrimaryKey(['on_id', 'subject_id']);
         $references->addForeignKeyConstraint($rules, ['on_id'], ['rule_id'], ['onUpdate' => 'CASCADE']);
         $references->addForeignKeyConstraint($rules, ['subject_id'], ['rule_id'], ['onUpdate' => 'CASCADE']);
-        // Create table drop statements.
-        $drops = [];
-        if ($input->getOption('drop')) {
-            $drops = $schema->toDropSql(new MySQL57Platform());
-            $this->logger->debug('Dropping with sql:', [
-                'sql' => implode("\n", $drops),
-            ]);
-        }
-        // Create table insert statements.
-        $inserts = $schema->toSql(new MySQL57Platform());
-        $this->logger->debug('Populating with sql:', [
-            'sql' => implode("\n", $inserts),
-        ]);
-        $arrayOfSqlQueries = array_merge($drops, $inserts);
-        // Loop through and execute statements.
-        foreach ($arrayOfSqlQueries as $query) {
-            try {
-                $this->db->exec($query);
-            } catch (DatabaseObjectExistsException $e) {
-                $this->logger->debug('Database already exists, skipping.');
-            } catch (Throwable $e) {
-                $this->monitoring->recordException($e, 'Problem creating database schema.');
-                $this->logger->error($e->getMessage(), ['exception' => $e]);
-                throw $e;
-            } finally {
-                $this->monitoring->endTransaction();
-            }
+
+        try {
+            // Only need to create references since its cascades.
+            $this->createTables($drop, $references);
+        } catch (Throwable $e) {
+            $this->monitoring->recordException($e, 'Problem creating database schema.');
+            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            throw $e;
+        } finally {
+            $this->monitoring->endTransaction();
         }
         $this->logger->info('Database created successfully.');
     }
