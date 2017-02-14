@@ -6,7 +6,7 @@ if [ -z "$environment" ]; then
     exit 2;
 fi;
 
-expected_rules=29
+expected_rules=14
 
 # propagate SIGINT to waiting process
 trap 'kill -INT -$waitingPid' INT
@@ -33,7 +33,7 @@ waitingReturnCode=$?
 # clean up PHP processes
 kill "$queueWatchPid";
 if [ ! "$waitingReturnCode" -eq "0" ]; then
-    echo -e "\e[31mThe script './wait-for-empty-queue' timed out\e[39m"
+    echo -e "\e[31mThe script './wait-for-empty-queue' timed out or failed\e[39m"
     exit "$waitingReturnCode"
 fi
 
