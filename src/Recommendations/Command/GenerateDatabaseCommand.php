@@ -3,6 +3,7 @@
 namespace eLife\Recommendations\Command;
 
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Exception\DatabaseObjectExistsException;
 use Doctrine\DBAL\Platforms\MySQL57Platform;
 use Doctrine\DBAL\Schema\Schema;
 use eLife\Logging\Monitoring;
@@ -76,6 +77,8 @@ class GenerateDatabaseCommand extends Command
         foreach ($arrayOfSqlQueries as $query) {
             try {
                 $this->db->exec($query);
+            } catch (DatabaseObjectExistsException $e) {
+                $this->logger->debug('Database already exists, skipping.');
             } catch (Throwable $e) {
                 $this->monitoring->recordException($e, 'Problem creating database schema.');
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
