@@ -41,6 +41,7 @@ final class Console
         $this->console
             ->getDefinition()
             ->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'dev'));
+
         // Set up logger.
         $this->logger = $app->get('logger');
 

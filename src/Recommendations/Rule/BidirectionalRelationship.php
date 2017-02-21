@@ -14,6 +14,7 @@ use eLife\Recommendations\Rule\Common\RepoRelations;
 use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 class BidirectionalRelationship implements Rule
 {
@@ -72,7 +73,11 @@ class BidirectionalRelationship implements Rule
             if ($related->count() === 0) {
                 return [];
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
+            $this->logger->error('Article<'.$input->getId().'> threw exception when requesting related articles', [
+                'exception' => $e,
+            ]);
+
             return [];
         }
         $this->logger->debug('Found related articles ('.$related->count().')');
