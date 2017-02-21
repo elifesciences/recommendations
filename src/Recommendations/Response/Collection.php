@@ -4,6 +4,7 @@ namespace eLife\Recommendations\Response;
 
 use DateTimeImmutable;
 use eLife\Api\Response\Common\Image;
+use eLife\Api\Response\Common\Published;
 use eLife\Api\Response\Common\SnippetFields;
 use eLife\Api\Response\Common\SubjectResponse;
 use eLife\Api\Response\Common\Subjects;
@@ -22,6 +23,7 @@ final class Collection implements Snippet, Result
     use SnippetFields;
     use Subjects;
     use Image;
+    use Published;
 
     /**
      * @Type("DateTimeImmutable<'Y-m-d\TH:i:s\Z'>")
@@ -47,7 +49,8 @@ final class Collection implements Snippet, Result
         string $id,
         string $title,
         string $impactStatement,
-        DateTimeImmutable $updated,
+        DateTimeImmutable $updated = null,
+        DateTimeImmutable $published,
         ImageResponse $image,
         $selectedCurator,
         array $subjects
@@ -56,6 +59,7 @@ final class Collection implements Snippet, Result
         $this->title = $title;
         $this->impactStatement = $impactStatement;
         $this->updated = $updated;
+        $this->published = $published;
         $this->image = $image;
         $this->selectedCurator = $selectedCurator;
         $this->subjects = $subjects;
@@ -67,6 +71,7 @@ final class Collection implements Snippet, Result
             $collection->getId(),
             $collection->getTitle(),
             $collection->getImpactStatement(),
+            $collection->getUpdatedDate(),
             $collection->getPublishedDate(),
             ImageResponse::fromModels($collection->getBanner(), $collection->getThumbnail()),
             SelectedCuratorResponse::fromModel($collection->getSelectedCurator(), $collection->getCurators()->count()),

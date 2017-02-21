@@ -81,6 +81,7 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
 
         $collection = $builder
             ->create(CollectionModel::class)
+            ->withPublishedDate(new DateTimeImmutable())
             ->withImpactStatement('Tropical disease impact statement')
             ->__invoke();
 
@@ -116,8 +117,10 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
 
         // Build recommendations.
         $recommendations = RecommendationsResponse::fromModels([$collection, $podcast, $PoaArticle, $VoRArticle, $externalArticle, new StdClass()], 1);
+
         // Should not throw.
         $json = $this->serializer->serialize($recommendations, 'json', $this->context);
+
         $response = new Response($json, 200, [
             'Content-Type' => 'application/vnd.elife.recommendations+json;version=1',
         ]);
