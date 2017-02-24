@@ -39,11 +39,6 @@ final class MysqlRepoQueueCommand extends QueueCommand
             ->addArgument('id', InputArgument::OPTIONAL, 'Identifier to distinguish workers from each other');
     }
 
-    public function transform(QueueItem $item)
-    {
-        return $this->transformer->transform($item);
-    }
-
     protected function process(InputInterface $input, QueueItem $model, $entity = null)
     {
         $type = method_exists($entity, 'getType') ? $entity->getType() : $model->getType();
