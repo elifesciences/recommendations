@@ -26,7 +26,8 @@
         "sorien/silex-dbal-profiler": "~2.0",
         "symfony/monolog-bridge": "^3.2",
         "elife/bus-sdk": "dev-master",
-        "elife/logging-sdk": "dev-master"
+        "elife/logging-sdk": "dev-master",
+        "ocramius/package-versions": "^1.1"
     },
     "autoload": {
         "psr-4": {
