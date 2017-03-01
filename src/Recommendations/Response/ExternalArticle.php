@@ -2,7 +2,6 @@
 
 namespace eLife\Recommendations\Response;
 
-use eLife\Api\Response\Journal;
 use eLife\ApiSdk\Model\ExternalArticle as ExternalArticleModel;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Since;
@@ -24,7 +23,7 @@ final class ExternalArticle implements Article, Result
     public $articleTitle;
 
     /**
-     * @Type(Journal::class)
+     * @Type("string")
      */
     public $journal;
 
@@ -46,7 +45,7 @@ final class ExternalArticle implements Article, Result
         return $this->type;
     }
 
-    public function __construct(string $articleTitle, string $authorLine, string $uri, Journal $journal)
+    public function __construct(string $articleTitle, string $authorLine, string $uri, string $journal)
     {
         $this->articleTitle = $articleTitle;
         $this->authorLine = $authorLine;
@@ -60,7 +59,7 @@ final class ExternalArticle implements Article, Result
             $externalArticle->getTitle(),
             $externalArticle->getAuthorLine(),
             $externalArticle->getUri(),
-            Journal::fromModel($externalArticle->getJournal())
+            $externalArticle->getJournal()
         );
     }
 }
