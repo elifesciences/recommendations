@@ -1,7 +1,6 @@
 /build/
 /vendor/
 /cache/
-.puli
 /config/local.php
 /config/db.ini
 /tests/raml/

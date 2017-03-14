@@ -2,6 +2,7 @@
 
 namespace eLife\Tests\Response;
 
+use ComposerLocator;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use eLife\ApiSdk\Collection\ArraySequence;
@@ -16,24 +17,21 @@ use eLife\ApiSdk\Model\PodcastEpisode as PodcastEpisodeModel;
 use eLife\ApiSdk\Model\PodcastEpisodeChapter as PodcastEpisodeChapterM;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
-use eLife\ApiValidator\SchemaFinder\PuliSchemaFinder;
+use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use eLife\Recommendations\RecommendationResultDiscriminator;
 use eLife\Recommendations\RecommendationsResponse;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerBuilder;
+use JsonSchema\Validator;
 use PHPUnit_Framework_TestCase;
 use StdClass;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Component\HttpFoundation\Response;
 use test\eLife\ApiSdk\Builder;
-use test\eLife\ApiSdk\PuliAwareTestCase;
-use Webmozart\Json\JsonDecoder;
 
 class RecommendationResponseTest extends PHPUnit_Framework_TestCase
 {
-    use PuliAwareTestCase;
-
     private $serializer;
     private $context;
     private $validator;
@@ -41,7 +39,6 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
 
     public function __construct()
     {
-        $this->setUpPuli();
         // Annotations.
         AnnotationRegistry::registerAutoloadNamespace(
             'JMS\Serializer\Annotation', __DIR__.'/../../../vendor/jms/serializer/src'
@@ -58,8 +55,8 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
         $this->psr7Bridge = new DiactorosFactory();
         // Validator.
         $this->validator = new JsonMessageValidator(
-            new PuliSchemaFinder(self::$puli),
-            new JsonDecoder()
+            new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
+            new Validator()
         );
 
         parent::__construct();
