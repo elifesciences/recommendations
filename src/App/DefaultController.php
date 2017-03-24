@@ -105,6 +105,13 @@ final class DefaultController
 
     public function pingAction()
     {
-        return 'pong';
+        return new Response(
+            'pong',
+            200,
+            [
+                'Cache-Control' => 'must-revalidate, no-cache, no-store, private',
+                'Content-Type' => 'text/plain; charset=UTF-8',
+            ]
+        );
     }
 }
