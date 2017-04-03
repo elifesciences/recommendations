@@ -14,12 +14,21 @@ elifePipeline {
 
     elifeMainlineOnly {
         stage 'End2end tests', {
-            elifeEnd2EndTest({
-                builderDeployRevision 'recommendations--end2end', commit
-                builderSmokeTests 'recommendations--end2end', '/srv/recommendations'
-                builderCmd 'recommendations--end2end', 'cd /srv/recommendations; bin/console api:import all --env=end2end'
-                builderCmd 'recommendations--end2end', 'cd /srv/recommendations; bin/wait-for-empty-queue end2end'
-            }, 'recommendations')
+
+            elifeSpectrum(
+                deploy: [
+                    stackname: 'recommendations--end2end',
+                    revision: commit,
+                    folder: '/srv/recommendations',
+                    preliminaryStep: {
+                        builderDeployRevision 'recommendations--end2end', commit
+                        builderSmokeTests 'recommendations--end2end', '/srv/recommendations'
+                        builderCmd 'recommendations--end2end', 'cd /srv/recommendations; bin/console api:import all --env=end2end'
+                        builderCmd 'recommendations--end2end', 'cd /srv/recommendations; bin/wait-for-empty-queue end2end'
+                    }
+                ],
+                marker: 'recommendations'
+            )
         }
 
         stage 'Approval', {
