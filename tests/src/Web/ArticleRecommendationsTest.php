@@ -39,10 +39,15 @@ class ArticleRecommendationsTest extends WebTestCase
 
         $a7 = $this->addArticle('007', 'feature', [], (new DateTimeImmutable())->setDate(2017, 1, 6));
 
+        $a8 = $this->addArticle('008', 'registered-report', [], (new DateTimeImmutable())->setDate(2017, 1, 7));
+
+        $this->addExternalArticle('http://www.example.com/');
+
         $this->relateArticlesByIds('002', ['003', '004']);
         $this->relateArticlesByIds('003', ['002']);
         $this->relateArticlesByIds('004', ['002', '006']);
         $this->relateArticlesByIds('006', ['004']);
+        $this->relateArticlesByIds('008', ['external-'.sha1('http://www.example.com/')]);
 
         $this->getRulesProcess()->import($a1['model']);
         $this->getRulesProcess()->import($a2['model']);
@@ -51,6 +56,7 @@ class ArticleRecommendationsTest extends WebTestCase
         $this->getRulesProcess()->import($a5['model']);
         $this->getRulesProcess()->import($a6['model']);
         $this->getRulesProcess()->import($a7['model']);
+        $this->getRulesProcess()->import($a8['model']);
 
         $this->addCollection(
             'col1',
@@ -164,5 +170,20 @@ class ArticleRecommendationsTest extends WebTestCase
         $this->assertEquals('research-article', $json->items[3]->type);
 
         $this->assertTrue(true);
+    }
+
+    public function test_for_an_article_that_has_an_external_relation()
+    {
+        $this->newClient();
+        $this->jsonRequest('GET', '/recommendations/article/008');
+        $json = $this->getJsonResponse();
+
+        $this->assertEquals(2, $json->total);
+
+        $this->assertEquals('external-article', $json->items[0]->type);
+        $this->assertEquals('http://www.example.com/', $json->items[0]->uri);
+
+        $this->assertEquals('006', $json->items[1]->id);
+        $this->assertEquals('research-article', $json->items[1]->type);
     }
 }
