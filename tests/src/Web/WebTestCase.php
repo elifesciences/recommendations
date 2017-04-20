@@ -7,8 +7,8 @@ use Doctrine\DBAL\Connection;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\Collection;
+use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\Image;
-use eLife\ApiSdk\Model\ImageSize;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapter;
@@ -56,16 +56,7 @@ abstract class WebTestCase extends SilexWebTestCase
         $podcastEpisode = $builder->create(PodcastEpisode::class)
             ->withNumber($number)
             ->withThumbnail(
-                new Image('alt', [
-                    new ImageSize('16:9', [
-                        250 => 'https://placehold.it/250x140',
-                        500 => 'https://placehold.it/500x280',
-                    ]),
-                    new ImageSize('1:1', [
-                        70 => 'https://placehold.it/70x70',
-                        140 => 'https://placehold.it/140x140',
-                    ]),
-                ])
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->withChapters(
                 new ArraySequence(
