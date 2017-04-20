@@ -2,8 +2,8 @@
 
 namespace eLife\Tests\Response;
 
+use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\Image;
-use eLife\ApiSdk\Model\ImageSize;
 use eLife\ApiSdk\Model\PodcastEpisode as PodcastEpisodeModel;
 use eLife\Recommendations\Response\PodcastEpisode;
 use PHPUnit_Framework_TestCase;
@@ -19,16 +19,7 @@ final class PodcastEpisodeTest extends PHPUnit_Framework_TestCase
         $podcast = $builder
             ->create(PodcastEpisodeModel::class)
             ->withThumbnail(
-                new Image('alt', [
-                    new ImageSize('16:9', [
-                        250 => 'https://placehold.it/250x140',
-                        500 => 'https://placehold.it/500x280',
-                    ]),
-                    new ImageSize('1:1', [
-                        70 => 'https://placehold.it/70x70',
-                        140 => 'https://placehold.it/140x140',
-                    ]),
-                ])
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->__invoke();
         PodcastEpisode::fromModel($podcast);
@@ -41,24 +32,10 @@ final class PodcastEpisodeTest extends PHPUnit_Framework_TestCase
         $podcast = $builder
             ->create(PodcastEpisodeModel::class)
             ->withThumbnail(
-                new Image('alt', [
-                    new ImageSize('16:9', [
-                        250 => 'https://placehold.it/250x140',
-                        500 => 'https://placehold.it/500x280',
-                    ]),
-                    new ImageSize('1:1', [
-                        70 => 'https://placehold.it/70x70',
-                        140 => 'https://placehold.it/140x140',
-                    ]),
-                ])
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->withBanner(
-                promise_for(new Image('alt', [
-                    new ImageSize('2:1', [
-                        900 => 'https://placehold.it/900x450',
-                        1800 => 'https://placehold.it/1800x900',
-                    ]),
-                ]))
+                promise_for(new Image('', 'https://iiif.elifesciences.org/banner.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/banner.jpg/full/full/0/default.jpg', 'banner.jpg'), 1800, 900, 50, 50))
             )
             ->__invoke();
         PodcastEpisode::fromModel($podcast);
