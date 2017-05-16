@@ -69,7 +69,7 @@ trait ArticleFromModel
             $article->getSubjects()->map(function (Subject $subject) {
                 return SubjectResponse::fromModel($subject);
             })->toArray(),
-            $article instanceof ArticleVoR ? ImageResponse::fromModels($article->getBanner(), $article->getThumbnail()) : null
+            $article instanceof ArticleVoR ? ImageResponse::fromModels(null, $article->getThumbnail()) : null
         );
     }
 }
