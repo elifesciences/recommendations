@@ -42,10 +42,10 @@ class Hydration
             case 'insight':
             case 'research-advance':
             case 'research-article':
-            case 'research-exchange':
             case 'retraction':
             case 'registered-report':
             case 'replication-study':
+            case 'scientific-correspondence':
             case 'short-report':
             case 'tools-resources':
                 return 'article';

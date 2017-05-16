@@ -56,10 +56,10 @@ class MostRecentWithSubject implements Rule
             case 'insight':
             case 'research-advance':
             case 'research-article':
-            case 'research-exchange':
             case 'retraction':
             case 'registered-report':
             case 'replication-study':
+            case 'scientific-correspondence':
             case 'short-report':
             case 'tools-resources':
                 // end of -- are these needed? - we will find out in the logs.
@@ -156,10 +156,10 @@ class MostRecentWithSubject implements Rule
             'insight',
             'research-advance',
             'research-article',
-            'research-exchange',
             'retraction',
             'registered-report',
             'replication-study',
+            'scientific-correspondence',
             'short-report',
             'tools-resources',
         ];

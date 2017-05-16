@@ -48,13 +48,13 @@ class RuleModelRepository
 
     public function getLatestArticle()
     {
-        // Research Advance, Research Article, Research Exchange, Short Report, Tools and Resources or Replication Study article
+        // Research Advance, Research Article, Scientific Correspondence, Short Report, Tools and Resources or Replication Study article
         $prepared = $this->db->prepare('
           SELECT * FROM '.$this->ruleTableName.' as Ru 
           WHERE Ru.type IN (
             "research-advance",
             "research-article",
-            "research-exchange",
+            "scientific-correspondence",
             "short-report",
             "tools-resources",
             "replication-study"
@@ -142,10 +142,10 @@ class RuleModelRepository
                 "insight",
                 "research-advance",
                 "research-article",
-                "research-exchange",
                 "retraction",
                 "registered-report",
                 "replication-study",
+                "scientific-correspondence",
                 "short-report",
                 "tools-resources"
               )

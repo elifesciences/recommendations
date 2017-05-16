@@ -18,10 +18,10 @@ final class RecommendationResultDiscriminator implements EventSubscriberInterfac
         'insight',
         'research-advance',
         'research-article',
-        'research-exchange',
         'retraction',
         'registered-report',
         'replication-study',
+        'scientific-correspondence',
         'short-report',
         'tools-resources',
     ];
