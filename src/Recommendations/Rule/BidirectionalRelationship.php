@@ -57,10 +57,11 @@ class BidirectionalRelationship implements Rule
      * Given a model (type + id) from SQS, calculate which entities need
      * relations added for the specific domain rule.
      *
-     * Return is an array of tuples containing an input and an on where `input`
-     * is the model to be added and `on` is the target node. In plain english
-     * given a podcast containing articles it would return an array where the
-     * podcast is every `input` and each article is the `output`.
+     * Return is an array of tuples containing an `input` and an `on` where
+     * `input` * is the model to be added and `on` is the target node.
+     * In plain english given an article related to other articles it would
+     * return an array * where the first is every `input` and each related
+     * article is the `output`.
      */
     public function resolveRelations(RuleModel $input): array
     {
@@ -95,6 +96,9 @@ class BidirectionalRelationship implements Rule
             })
             ->map(function (Article $article) use ($input) {
                 $id = $article->getId();
+                // we should probably ignore external articles here
+                // 1. when we ignore them, the API starts working for articles that contain them
+                // 2. we can add them to the relations in a separate Rule implementation, see Kernel changes
                 $type = $article instanceof ExternalArticleModel ? 'external-article' : $article->getType();
                 $date = $article instanceof ArticleVersion ? $article->getPublishedDate() : null;
                 $relationship = new ManyToManyRelationship($input, new RuleModel($article->getId(), $type, $date));

@@ -57,6 +57,7 @@ final class CollectionContents implements Rule
             })
             ->map(function (Article $article) use ($input) {
                 $id = $article->getId();
+                // also this is strange, can collections contains external articles and is this the assumption being made here?
                 $type = $article instanceof ExternalArticle ? 'external-article' : $article->getType();
                 $date = $article instanceof ArticleVersion ? $article->getPublishedDate() : null;
                 $relationship = new ManyToManyRelationship(new RuleModel($id, $type, $date), $input);

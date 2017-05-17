@@ -46,6 +46,7 @@ class PodcastEpisodeContents implements Rule
                 return $content instanceof Article;
             })->map(function (ArticleVersion $article) use ($input, $chapter) {
                 $id = $article->getId();
+                // are we sure this is needed? can podcast episodes link to external articles? I thought they were only present in /article/:id/related
                 $type = $article instanceof ExternalArticle ? 'external-article' : $article->getType();
                 $date = $article instanceof ArticleVersion ? $article->getPublishedDate() : null;
                 $relationship = new ManyToManyRelationship(

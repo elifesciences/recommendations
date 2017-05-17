@@ -80,6 +80,7 @@ class Hydration
                 case 'podcast-episode-chapter':
                     return $this->getPodcastEpisodeChapterById($item->getId());
             }
+            // we should add external articles here, using a $this->getExternalArticleById($item->getId()) method
         }
 
         return $this->repo->get($this->convertType($item->getType()), $item->getId());

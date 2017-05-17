@@ -275,6 +275,8 @@ final class Kernel implements MinimalKernel
                     new CollectionContents($app['rules.micro_sdk'], $app['rules.repository']),
                     /* 12 */
                     new PodcastEpisodeContents($app['rules.micro_sdk'], $app['rules.repository'])
+                    // new RelatedExternalArticleContents(...)
+                    //    using new RuleModel("{$input->getId()}-{$externalArticle->getIndex()}", 'podcast-episode-chapter', null, $synthetic=true)
                 ),
                 /* 13 */
                 new MostRecent($app['rules.repository'], $app['logger']),
