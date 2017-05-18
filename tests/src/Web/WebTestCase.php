@@ -8,6 +8,7 @@ use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\File;
+use eLife\ApiSdk\Model\ExternalArticle;
 use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
@@ -126,9 +127,23 @@ abstract class WebTestCase extends SilexWebTestCase
         ];
     }
 
+    public function addExternalArticle(string $uri)
+    {
+        $builder = Builder::for(ExternalArticle::class);
+        $article = $builder->create(ExternalArticle::class)
+            ->withUri($uri);
+
+        $article = $article->__invoke();
+        $this->addDocument('external-article', 'external-'.sha1($uri), $article);
+    }
+
     public function relateArticlesByIds($id, array $ids)
     {
         $articles = array_map(function ($id) {
+            if (!empty($this->itemMocks['external-article'][$id])) {
+                return $this->itemMocks['external-article'][$id];
+            }
+
             return $this->itemMocks['article'][$id];
         }, $ids);
 
