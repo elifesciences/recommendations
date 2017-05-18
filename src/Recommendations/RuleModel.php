@@ -52,8 +52,12 @@ class RuleModel implements JsonSerializable
      * Synthetic check.
      *
      * This will return whether or not the item is retrievable from
-     * the API SDK. If it is synthetic, the data will have to be
-     * retrieved from another, local, data source.
+     * the locally cached API SDK, as it came through from the bus
+     * and was retrieved in background.
+     *
+     * If it is synthetic, the data will have to be retrieved from:
+     * - its own API SDK, but it will be a cache miss initially (e.g. subjects)
+     * - the API SDK of another type (e.g. podcast episode chapters or external articles)
      */
     public function isSynthetic(): bool
     {
