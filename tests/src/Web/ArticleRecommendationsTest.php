@@ -41,13 +41,13 @@ class ArticleRecommendationsTest extends WebTestCase
 
         $a8 = $this->addArticle('008', 'registered-report', [], (new DateTimeImmutable())->setDate(2017, 1, 7));
 
-        $this->addExternalArticle('http://www.example.com/');
+        $this->addExternalArticle('008-0');
 
         $this->relateArticlesByIds('002', ['003', '004']);
         $this->relateArticlesByIds('003', ['002']);
         $this->relateArticlesByIds('004', ['002', '006']);
         $this->relateArticlesByIds('006', ['004']);
-        $this->relateArticlesByIds('008', ['external-'.sha1('http://www.example.com/')]);
+        $this->relateArticlesByIds('008', ['008-0']);
 
         $this->getRulesProcess()->import($a1['model']);
         $this->getRulesProcess()->import($a2['model']);
@@ -181,7 +181,7 @@ class ArticleRecommendationsTest extends WebTestCase
         $this->assertEquals(2, $json->total);
 
         $this->assertEquals('external-article', $json->items[0]->type);
-        $this->assertEquals('http://www.example.com/', $json->items[0]->uri);
+        $this->assertEquals('http://www.example.com/008-0', $json->items[0]->uri);
 
         $this->assertEquals('006', $json->items[1]->id);
         $this->assertEquals('research-article', $json->items[1]->type);
