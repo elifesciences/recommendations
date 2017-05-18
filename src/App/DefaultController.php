@@ -72,6 +72,9 @@ final class DefaultController
         return $mediaType;
     }
 
+    // TODO: remove? It's not in the api-raml, we are not using it for testing
+    // and it doesn't work anymore.
+    // SQLSTATE[42S22]: Column not found: 1054 Unknown column 'R.published' in 'order clause'
     public function allAction(Request $request)
     {
         $page = $request->get('page', 1);
