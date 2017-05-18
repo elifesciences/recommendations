@@ -86,6 +86,7 @@ class BidirectionalRelationship implements Rule
         }
         $this->debug($input, sprintf('Found (%d) related article(s)', $related->count()));
 
+        // we don't have access to this in map():
         $index = 0;
 
         return $related
@@ -101,10 +102,7 @@ class BidirectionalRelationship implements Rule
             })
             ->map(function (Article $article) use ($input, &$index) {
                 $id = $article->getId();
-                // we should probably ignore external articles here
-                // 1. when we ignore them, the API starts working for articles that contain them
-                // 2. we can add them to the relations in a separate Rule implementation, see Kernel changes
-                $type = $article instanceof ExternalArticleModel ? 'external-article' : $article->getType();
+                $type = $article->getType();
                 $date = $article instanceof ArticleVersion ? $article->getPublishedDate() : null;
                 if ($article instanceof ExternalArticleModel) {
                     $relationship = new ManyToManyRelationship($input, new RuleModel($input->getId().'-'.$index, $type, $date, $isSynthetic = true));
