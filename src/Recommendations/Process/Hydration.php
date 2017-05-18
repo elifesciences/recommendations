@@ -100,6 +100,7 @@ class Hydration
         return $this->repo->get($this->convertType($item->getType()), $item->getId());
     }
 
+    // TODO: delete after having extracted all knowledge. It's dead code
     public function extractRelatedFrom(RuleModel $model)
     {
         $model = $this->hydrateOne($model);
