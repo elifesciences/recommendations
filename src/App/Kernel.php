@@ -402,7 +402,7 @@ final class Kernel implements MinimalKernel
         }
         // Cache.
         if ($app['config']['ttl'] > 0) {
-            $app->after([$this, 'cache'], 3);
+            $app->after([$this, 'cacheDirectives'], 3);
         }
         // Error handling.
         if (!$app['config']['debug']) {
@@ -494,7 +494,7 @@ final class Kernel implements MinimalKernel
         return $response;
     }
 
-    public function cache(Request $request, Response $response)
+    public function cacheDirectives(Request $request, Response $response)
     {
         if ($response instanceof PrivateResponse) {
             return $response;
