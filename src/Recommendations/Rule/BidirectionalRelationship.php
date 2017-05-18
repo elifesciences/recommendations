@@ -16,6 +16,9 @@ use eLife\Recommendations\RuleModelRepository;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+/**
+ * TODO: rename into RelatedArticles?
+ */
 class BidirectionalRelationship implements Rule
 {
     use PersistRule;
