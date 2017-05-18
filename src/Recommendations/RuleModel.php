@@ -19,6 +19,7 @@ class RuleModel implements JsonSerializable
     private $isSynthetic;
     private $published;
 
+    // TODO: RuleModel::synthetic($id, $type, $published = null) for clarity
     public function __construct(string $id, string $type, DateTimeImmutable $published = null, bool $isSynthetic = false, string $rule_id = null)
     {
         $this->id = $id;
