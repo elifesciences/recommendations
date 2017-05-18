@@ -83,29 +83,36 @@ class BidirectionalRelationship implements Rule
         }
         $this->debug($input, sprintf('Found (%d) related article(s)', $related->count()));
 
+        $index = 0;
+
         return $related
             ->filter(function ($item) use ($input) {
                 $isArticle = $item instanceof Article;
                 if (!$isArticle) {
-                    $this->debug($input, sprintf('Found unknown article type: %s', get_class($item)), [
+                    $this->warning($input, sprintf('Found unknown article type: %s', get_class($item)), [
                         'model' => $item,
                     ]);
                 }
 
                 return $isArticle;
             })
-            ->map(function (Article $article) use ($input) {
+            ->map(function (Article $article) use ($input, &$index) {
                 $id = $article->getId();
                 // we should probably ignore external articles here
                 // 1. when we ignore them, the API starts working for articles that contain them
                 // 2. we can add them to the relations in a separate Rule implementation, see Kernel changes
                 $type = $article instanceof ExternalArticleModel ? 'external-article' : $article->getType();
                 $date = $article instanceof ArticleVersion ? $article->getPublishedDate() : null;
-                $relationship = new ManyToManyRelationship($input, new RuleModel($article->getId(), $type, $date));
+                if ($article instanceof ExternalArticleModel) {
+                    $relationship = new ManyToManyRelationship($input, new RuleModel($input->getId().'-'.$index, $type, $date, $isSynthetic = true));
+                } else {
+                    $relationship = new ManyToManyRelationship($input, new RuleModel($article->getId(), $type, $date));
+                }
                 $this->debug($input, sprintf('Found related article %s<%s>', $type, $id), [
                     'relationship' => $relationship,
                     'article' => $article,
                 ]);
+                ++$index;
 
                 return $relationship;
             })

@@ -12,6 +12,7 @@ namespace eLife\Recommendations\Process;
 
 use Assert\Assertion;
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ExternalArticle;
 use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapter;
@@ -73,14 +74,27 @@ class Hydration
         return new PodcastEpisodeChapterModel($episode, $chapter);
     }
 
+    public function getExternalArticleByOriginalArticleId($id): ExternalArticle
+    {
+        list($originalArticleId, $relatedIndex) = explode('-', $id);
+        $relatedIndex = (int) $relatedIndex;
+
+/** @var ExternalArticle $episode */
+        // TODO: this uses sdk but it should really go through SingleItemRepository (doesn't have a method for this) or in any case through a cache
+        $externalArticle = $this->sdk->getRelatedArticles($originalArticleId)[$relatedIndex];
+
+        return $externalArticle;
+    }
+
     public function hydrateOne(RuleModel $item)
     {
         if ($item->isSynthetic()) {
             switch ($item->getType()) {
                 case 'podcast-episode-chapter':
                     return $this->getPodcastEpisodeChapterById($item->getId());
+                case 'external-article':
+                    return $this->getExternalArticleByOriginalArticleId($item->getId());
             }
-            // we should add external articles here, using a $this->getExternalArticleById($item->getId()) method
         }
 
         return $this->repo->get($this->convertType($item->getType()), $item->getId());
