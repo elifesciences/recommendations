@@ -127,14 +127,17 @@ abstract class WebTestCase extends SilexWebTestCase
         ];
     }
 
-    public function addExternalArticle(string $id)
+    public function addExternalArticle(string $compositeId)
     {
+        $this->assertTrue((bool) preg_match('/^(\d+)-(.+)$/', $compositeId, $matches));
+        $originalArticleId = $matches[1];
+        $uri = $matches[2];
         $builder = Builder::for(ExternalArticle::class);
         $article = $builder->create(ExternalArticle::class)
-            ->withUri('http://www.example.com/'.$id);
+            ->withUri($uri);
 
         $article = $article->__invoke();
-        $this->addDocument('external-article', $id, $article);
+        $this->addDocument('external-article', $compositeId, $article);
     }
 
     public function relateArticlesByIds($id, array $ids)

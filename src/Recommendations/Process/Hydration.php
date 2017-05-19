@@ -11,6 +11,7 @@
 namespace eLife\Recommendations\Process;
 
 use Assert\Assertion;
+use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ExternalArticle;
 use eLife\ApiSdk\Model\HasSubjects;
@@ -20,6 +21,7 @@ use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Bus\Queue\SingleItemRepository;
 use eLife\Recommendations\Rule\Common\MicroSdk;
 use eLife\Recommendations\RuleModel;
+use InvalidArgumentException;
 
 class Hydration
 {
@@ -76,12 +78,19 @@ class Hydration
 
     public function getExternalArticleByOriginalArticleId($id): ExternalArticle
     {
-        list($originalArticleId, $relatedIndex) = explode('-', $id);
-        $relatedIndex = (int) $relatedIndex;
+        if (!preg_match('/^(\d+)-(.+)$/', $id, $matches)) {
+            throw new InvalidArgumentException("Not well-formed composite id of external article: $id");
+        }
+        list(, $originalArticleId, $relatedIndex) = $matches;
 
-/** @var ExternalArticle $episode */
+/** @var ExternalArticle $externalArticle */
         // TODO: this uses sdk but it should really go through SingleItemRepository (doesn't have a method for this) or in any case through a cache
-        $externalArticle = $this->sdk->getRelatedArticles($originalArticleId)[$relatedIndex];
+        $externalArticle = $this->sdk
+            ->getRelatedArticles($originalArticleId)
+            ->filter(function (Article $relatedArticle) use ($relatedIndex) {
+                return $relatedArticle->getUri() === $relatedIndex;
+            })
+            ->toArray()[0] ?? null;
 
         return $externalArticle;
     }

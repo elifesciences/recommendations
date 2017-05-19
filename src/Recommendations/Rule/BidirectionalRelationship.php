@@ -86,9 +86,6 @@ class BidirectionalRelationship implements Rule
         }
         $this->debug($input, sprintf('Found (%d) related article(s)', $related->count()));
 
-        // we don't have access to this in map():
-        $index = 0;
-
         return $related
             ->filter(function ($item) use ($input) {
                 $isArticle = $item instanceof Article;
@@ -100,12 +97,12 @@ class BidirectionalRelationship implements Rule
 
                 return $isArticle;
             })
-            ->map(function (Article $article) use ($input, &$index) {
+            ->map(function (Article $article) use ($input) {
                 $id = $article->getId();
                 $type = $article->getType();
                 $date = $article instanceof ArticleVersion ? $article->getPublishedDate() : null;
                 if ($article instanceof ExternalArticleModel) {
-                    $relationship = new ManyToManyRelationship($input, new RuleModel($input->getId().'-'.$index, $type, $date, $isSynthetic = true));
+                    $relationship = new ManyToManyRelationship($input, new RuleModel($input->getId().'-'.$article->getUri(), $type, $date, $isSynthetic = true));
                 } else {
                     $relationship = new ManyToManyRelationship($input, new RuleModel($article->getId(), $type, $date));
                 }
@@ -113,7 +110,6 @@ class BidirectionalRelationship implements Rule
                     'relationship' => $relationship,
                     'article' => $article,
                 ]);
-                ++$index;
 
                 return $relationship;
             })

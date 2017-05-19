@@ -41,13 +41,13 @@ class ArticleRecommendationsTest extends WebTestCase
 
         $a8 = $this->addArticle('008', 'registered-report', [], (new DateTimeImmutable())->setDate(2017, 1, 7));
 
-        $this->addExternalArticle('008-0');
+        $this->addExternalArticle('008-http://www.example.com/008-0');
 
         $this->relateArticlesByIds('002', ['003', '004']);
         $this->relateArticlesByIds('003', ['002']);
         $this->relateArticlesByIds('004', ['002', '006']);
         $this->relateArticlesByIds('006', ['004']);
-        $this->relateArticlesByIds('008', ['008-0']);
+        $this->relateArticlesByIds('008', ['008-http://www.example.com/008-0']);
 
         $this->getRulesProcess()->import($a1['model']);
         $this->getRulesProcess()->import($a2['model']);
