@@ -5,21 +5,21 @@ namespace tests\eLife\Rule;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ExternalArticle;
-use eLife\Recommendations\Rule\BidirectionalRelationship;
+use eLife\Recommendations\Rule\RelatedArticles;
 use eLife\Recommendations\RuleModel;
 use Psr\Log\NullLogger;
 use test\eLife\ApiSdk\Serializer\ArticlePoANormalizerTest;
 use test\eLife\ApiSdk\Serializer\ArticleVoRNormalizerTest;
 
-class BidirectionalRelationshipTest extends BaseRuleTest
+class RelatedArticlesTest extends BaseRuleTest
 {
     /**
      * @dataProvider getArticleData
      */
     public function test(Article $article)
     {
-        /** @var BidirectionalRelationship | \PHPUnit_Framework_MockObject_MockObject $mock */
-        $mock = $this->createPartialMock(BidirectionalRelationship::class, ['getRelatedArticles']);
+        /** @var RelatedArticles | \PHPUnit_Framework_MockObject_MockObject $mock */
+        $mock = $this->createPartialMock(RelatedArticles::class, ['getRelatedArticles']);
         $mock->setLogger(new NullLogger());
         $mock->expects($this->exactly(1))
             ->method('getRelatedArticles')

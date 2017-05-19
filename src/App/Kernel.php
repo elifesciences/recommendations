@@ -32,13 +32,13 @@ use eLife\Recommendations\Process\Hydration;
 use eLife\Recommendations\Process\Rules;
 use eLife\Recommendations\RecommendationResultDiscriminator;
 use eLife\Recommendations\Response\PrivateResponse;
-use eLife\Recommendations\Rule\BidirectionalRelationship;
 use eLife\Recommendations\Rule\CollectionContents;
 use eLife\Recommendations\Rule\Common\MicroSdk;
 use eLife\Recommendations\Rule\MostRecent;
 use eLife\Recommendations\Rule\MostRecentWithSubject;
 use eLife\Recommendations\Rule\NormalizedPersistence;
 use eLife\Recommendations\Rule\PodcastEpisodeContents;
+use eLife\Recommendations\Rule\RelatedArticles;
 use eLife\Recommendations\RuleModelRepository;
 use GuzzleHttp\Client;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
@@ -269,7 +269,7 @@ final class Kernel implements MinimalKernel
                 new NormalizedPersistence(
                     $app['rules.repository'],
                     /* 1 - 10 */
-                    new BidirectionalRelationship($app['rules.micro_sdk'], $app['rules.repository'], $app['logger']),
+                    new RelatedArticles($app['rules.micro_sdk'], $app['rules.repository'], $app['logger']),
                     /* 11 */
                     new CollectionContents($app['rules.micro_sdk'], $app['rules.repository']),
                     /* 12 */

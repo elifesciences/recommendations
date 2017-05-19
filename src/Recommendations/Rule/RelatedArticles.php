@@ -15,10 +15,7 @@ use eLife\Recommendations\RuleModelRepository;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
-/**
- * TODO: rename into RelatedArticles?
- */
-class BidirectionalRelationship implements Rule
+class RelatedArticles implements Rule
 {
     use PersistRule;
     use RepoRelations;
@@ -67,6 +64,7 @@ class BidirectionalRelationship implements Rule
      */
     public function resolveRelations(RuleModel $input): array
     {
+        error_log($input->getType());
         $this->debug($input, 'Looking for related articles');
         try {
             $related = $this->getRelatedArticles($input->getId());
