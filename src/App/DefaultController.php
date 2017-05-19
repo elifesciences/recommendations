@@ -105,8 +105,6 @@ final class DefaultController
 
         $this->logger->debug('Rule model', ['id' => $id, 'type' => $type]);
         $requestModel = $this->repo->getOne($id, $type);
-        // This is meant to be an optimisation, but due to lack of cache elsewhere it currently slows it down.
-        //$this->hydrator->extractRelatedFrom($requestModel);
         $recommendations = $this->rules->getRecommendations($requestModel);
         $items = $this->hydrator->hydrateAll($recommendations);
         $context = $this->createContext();

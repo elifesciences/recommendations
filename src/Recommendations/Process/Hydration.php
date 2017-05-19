@@ -12,9 +12,7 @@ namespace eLife\Recommendations\Process;
 
 use Assert\Assertion;
 use eLife\ApiSdk\Model\Article;
-use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ExternalArticle;
-use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapter;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
@@ -106,28 +104,6 @@ class Hydration
         }
 
         return $this->repo->get($this->convertType($item->getType()), $item->getId());
-    }
-
-    // TODO: delete after having extracted all knowledge. It's dead code
-    public function extractRelatedFrom(RuleModel $model)
-    {
-        $model = $this->hydrateOne($model);
-        if ($model instanceof HasSubjects) {
-            $this->cache['subjects'] = $this->cache['subjects'] ?? [];
-            /** @var $model ArticleVersion */
-            foreach ($model->getSubjects() as $subjected) {
-                $this->cache['subjects'][$subjected->getId()] = $subjected;
-            }
-        }
-
-        if ($model instanceof ArticleVersion) {
-            $this->cache['related-article'] = $this->cache['related-article'] ?? [];
-            /** @var $model ArticleVersion */
-            foreach ($this->sdk->getRelatedArticles($model->getId()) as $relatedArticle) {
-                /* @var $relatedArticle ArticleVersion */
-                $this->cache[$relatedArticle->getType()][$relatedArticle->getId()] = $relatedArticle;
-            }
-        }
     }
 
     /**
