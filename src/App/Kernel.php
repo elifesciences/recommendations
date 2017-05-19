@@ -67,7 +67,6 @@ final class Kernel implements MinimalKernel
 
     public static $routes = [
         '/recommendations/{type}/{id}' => 'indexAction',
-        '/recommendations' => 'allAction',
         '/ping' => 'pingAction',
     ];
 
