@@ -49,7 +49,7 @@ class PodcastEpisodeContents implements Rule
                 $date = $article instanceof ArticleVersion ? $article->getPublishedDate() : null;
                 $relationship = new ManyToManyRelationship(
                     new RuleModel($article->getId(), $type, $date),
-                    new RuleModel("{$input->getId()}-{$chapter->getNumber()}", 'podcast-episode-chapter', null, true)
+                    RuleModel::synthetic("{$input->getId()}-{$chapter->getNumber()}", 'podcast-episode-chapter')
                 );
                 $this->debug(
                     $input,

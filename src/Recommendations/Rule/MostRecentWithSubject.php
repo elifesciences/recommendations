@@ -96,7 +96,7 @@ class MostRecentWithSubject implements Rule
 
         $relations = $subjects
             ->map(function (Subject $subject) use ($input) {
-                $relation = new ManyToManyRelationship($input, new RuleModel($subject->getId(), 'subject', null, true));
+                $relation = new ManyToManyRelationship($input, RuleModel::synthetic($subject->getId(), 'subject'));
                 $this->debug($input, 'Adding relation for subject', [
                     'relation' => $relation,
                 ]);

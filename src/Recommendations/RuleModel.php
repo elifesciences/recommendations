@@ -11,6 +11,7 @@ namespace eLife\Recommendations;
 use DateTimeImmutable;
 use JsonSerializable;
 
+/* TODO: final? */
 class RuleModel implements JsonSerializable
 {
     private $rule_id;
@@ -19,7 +20,11 @@ class RuleModel implements JsonSerializable
     private $isSynthetic;
     private $published;
 
-    // TODO: RuleModel::synthetic($id, $type, $published = null) for clarity
+    public static function synthetic(string $id, string $type)
+    {
+        return new static($id, $type, $published = null, $isSynthetic = true);
+    }
+
     public function __construct(string $id, string $type, DateTimeImmutable $published = null, bool $isSynthetic = false, string $rule_id = null)
     {
         $this->id = $id;
