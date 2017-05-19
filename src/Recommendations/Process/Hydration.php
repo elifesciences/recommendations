@@ -81,13 +81,13 @@ class Hydration
         if (!preg_match('/^(\d+)-(.+)$/', $id, $matches)) {
             throw new InvalidArgumentException("Not well-formed composite id of external article: $id");
         }
-        list(, $originalArticleId, $relatedIndex) = $matches;
+        list(, $originalArticleId, $externalArticleUri) = $matches;
 
         // TODO: this uses sdk but it should really go through SingleItemRepository (doesn't have a method for this) or in any case through a cache
         $externalArticle = $this->sdk
             ->getRelatedArticles($originalArticleId)
-            ->filter(function (Article $relatedArticle) use ($relatedIndex) {
-                return $relatedArticle instanceof ExternalArticle && $relatedArticle->getUri() === $relatedIndex;
+            ->filter(function (Article $relatedArticle) use ($externalArticleUri) {
+                return $relatedArticle instanceof ExternalArticle && $relatedArticle->getUri() === $externalArticleUri;
             })
             ->toArray()[0] ?? null;
 
