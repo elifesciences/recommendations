@@ -22,6 +22,11 @@ class NormalizedPersistence implements CompoundRule
         $this->repository = $repository;
     }
 
+    public function addRelations(RuleModel $model, array $list): array
+    {
+        return $this->rules[0]->addRelations($model, $list);
+    }
+
     public function isSupported(RuleModel $model, Rule $rule)
     {
         return in_array($model->getType(), $rule->supports());

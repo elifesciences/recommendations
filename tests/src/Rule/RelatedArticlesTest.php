@@ -16,7 +16,7 @@ class RelatedArticlesTest extends BaseRuleTest
     /**
      * @dataProvider getArticleData
      */
-    public function test(Article $article)
+    public function test_validity(Article $article)
     {
         /** @var RelatedArticles | \PHPUnit_Framework_MockObject_MockObject $mock */
         $mock = $this->createPartialMock(RelatedArticles::class, ['getRelatedArticles']);

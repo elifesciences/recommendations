@@ -180,11 +180,11 @@ class ArticleRecommendationsTest extends WebTestCase
 
         $this->assertEquals(3, $json->total);
 
-        $this->assertEquals('feature', $json->items[0]->type);
-        $this->assertEquals('007', $json->items[0]->id);
+        $this->assertEquals('external-article', $json->items[0]->type);
+        $this->assertEquals('http://www.example.com/008-0', $json->items[0]->uri);
 
-        $this->assertEquals('external-article', $json->items[1]->type);
-        $this->assertEquals('http://www.example.com/008-0', $json->items[1]->uri);
+        $this->assertEquals('feature', $json->items[1]->type);
+        $this->assertEquals('007', $json->items[1]->id);
 
         $this->assertEquals('research-article', $json->items[2]->type);
         $this->assertEquals('006', $json->items[2]->id);
