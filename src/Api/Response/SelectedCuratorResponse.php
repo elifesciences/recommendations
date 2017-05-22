@@ -18,12 +18,12 @@ final class SelectedCuratorResponse extends NamedResponse
     public $etAl = false;
 
     /**
-     * @Type("string")
+     * @Type("array")
      * @Since(version="1")
      */
     public $type;
 
-    public function __construct(string $id, array $name, string $type, bool $etAl = false)
+    public function __construct(string $id, array $name, array $type, bool $etAl = false)
     {
         $this->id = $id;
         $this->name = $name;
@@ -39,7 +39,10 @@ final class SelectedCuratorResponse extends NamedResponse
                 'preferred' => $person->getDetails()->getPreferredName(),
                 'index' => $person->getDetails()->getIndexName(),
             ],
-            $person->getType(),
+            [
+                'id' => $person->getType(),
+                'label' => $person->getTypeLabel(),
+            ],
             $count > 1
         );
     }

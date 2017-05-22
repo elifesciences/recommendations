@@ -905,12 +905,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "48a67ae22ca12389ac0500e2e03c03b16c2cfed0"
+                "reference": "d53838fa5df6bc5c0c0a2c417bb5f364b4c04465"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/48a67ae22ca12389ac0500e2e03c03b16c2cfed0",
-                "reference": "48a67ae22ca12389ac0500e2e03c03b16c2cfed0",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/d53838fa5df6bc5c0c0a2c417bb5f364b4c04465",
+                "reference": "d53838fa5df6bc5c0c0a2c417bb5f364b4c04465",
                 "shasum": ""
             },
             "conflict": {
@@ -922,7 +922,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2017-05-16 07:21:10"
+            "time": "2017-05-22 09:55:26"
         },
         {
             "name": "elife/api-client",
@@ -986,12 +986,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "fa73e65c617284172fe6221244b6a396dc9a75b3"
+                "reference": "c811dd902c2b24c8a3e6885741da2929f44abf40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/fa73e65c617284172fe6221244b6a396dc9a75b3",
-                "reference": "fa73e65c617284172fe6221244b6a396dc9a75b3",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/c811dd902c2b24c8a3e6885741da2929f44abf40",
+                "reference": "c811dd902c2b24c8a3e6885741da2929f44abf40",
                 "shasum": ""
             },
             "require": {
@@ -1026,7 +1026,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-05-19 12:55:19"
+            "time": "2017-05-22 12:55:30"
         },
         {
             "name": "elife/api-validator",
@@ -3572,12 +3572,12 @@
             "version": "0.9.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/padraic/mockery.git",
+                "url": "https://github.com/mockery/mockery.git",
                 "reference": "1e5e2ffdc4d71d7358ed58a6fdd30a4a0c506855"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/1e5e2ffdc4d71d7358ed58a6fdd30a4a0c506855",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/1e5e2ffdc4d71d7358ed58a6fdd30a4a0c506855",
                 "reference": "1e5e2ffdc4d71d7358ed58a6fdd30a4a0c506855",
                 "shasum": ""
             },

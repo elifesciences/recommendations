@@ -89,7 +89,7 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
             )
             ->__invoke();
 
-        $podcastChapter = new PodcastEpisodeChapterM(2, 'something title', 300, null, new ArraySequence([]));
+        $podcastChapter = new PodcastEpisodeChapterM(2, 'something title', 'long title', 300, null, new ArraySequence([]));
 
         $podcast = new PodcastEpisodeChapterModel($podcastEpisode, $podcastChapter);
 

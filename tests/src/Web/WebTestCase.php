@@ -65,6 +65,7 @@ abstract class WebTestCase extends SilexWebTestCase
                         return new PodcastEpisodeChapter(
                             $chapter['number'],
                             'title '.$chapter['number'],
+                            'long title '.$chapter['number'],
                             100,
                             null,
                             new ArraySequence($chapter['content'] ?? [])

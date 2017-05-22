@@ -21,6 +21,12 @@ class PodcastChapter
     private $title;
 
     /**
+     * @Type("string")
+     * @Since(version="1")
+     */
+    private $longTitle;
+
+    /**
      * @Type("integer")
      * @Since(version="1")
      */
@@ -35,11 +41,13 @@ class PodcastChapter
     public function __construct(
         int $number,
         string $title,
+        string $longTitle = null,
         int $time,
         string $impactStatement = null
     ) {
         $this->number = $number;
         $this->title = $title;
+        $this->longTitle = $longTitle;
         $this->time = $time;
         $this->impactStatement = $impactStatement;
     }
@@ -49,6 +57,7 @@ class PodcastChapter
         return new static(
             $chapter->getNumber(),
             $chapter->getTitle(),
+            $chapter->getLongTitle(),
             $chapter->getTime(),
             $chapter->getImpactStatement()
         );
