@@ -36,16 +36,6 @@ class RelatedArticles implements Rule
         $this->logger = $logger;
     }
 
-    // extract a RelatedArticleOrder class to test in isolation
-
-    public function addRelations(RuleModel $model, array $list): array
-    {
-        return array_merge(
-            $list,
-            $this->order->filter($this->getRepository()->getAll($model))
-        );
-    }
-
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;

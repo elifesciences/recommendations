@@ -15,16 +15,21 @@ class NormalizedPersistence implements CompoundRule
     use RepoRelations;
 
     private $rules;
+    private $order;
 
-    public function __construct(RuleModelRepository $repository, Rule ...$rules)
+    public function __construct(RuleModelRepository $repository, RelatedArticlesOrder $order, Rule ...$rules)
     {
         $this->rules = $rules;
+        $this->order = $order;
         $this->repository = $repository;
     }
 
     public function addRelations(RuleModel $model, array $list): array
     {
-        return $this->rules[0]->addRelations($model, $list);
+        return $this->order->filter(array_merge(
+            $list,
+            $this->getRepository()->getAll($model)
+        ));
     }
 
     public function isSupported(RuleModel $model, Rule $rule)

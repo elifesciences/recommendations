@@ -269,6 +269,7 @@ final class Kernel implements MinimalKernel
                 $app['logger'],
                 new NormalizedPersistence(
                     $app['rules.repository'],
+                    new RelatedArticlesOrder(),
                     /* 1 - 10 */
                     new RelatedArticles($app['rules.micro_sdk'], $app['rules.repository'], new RelatedArticlesOrder(), $app['logger']),
                     /* 11 */
