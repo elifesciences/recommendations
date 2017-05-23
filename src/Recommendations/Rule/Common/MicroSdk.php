@@ -50,10 +50,6 @@ class MicroSdk implements SingleItemRepository
                 return $this->sdk->interviews();
                 break;
 
-            case 'labs-experiment':
-                return $this->sdk->labsExperiments();
-                break;
-
             case 'podcast-episode':
                 return $this->sdk->podcastEpisodes();
                 break;

@@ -42,7 +42,6 @@ class MostRecentWithSubject implements Rule
         switch ($type) {
             case 'blog-article':
             case 'event':
-            case 'labs-experiment':
             case 'interview':
             case 'podcast-episode':
             case 'collection':
