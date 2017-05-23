@@ -39,7 +39,7 @@ use eLife\Recommendations\Rule\MostRecentWithSubject;
 use eLife\Recommendations\Rule\NormalizedPersistence;
 use eLife\Recommendations\Rule\PodcastEpisodeContents;
 use eLife\Recommendations\Rule\RelatedArticles;
-use eLife\Recommendations\Rule\RelatedArticlesOrder;
+use eLife\Recommendations\Rule\RelationsOrder;
 use eLife\Recommendations\RuleModelRepository;
 use GuzzleHttp\Client;
 use JMS\Serializer\EventDispatcher\EventDispatcher;
@@ -269,9 +269,9 @@ final class Kernel implements MinimalKernel
                 $app['logger'],
                 new NormalizedPersistence(
                     $app['rules.repository'],
-                    new RelatedArticlesOrder(),
+                    new RelationsOrder(),
                     /* 1 - 10 */
-                    new RelatedArticles($app['rules.micro_sdk'], $app['rules.repository'], new RelatedArticlesOrder(), $app['logger']),
+                    new RelatedArticles($app['rules.micro_sdk'], $app['rules.repository'], new RelationsOrder(), $app['logger']),
                     /* 11 */
                     new CollectionContents($app['rules.micro_sdk'], $app['rules.repository']),
                     /* 12 */

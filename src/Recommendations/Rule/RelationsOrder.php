@@ -6,8 +6,7 @@ use DomainException;
 use eLife\ApiSdk\Model\Article;
 use eLife\Recommendations\RuleModel;
 
-// TODO: rename to RelationsOrder
-class RelatedArticlesOrder
+class RelationsOrder
 {
     private $typeOrder = [
         'retraction',

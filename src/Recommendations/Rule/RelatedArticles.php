@@ -27,7 +27,7 @@ class RelatedArticles implements Rule
     public function __construct(
         MicroSdk $sdk,
         RuleModelRepository $repository,
-        RelatedArticlesOrder $order,
+        RelationsOrder $order,
         LoggerInterface $logger = null
     ) {
         $this->sdk = $sdk;

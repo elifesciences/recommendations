@@ -5,13 +5,13 @@ namespace eLife\Recommendations\Rule;
 use DateTimeImmutable;
 use eLife\Recommendations\RuleModel;
 
-class RelatedArticlesOrderTest extends \PHPUnit_Framework_TestCase
+class RelationsOrderTest extends \PHPUnit_Framework_TestCase
 {
     private $order;
 
     public function setUp()
     {
-        $this->order = new RelatedArticlesOrder();
+        $this->order = new RelationsOrder();
     }
 
     public function test_orders_by_type()

@@ -17,7 +17,7 @@ class NormalizedPersistence implements CompoundRule
     private $rules;
     private $order;
 
-    public function __construct(RuleModelRepository $repository, RelatedArticlesOrder $order, Rule ...$rules)
+    public function __construct(RuleModelRepository $repository, RelationsOrder $order, Rule ...$rules)
     {
         $this->rules = $rules;
         $this->order = $order;

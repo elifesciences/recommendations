@@ -2,6 +2,7 @@
 
 namespace eLife\Recommendations\Rule\Common;
 
+use BadMethodCallException;
 use eLife\Recommendations\RuleModel;
 use eLife\Recommendations\RuleModelRepository;
 use LogicException;
@@ -12,7 +13,7 @@ trait RepoRelations
 
     public function addRelations(RuleModel $model, array $list): array
     {
-        return array_merge($list, $this->getRepository()->getAll($model));
+        throw new BadMethodCallException('No default implementation for addRelations()');
     }
 
     protected function getRepository(): RuleModelRepository
