@@ -271,7 +271,7 @@ final class Kernel implements MinimalKernel
                     $app['rules.repository'],
                     new RelationsOrder(),
                     /* 1 - 10 */
-                    new RelatedArticles($app['rules.micro_sdk'], $app['rules.repository'], new RelationsOrder(), $app['logger']),
+                    new RelatedArticles($app['rules.micro_sdk'], $app['rules.repository'], $app['logger']),
                     /* 11 */
                     new CollectionContents($app['rules.micro_sdk'], $app['rules.repository']),
                     /* 12 */
