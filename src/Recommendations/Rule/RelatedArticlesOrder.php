@@ -6,6 +6,7 @@ use DomainException;
 use eLife\ApiSdk\Model\Article;
 use eLife\Recommendations\RuleModel;
 
+// TODO: rename to RelationsOrder
 class RelatedArticlesOrder
 {
     private $typeOrder = [
@@ -22,6 +23,9 @@ class RelatedArticlesOrder
         'insight',
         'editorial',
         'short-report',
+        'collection',
+        'podcast-episode',
+        'podcast-episode-chapter',
     ];
 
     public function filter($articles)
