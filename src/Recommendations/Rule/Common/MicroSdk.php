@@ -38,18 +38,6 @@ class MicroSdk implements SingleItemRepository
             throw new LogicException('ApiSDK field does not exist on this class: '.get_class($this));
         }
         switch ($type) {
-            case 'blog-article':
-                return $this->sdk->blogArticles();
-                break;
-
-            case 'event':
-                return $this->sdk->events();
-                break;
-
-            case 'interview':
-                return $this->sdk->interviews();
-                break;
-
             case 'podcast-episode':
                 return $this->sdk->podcastEpisodes();
                 break;

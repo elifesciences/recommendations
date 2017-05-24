@@ -58,7 +58,7 @@ abstract class PopulateCommand extends Command
 
     protected static function getSupportedModels()
     {
-        return ['all', 'BlogArticles', 'Events', 'Interviews', 'PodcastEpisodes', 'Collections', 'ResearchArticles'];
+        return ['all', 'PodcastEpisodes', 'Collections', 'ResearchArticles'];
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -105,27 +105,6 @@ abstract class PopulateCommand extends Command
         $this->logger->info('Importing Research Articles');
         $articles = $this->sdk->articles();
         $this->iterateSerializeTask($articles, 'article', $articles->count());
-    }
-
-    public function importInterviews()
-    {
-        $this->logger->info('Importing Interviews');
-        $interviews = $this->sdk->interviews();
-        $this->iterateSerializeTask($interviews, 'interview', $interviews->count());
-    }
-
-    public function importEvents()
-    {
-        $this->logger->info('Importing Events');
-        $events = $this->sdk->events();
-        $this->iterateSerializeTask($events, 'event', $events->count());
-    }
-
-    public function importBlogArticles()
-    {
-        $this->logger->info('Importing Blog Articles');
-        $articles = $this->sdk->blogArticles();
-        $this->iterateSerializeTask($articles, 'blog-article', $articles->count());
     }
 
     private function iterateSerializeTask(Iterator $items, string $type, int $count)
