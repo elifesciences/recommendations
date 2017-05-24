@@ -26,7 +26,7 @@ class RelationsOrderTest extends \PHPUnit_Framework_TestCase
                 $correction,
                 $external,
             ],
-            $this->order->filter([
+            $this->order->sort([
                 $external,
                 $retraction,
                 $correction,
@@ -49,7 +49,7 @@ class RelationsOrderTest extends \PHPUnit_Framework_TestCase
                 $secondInsight,
                 $firstInsight,
             ],
-            $this->order->filter([
+            $this->order->sort([
                 $firstInsight,
                 $secondInsight,
                 $firstExternal,
@@ -70,7 +70,7 @@ class RelationsOrderTest extends \PHPUnit_Framework_TestCase
                 $collection,
                 $podcastEpisodeChapter,
             ],
-            $this->order->filter([
+            $this->order->sort([
                 $podcastEpisodeChapter,
                 $collection,
                 $article,

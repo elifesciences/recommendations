@@ -27,7 +27,7 @@ class RelationsOrder
         'podcast-episode-chapter',
     ];
 
-    public function filter($articles)
+    public function sort(array $articles): array
     {
         usort($articles, function ($former, $latter) {
             $comparison = $this->typeIndex($former) <=> $this->typeIndex($latter);

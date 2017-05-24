@@ -26,7 +26,7 @@ class NormalizedPersistence implements CompoundRule
 
     public function addRelations(RuleModel $model, array $list): array
     {
-        return $this->order->filter(array_merge(
+        return $this->order->sort(array_merge(
             $list,
             $this->getRepository()->getAll($model)
         ));
