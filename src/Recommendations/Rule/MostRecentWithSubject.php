@@ -40,10 +40,6 @@ class MostRecentWithSubject implements Rule
     public function getType($type)
     {
         switch ($type) {
-            case 'blog-article':
-            case 'event':
-            case 'labs-experiment':
-            case 'interview':
             case 'podcast-episode':
             case 'collection':
                 return $type;
