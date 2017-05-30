@@ -48,7 +48,8 @@ final class MostRecent implements Rule
             });
             if (
                 empty($intersection) &&
-                $item->equalTo($model) === false
+                $item->equalTo($model) === false &&
+                in_array($item->getType(), $this->supports())
             ) {
                 array_push($list, $item);
 
@@ -65,14 +66,8 @@ final class MostRecent implements Rule
     public function supports(): array
     {
         return [
-            'correction',
-            'editorial',
-            'feature',
-            'insight',
             'research-advance',
             'research-article',
-            'retraction',
-            'registered-report',
             'replication-study',
             'scientific-correspondence',
             'short-report',
