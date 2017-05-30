@@ -278,9 +278,9 @@ final class Kernel implements MinimalKernel
                     new PodcastEpisodeContents($app['rules.micro_sdk'], $app['rules.repository'])
                 ),
                 /* 13 */
-                new MostRecent($app['rules.repository'], $app['logger']),
+                new MostRecentWithSubject($app['hydration.single_item_repository'], $app['rules.micro_sdk'], $app['rules.repository'], $app['logger']),
                 /* 14 */
-                new MostRecentWithSubject($app['hydration.single_item_repository'], $app['rules.micro_sdk'], $app['rules.repository'], $app['logger'])
+                new MostRecent($app['rules.repository'], $app['logger'])
             );
         };
 
