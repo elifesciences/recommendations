@@ -3,6 +3,7 @@
 namespace eLife\Recommendations\Response;
 
 use eLife\ApiSdk\Model\PodcastEpisodeChapter as ApiSdkPodcastEpisodeChapter;
+use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\Type;
 
@@ -23,6 +24,7 @@ class PodcastChapter
     /**
      * @Type("string")
      * @Since(version="1")
+     * @SerializedName("longTitle")
      */
     private $longTitle;
 
@@ -35,6 +37,7 @@ class PodcastChapter
     /**
      * @Type("string")
      * @Since(version="1")
+     * @SerializedName("impactStatement")
      */
     private $impactStatement;
 
