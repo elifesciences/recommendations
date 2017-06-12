@@ -105,6 +105,7 @@ final class Kernel implements MinimalKernel
             'ttl' => 300,
             'process_memory_limit' => 200,
             'file_logs_path' => self::ROOT.'/var/logs',
+            'logging_level' => null,
             'tables' => [
                 'rules' => 'Rules',
                 'references' => 'Relations',
