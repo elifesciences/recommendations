@@ -2,6 +2,7 @@
 
 namespace eLife\Tests\Response;
 
+use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\PodcastEpisode as PodcastEpisodeModel;
@@ -19,7 +20,7 @@ final class PodcastEpisodeTest extends PHPUnit_Framework_TestCase
         $podcast = $builder
             ->create(PodcastEpisodeModel::class)
             ->withThumbnail(
-                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new EmptySequence(), new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->__invoke();
         PodcastEpisode::fromModel($podcast);
@@ -32,10 +33,10 @@ final class PodcastEpisodeTest extends PHPUnit_Framework_TestCase
         $podcast = $builder
             ->create(PodcastEpisodeModel::class)
             ->withThumbnail(
-                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new EmptySequence(), new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->withBanner(
-                promise_for(new Image('', 'https://iiif.elifesciences.org/banner.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/banner.jpg/full/full/0/default.jpg', 'banner.jpg'), 1800, 900, 50, 50))
+                promise_for(new Image('', 'https://iiif.elifesciences.org/banner.jpg', new EmptySequence(), new File('image/jpeg', 'https://iiif.elifesciences.org/banner.jpg/full/full/0/default.jpg', 'banner.jpg'), 1800, 900, 50, 50))
             )
             ->__invoke();
         PodcastEpisode::fromModel($podcast);

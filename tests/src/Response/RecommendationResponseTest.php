@@ -6,6 +6,7 @@ use ComposerLocator;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use eLife\ApiSdk\Collection\ArraySequence;
+use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Collection as CollectionModel;
@@ -85,7 +86,7 @@ class RecommendationResponseTest extends PHPUnit_Framework_TestCase
         $podcastEpisode = $builder
             ->create(PodcastEpisode::class)
             ->withThumbnail(
-                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new EmptySequence(), new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->__invoke();
 

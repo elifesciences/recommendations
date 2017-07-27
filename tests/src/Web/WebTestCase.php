@@ -5,6 +5,7 @@ namespace tests\eLife\Web;
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use eLife\ApiSdk\Collection\ArraySequence;
+use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\ExternalArticle;
@@ -57,7 +58,7 @@ abstract class WebTestCase extends SilexWebTestCase
         $podcastEpisode = $builder->create(PodcastEpisode::class)
             ->withNumber($number)
             ->withThumbnail(
-                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new EmptySequence(), new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->withChapters(
                 new ArraySequence(

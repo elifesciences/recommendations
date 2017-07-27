@@ -3,6 +3,7 @@
 namespace eLife\Tests\Response;
 
 use DateTimeImmutable;
+use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\Collection as CollectionModel;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\Image;
@@ -36,10 +37,10 @@ final class CollectionTest extends PHPUnit_Framework_TestCase
             ->withImpactStatement('Tropical disease impact statement')
             ->withPublishedDate($publishedDate = new DateTimeImmutable())
             ->withPromiseOfBanner(
-                new Image('', 'https://iiif.elifesciences.org/banner.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/banner.jpg/full/full/0/default.jpg', 'banner.jpg'), 1800, 900, 50, 50)
+                new Image('', 'https://iiif.elifesciences.org/banner.jpg', new EmptySequence(), new File('image/jpeg', 'https://iiif.elifesciences.org/banner.jpg/full/full/0/default.jpg', 'banner.jpg'), 1800, 900, 50, 50)
             )
             ->withThumbnail(
-                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
+                new Image('', 'https://iiif.elifesciences.org/thumbnail.jpg', new EmptySequence(), new File('image/jpeg', 'https://iiif.elifesciences.org/thumbnail.jpg/full/full/0/default.jpg', 'thumbnail.jpg'), 140, 140, 50, 50)
             )
             ->__invoke();
 
