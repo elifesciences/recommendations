@@ -6,8 +6,8 @@ if [ -z "$environment" ]; then
     exit 2;
 fi;
 
-expected_rules=25
-expected_most_recent=7
+expected_rules=45
+expected_most_recent=16
 
 # propagate SIGINT to waiting process
 trap 'kill -INT -$waitingPid' INT
