@@ -166,6 +166,7 @@ class ArticleRecommendationsTest extends WebTestCase
         $this->assertEquals('1', $json->items[2]->chapter->number);
         $this->assertEquals('2', $json->items[2]->episode->number);
         $this->assertEquals('long title 1', $json->items[2]->chapter->longTitle);
+        $this->assertEquals(['By some person.'], $json->items[2]->episode->image->thumbnail->attribution);
 
         $this->assertEquals('005', $json->items[3]->id);
         $this->assertEquals('research-article', $json->items[3]->type);
