@@ -40,9 +40,16 @@ final class IiifImageResponse
      */
     public $focalPoint;
 
+    /**
+     * @Type("array<string>")
+     * @Since(version="1")
+     * @SerializedName("attribution")
+     */
+    public $attribution;
+
     public function https()
     {
-        return new static($this->alt, $this->makeHttps($this->uri), $this->source, $this->size, $this->focalPoint);
+        return new static($this->alt, $this->makeHttps($this->uri), $this->source, $this->size, $this->focalPoint, $this->attribution);
     }
 
     private function makeHttps($uri)
@@ -50,13 +57,14 @@ final class IiifImageResponse
         return str_replace(['http:/', 'internal_elife_dummy_api'], ['https:/', 'internalelifedummyapi.com'], $uri);
     }
 
-    public function __construct(string $alt, string $uri, array $source, array $size, array $focalPoint = null)
+    public function __construct(string $alt, string $uri, array $source, array $size, array $focalPoint = null, $attribution = null)
     {
         $this->alt = $alt;
         $this->uri = $uri;
         $this->source = $source;
         $this->size = $size;
         $this->focalPoint = $focalPoint;
+        $this->attribution = $attribution;
     }
 
     public static function fromModel(Image $image)
@@ -73,8 +81,10 @@ final class IiifImageResponse
                 'width' => $image->getWidth(),
                 'height' => $image->getHeight(),
             ],
-            50 === $image->getFocalPointX() && 50 === $image->getFocalPointY() ? null :
-                ['x' => $image->getFocalPointX(), 'y' => $image->getFocalPointY()]
+            50 === $image->getFocalPointX() && 50 === $image->getFocalPointY()
+            ? null
+            : ['x' => $image->getFocalPointX(), 'y' => $image->getFocalPointY()],
+            $image->getAttribution()->toArray()
         ))->https();
     }
 }
