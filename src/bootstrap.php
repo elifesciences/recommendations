@@ -178,10 +178,11 @@ $app->error(function (Throwable $e) {
         $problem[$key] = $value;
     }
 
-    return new Response(
-        json_encode(json_decode($problem->asJson()), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+    return new JsonResponse(
+        $problem->asJson(),
         $status,
-        ['Content-Type' => 'application/problem+json']
+        ['Content-Type' => 'application/problem+json'],
+        true
     );
 });
 
