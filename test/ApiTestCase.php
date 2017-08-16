@@ -4,8 +4,10 @@ namespace test\eLife\Recommendations;
 
 use ComposerLocator;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
+use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
+use eLife\ApiClient\MediaType;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use GuzzleHttp\Client;
@@ -16,6 +18,7 @@ use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
+use function GuzzleHttp\json_encode;
 
 abstract class ApiTestCase extends TestCase
 {
@@ -81,6 +84,28 @@ abstract class ApiTestCase extends TestCase
                     'title' => 'Not found',
                 ])
             )
+        );
+    }
+
+    final protected function mockRelatedArticlesCall(string $id, array $articles)
+    {
+        $response = new Response(
+            200,
+            ['Content-Type' => new MediaType(ArticlesClient::TYPE_ARTICLE_RELATED, 1)],
+            json_encode($articles)
+        );
+
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/articles/$id/related",
+                [
+                    'Accept' => [
+                        new MediaType(ArticlesClient::TYPE_ARTICLE_RELATED, 1),
+                    ],
+                ]
+            ),
+            $response
         );
     }
 
