@@ -179,10 +179,9 @@ $app->error(function (Throwable $e) {
     }
 
     return new JsonResponse(
-        $problem->asJson(),
+        $problem->asArray(),
         $status,
-        ['Content-Type' => 'application/problem+json'],
-        true
+        ['Content-Type' => 'application/problem+json']
     );
 });
 
