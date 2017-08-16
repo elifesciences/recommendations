@@ -31,6 +31,13 @@ elifePipeline {
             )
         }
 
+        stage 'Deploy on continuumtest', {
+            lock('recommendations--continuumtest') {
+                builderDeployRevision 'recommendations--continuumtest', commit
+                builderSmokeTests 'recommendations--continuumtest', '/srv/recommendations'
+            }
+        }
+
         stage 'Approval', {
             elifeGitMoveToBranch commit, 'approved'
         }
