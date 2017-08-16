@@ -25,8 +25,14 @@
         "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
+        "elife/api": "dev-master",
+        "elife/api-validator": "^1.0@dev",
+        "justinrainbow/json-schema": "^5.2",
+        "mindplay/composer-locator": "^2.1",
         "phpunit/phpunit": "^6.3",
-        "symfony/browser-kit": "^3.3"
+        "symfony/browser-kit": "^3.3",
+        "symfony/psr-http-message-bridge": "^1.0",
+        "zendframework/zend-diactoros": "^1.4"
     },
     "config": {
         "sort-packages": true
