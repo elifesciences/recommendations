@@ -13,6 +13,7 @@ final class RecommendationsTest extends WebTestCase
     {
         $client = static::createClient();
 
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', []);
 
         $client->request('GET', '/recommendations/article/1234');
@@ -33,6 +34,7 @@ final class RecommendationsTest extends WebTestCase
     {
         $client = static::createClient();
 
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', []);
 
         $client->request('GET', "/recommendations/article/1234?page=$page");
@@ -76,7 +78,7 @@ final class RecommendationsTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->mockNotFound('articles/1234/related', ['Accept' => 'application/vnd.elife.article-related+json; version=1']);
+        $this->mockNotFound('articles/1234/versions', ['Accept' => 'application/vnd.elife.article-history+json; version=1']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();

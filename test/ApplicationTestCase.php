@@ -2,6 +2,7 @@
 
 namespace test\eLife\Recommendations;
 
+use eLife\ApiSdk\ApiSdk;
 use Silex\Application;
 use function GuzzleHttp\json_encode;
 
@@ -21,6 +22,11 @@ abstract class ApplicationTestCase extends ApiTestCase
     final protected function getApp() : Application
     {
         return $this->app;
+    }
+
+    final protected function getApiSdk() : ApiSdk
+    {
+        return $this->app['elife.api_sdk'];
     }
 
     final protected function assertJsonStringEqualsJson(array $expectedJson, string $actualJson, $message = '')

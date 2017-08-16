@@ -6,7 +6,6 @@ use Crell\ApiProblem\ApiProblem;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
@@ -22,7 +21,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use function GuzzleHttp\Promise\rejection_for;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -81,6 +79,18 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
     $page = $request->query->get('page', 1);
     $perPage = $request->query->get('per-page', 20);
 
+    try {
+        $article = $app['elife.api_sdk']->articles()->getHistory($id)->wait()->getVersions()[0];
+    } catch (BadResponse $e) {
+        switch ($e->getResponse()->getStatusCode()) {
+            case Response::HTTP_GONE:
+            case Response::HTTP_NOT_FOUND:
+                throw new HttpException($e->getResponse()->getStatusCode(), "$identifier does not exist", $e);
+        }
+
+        throw $e;
+    }
+
     $relations = $app['elife.api_sdk']->articles()->getRelatedArticles($id);
 
     $relations = $relations->sort(function (Article $a, Article $b) {
@@ -88,19 +98,6 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
     });
 
     $recommendations = $relations;
-
-    $recommendations = new PromiseSequence($recommendations
-        ->otherwise(function ($reason) use ($identifier) {
-            if ($reason instanceof BadResponse) {
-                switch ($reason->getResponse()->getStatusCode()) {
-                    case Response::HTTP_GONE:
-                    case Response::HTTP_NOT_FOUND:
-                        throw new HttpException($reason->getResponse()->getStatusCode(), "$identifier does not exist", $reason);
-                }
-            }
-
-            return rejection_for($reason);
-        }));
 
     $content = [
         'total' => count($recommendations),

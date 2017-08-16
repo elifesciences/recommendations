@@ -8,6 +8,8 @@ use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\MediaType;
+use eLife\ApiSdk\Model\ArticlePoA;
+use eLife\ApiSdk\Model\Model;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use GuzzleHttp\Client;
@@ -69,6 +71,8 @@ abstract class ApiTestCase extends TestCase
         return $this->httpClient;
     }
 
+    abstract protected function getApiSdk();
+
     final protected function mockNotFound(string $uri, array $headers = [])
     {
         $this->storage->save(
@@ -84,6 +88,30 @@ abstract class ApiTestCase extends TestCase
                     'title' => 'Not found',
                 ])
             )
+        );
+    }
+
+    final protected function mockArticleVersionsCall(string $id, array $versions)
+    {
+        $response = new Response(
+            200,
+            ['Content-Type' => new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 1)],
+            json_encode([
+                'versions' => array_map([$this, 'normalize'], $versions),
+            ])
+        );
+
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/articles/$id/versions",
+                [
+                    'Accept' => [
+                        new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 1),
+                    ],
+                ]
+            ),
+            $response
         );
     }
 
@@ -107,6 +135,33 @@ abstract class ApiTestCase extends TestCase
             ),
             $response
         );
+    }
+
+    final protected function createArticlePoA(string $id) : ArticlePoA
+    {
+        return $this->denormalize([
+            'status' => 'poa',
+            'id' => $id,
+            'version' => 1,
+            'type' => 'research-article',
+            'doi' => "10.7554/eLife.$id",
+            'title' => "Article $id",
+            'stage' => 'published',
+            'published' => '2016-03-28T00:00:00Z',
+            'statusDate' => '2016-03-28T00:00:00Z',
+            'volume' => 5,
+            'elocationId' => "e$id",
+        ], ArticlePoA::class);
+    }
+
+    final protected function denormalize(array $json, string $type) : Model
+    {
+        return $this->getApiSdk()->getSerializer()->denormalize($json, $type, 'json', ['snippet' => true]);
+    }
+
+    final protected function normalize(Model $model) : array
+    {
+        return $this->getApiSdk()->getSerializer()->normalize($model, 'json', ['snippet' => true]);
     }
 
     final protected function assertResponseIsValid(HttpFoundationResponse $response)
