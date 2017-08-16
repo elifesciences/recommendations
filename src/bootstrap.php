@@ -127,7 +127,7 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
 
     $headers = ['Content-Type' => sprintf('%s; version=%s', $type, $version)];
 
-    return new JsonResponse(
+    return new ApiResponse(
         $content,
         Response::HTTP_OK,
         $headers
@@ -146,13 +146,10 @@ $app->get('ping', function () use ($app) {
 });
 
 $app->after(function (Request $request, Response $response, Application $app) {
-    if ('/ping' !== $request->getPathInfo()) {
-        $response->headers->set('Cache-Control', 'public, max-age=300, stale-while-revalidate=300, stale-if-error=86400');
-        $response->headers->set('Vary', 'Accept', false);
+    if ($response->isCacheable()) {
+        $response->headers->set('ETag', md5($response->getContent()));
+        $response->isNotModified($request);
     }
-
-    $response->headers->set('ETag', md5($response->getContent()));
-    $response->isNotModified($request);
 });
 
 $app->error(function (Throwable $e) {

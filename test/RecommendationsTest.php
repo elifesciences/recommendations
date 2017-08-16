@@ -37,5 +37,6 @@ final class RecommendationsTest extends WebTestCase
         $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(['title' => 'article/1234 does not exist'], $response->getContent());
+        $this->assertFalse($client->getResponse()->isCacheable());
     }
 }
