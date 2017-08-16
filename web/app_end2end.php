@@ -1,7 +1,9 @@
 <?php
 
-require_once __DIR__.'/bootstrap.php';
+$config = [
+    'api.uri' => 'http://end2end--gateway.elife.internal/',
+];
 
-$config = include __DIR__.'/../config/end2end.php';
+$app = require __DIR__ . '/../src/bootstrap.php';
 
-(new eLife\App\Kernel($config))->run();
+$app->run();
