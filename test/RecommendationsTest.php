@@ -11,12 +11,13 @@ final class RecommendationsTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/recommendations/interviews/1234');
+        $client->request('GET', '/recommendations/interview/1234');
+        $response = $client->getResponse();
 
-        $this->assertSame(400, $client->getResponse()->getStatusCode());
-        $this->assertSame('application/problem+json', $client->getResponse()->headers->get('Content-Type'));
-        $this->assertJsonStringEqualsJson(['type' => 'about:blank'], $client->getResponse()->getContent());
-        $this->assertFalse($client->getResponse()->isCacheable());
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertJsonStringEqualsJson(['title' => 'Not an article'], $response->getContent());
+        $this->assertFalse($response->isCacheable());
     }
 
     /**
@@ -29,9 +30,10 @@ final class RecommendationsTest extends WebTestCase
         $this->mockNotFound('articles/1234/related', ['Accept' => 'application/vnd.elife.article-related+json; version=1']);
 
         $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
 
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-        $this->assertSame('application/problem+json', $client->getResponse()->headers->get('Content-Type'));
-        $this->assertJsonStringEqualsJson(['type' => 'about:blank', 'title' => 'article/1234 does not exist'], $client->getResponse()->getContent());
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertJsonStringEqualsJson(['title' => 'article/1234 does not exist'], $response->getContent());
     }
 }

@@ -62,10 +62,10 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         $identifier = Identifier::fromString("{$type}/{$id}");
 
         if ('article' !== $type) {
-            throw new InvalidArgumentException('Not an article');
+            throw new BadRequestHttpException('Not an article');
         }
     } catch (InvalidArgumentException $e) {
-        throw new BadRequestHttpException();
+        throw new NotFoundHttpException();
     }
 
     $accepts = [
@@ -166,14 +166,13 @@ $app->error(function (Throwable $e) {
         $extra = [];
     } else {
         $status = Response::HTTP_INTERNAL_SERVER_ERROR;
-        $message = 'Error';
         $extra = [
             'exception' => $e->getMessage(),
             'stacktrace' => $e->getTraceAsString(),
         ];
     }
 
-    $problem = new ApiProblem($message);
+    $problem = new ApiProblem(empty($message) ? 'Error' : $message, null);
 
     foreach ($extra as $key => $value) {
         $problem[$key] = $value;
