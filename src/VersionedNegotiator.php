@@ -9,7 +9,7 @@ use Negotiation\Negotiator;
 
 final class VersionedNegotiator extends Negotiator
 {
-    public function getBest($header, array $priorities): AcceptHeader
+    public function getBest($header, array $priorities) : AcceptHeader
     {
         if (empty($header)) {
             $header = '*/*';
@@ -32,7 +32,7 @@ final class VersionedNegotiator extends Negotiator
         }
 
         if ($match->getType() === $header->getType() && $match->getParameter('version') !== $header->getParameter('version')) {
-            throw new UnsupportedVersion($header->getNormalizedValue() . ' is not supported');
+            throw new UnsupportedVersion($header->getNormalizedValue().' is not supported');
         }
 
         return $match;

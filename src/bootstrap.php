@@ -6,13 +6,11 @@ use Crell\ApiProblem\ApiProblem;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use GuzzleHttp\Client;
-use function GuzzleHttp\Promise\rejection_for;
 use InvalidArgumentException;
 use Negotiation\Accept;
 use Silex\Application;
@@ -23,10 +21,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
+use function GuzzleHttp\Promise\rejection_for;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 $config = $config ?? [];
 
@@ -46,7 +44,6 @@ $app['elife.guzzle_client'] = function () use ($app) {
 $app['elife.api_client'] = function () use ($app) {
     return new Guzzle6HttpClient($app['elife.guzzle_client']);
 };
-
 
 $app['elife.api_sdk'] = function () use ($app) {
     return new ApiSdk($app['elife.api_client']);
@@ -78,7 +75,7 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
     /** @var Accept $type */
     $type = $app['negotiator']->getBest($request->headers->get('Accept'), $accepts);
 
-    $version = (int)$type->getParameter('version');
+    $version = (int) $type->getParameter('version');
     $type = $type->getType();
 
     $page = $request->query->get('page', 1);
@@ -112,7 +109,7 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
     $recommendations = $recommendations->slice(($page * $perPage) - $perPage, $perPage);
 
     if ($page < 1 || (0 === count($recommendations) && $page > 1)) {
-        throw new NotFoundHttpException('No page ' . $page);
+        throw new NotFoundHttpException('No page '.$page);
     }
 
     if ('asc' === $request->query->get('order', 'desc')) {
