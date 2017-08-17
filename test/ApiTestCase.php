@@ -5,12 +5,15 @@ namespace test\eLife\Recommendations;
 use ComposerLocator;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
 use eLife\ApiClient\ApiClient\ArticlesClient;
+use eLife\ApiClient\ApiClient\CollectionsClient;
 use eLife\ApiClient\ApiClient\SearchClient;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\Model\ArticlePoA;
+use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\HasIdentifier;
+use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
@@ -117,6 +120,36 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
+    final protected function mockCollectionsCall(
+        int $total,
+        array $collections,
+        int $page = 1,
+        int $perPage = 100,
+        array $containing = []
+    ) {
+        $containingQuery = implode('', array_map(function (Identifier $identifier) {
+            return "&containing[]=$identifier";
+        }, $containing));
+
+        $json = [
+            'total' => $total,
+            'items' => array_map([$this, 'normalize'], $collections),
+        ];
+
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/collections?page=$page&per-page=$perPage&order=desc$containingQuery",
+                ['Accept' => new MediaType(CollectionsClient::TYPE_COLLECTION_LIST, 1)]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => new MediaType(CollectionsClient::TYPE_COLLECTION_LIST, 1)],
+                json_encode($json)
+            )
+        );
+    }
+
     final protected function mockRelatedArticlesCall(string $id, array $articles)
     {
         $response = new Response(
@@ -220,14 +253,50 @@ abstract class ApiTestCase extends TestCase
         ]), ArticlePoA::class);
     }
 
+    final protected function createCollection(string $id) : Collection
+    {
+        return $this->denormalize(
+            [
+                'id' => $id,
+                'title' => "Collection $id",
+                'published' => '2015-09-16T11:19:26Z',
+                'image' => [
+                    'thumbnail' => [
+                        'uri' => 'https://www.example.com/image',
+                        'alt' => '',
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image/full/full/0/default.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 1000,
+                            'height' => 1000,
+                        ],
+                    ],
+                ],
+                'selectedCurator' => [
+                    'id' => 'person',
+                    'type' => [
+                        'id' => 'senior-editor',
+                        'label' => 'Senior Editor',
+                    ],
+                    'name' => [
+                        'preferred' => 'Person',
+                        'index' => 'Curator',
+                    ],
+                ],
+            ], Collection::class);
+    }
+
     final protected function denormalize(array $json, string $type) : Model
     {
-        return $this->getApiSdk()->getSerializer()->denormalize($json, $type, 'json', ['snippet' => true]);
+        return $this->getApiSdk()->getSerializer()->denormalize($json, $type, 'json', ['snippet' => true, 'type' => true]);
     }
 
     final protected function normalize(Model $model) : array
     {
-        return $this->getApiSdk()->getSerializer()->normalize($model, 'json', ['snippet' => true]);
+        return $this->getApiSdk()->getSerializer()->normalize($model, 'json', ['snippet' => true, 'type' => true]);
     }
 
     final protected function assertResponseIsValid(HttpFoundationResponse $response)

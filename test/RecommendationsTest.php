@@ -2,6 +2,7 @@
 
 namespace test\eLife\Recommendations;
 
+use eLife\ApiSdk\Model\Identifier;
 use Traversable;
 
 final class RecommendationsTest extends WebTestCase
@@ -15,6 +16,7 @@ final class RecommendationsTest extends WebTestCase
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', '/recommendations/article/1234');
@@ -36,6 +38,7 @@ final class RecommendationsTest extends WebTestCase
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')]);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', '/recommendations/article/1234');
@@ -61,12 +64,44 @@ final class RecommendationsTest extends WebTestCase
     /**
      * @test
      */
+    public function it_returns_collection_recommendations_for_an_article()
+    {
+        $client = static::createClient();
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
+        $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [$this->createCollection('1234'), $this->createCollection('5678')], 1, 100, [Identifier::article('1234')]);
+        $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/vnd.elife.recommendations+json; version=1', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(
+            [
+                'total' => 2,
+                'items' => [
+                    $this->normalize($this->createCollection('1234')),
+                    $this->normalize($this->createCollection('5678')),
+                ],
+            ],
+            $response->getContent()
+        );
+        $this->assertTrue($response->isCacheable());
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_most_recent_article_with_first_subject_recommendations_for_an_article()
     {
         $client = static::createClient();
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
         $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
         $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
 
@@ -97,6 +132,7 @@ final class RecommendationsTest extends WebTestCase
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', '/recommendations/article/1234');
@@ -126,6 +162,7 @@ final class RecommendationsTest extends WebTestCase
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
         $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')]);
+        $this->mockCollectionsCall(0, [$this->createCollection('1234'), $this->createCollection('5678')], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
         $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1240', 'research-article'), $this->createArticlePoA('1239', 'research-article')], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
@@ -137,11 +174,13 @@ final class RecommendationsTest extends WebTestCase
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
-                'total' => 5,
+                'total' => 7,
                 'items' => [
                     $this->normalize($this->createArticlePoA('1237', 'research-article')),
                     $this->normalize($this->createArticlePoA('1235', 'insight')),
                     $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                    $this->normalize($this->createCollection('1234')),
+                    $this->normalize($this->createCollection('5678')),
                     $this->normalize($this->createArticlePoA('1238', 'research-article')),
                     $this->normalize($this->createArticlePoA('1240', 'research-article')),
                 ],
@@ -161,6 +200,7 @@ final class RecommendationsTest extends WebTestCase
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', "/recommendations/article/1234?page=$page");

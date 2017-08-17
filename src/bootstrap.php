@@ -113,6 +113,10 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
             return $order[$a->getType()] <=> $order[$b->getType()];
         });
 
+    $collections = $app['elife.api_sdk']->collections()
+        ->containing($article->getIdentifier())
+        ->slice(0, 100);
+
     if ($article->getSubjects()->notEmpty()) {
         $subject = $article->getSubjects()[0];
 
@@ -146,6 +150,7 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         return $recommendations;
     };
 
+    $recommendations = $recommendations->append(...$collections);
     $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecentWithSubject);
     $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecent);
 
