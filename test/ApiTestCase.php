@@ -5,10 +5,12 @@ namespace test\eLife\Recommendations;
 use ComposerLocator;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
 use eLife\ApiClient\ApiClient\ArticlesClient;
+use eLife\ApiClient\ApiClient\SearchClient;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\Model\ArticlePoA;
+use eLife\ApiSdk\Model\HasIdentifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
@@ -137,7 +139,63 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
-    final protected function createArticlePoA(string $id, string $type = 'research-article') : ArticlePoA
+    final protected function mockSearchCall(
+        int $total,
+        array $items,
+        int $page = 1,
+        int $perPage = 100,
+        array $types = []
+    ) {
+        $typesQuery = implode('', array_map(function (string $type) {
+            return "&type[]=$type";
+        }, $types));
+
+        $json = [
+            'total' => $total,
+            'items' => array_map([$this, 'normalize'], $items),
+            'subjects' => [],
+            'types' => array_reduce([
+                'correction',
+                'editorial',
+                'feature',
+                'insight',
+                'research-advance',
+                'research-article',
+                'retraction',
+                'registered-report',
+                'replication-study',
+                'scientific-correspondence',
+                'short-report',
+                'tools-resources',
+                'blog-article',
+                'collection',
+                'interview',
+                'labs-post',
+                'podcast-episode',
+            ], function (array $carry, string $type) use ($items) {
+                $carry[$type] = count(array_filter($items, function (HasIdentifier $model) use ($type) {
+                    return $type === $model->getIdentifier();
+                }));
+
+                return $carry;
+            }, []),
+        ];
+
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/search?for=&page=$page&per-page=$perPage&sort=date&order=desc$typesQuery&use-date=default",
+                ['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => new MediaType(SearchClient::TYPE_SEARCH, 1)],
+                json_encode($json)
+            )
+        );
+    }
+
+    final protected function createArticlePoA(string $id, string $type = 'research-article', array $subjects = []) : ArticlePoA
     {
         return $this->denormalize([
             'status' => 'poa',

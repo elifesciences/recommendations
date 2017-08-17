@@ -6,6 +6,7 @@ use Crell\ApiProblem\ApiProblem;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
@@ -113,7 +114,28 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
             return $order[$a->getType()] <=> $order[$b->getType()];
         });
 
+    $mostRecent = $app['elife.api_sdk']->search()
+        ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
+        ->sortBy('date')
+        ->slice(0, 5);
+
     $recommendations = $relations;
+
+    $appendFirstThatDoesNotExist = function (Sequence $recommendations, Sequence $toInsert) : Sequence {
+        foreach ($toInsert as $article) {
+            foreach ($recommendations as $recommendation) {
+                if ($article->getId() === $recommendation->getId()) {
+                    continue 2;
+                }
+            }
+
+            return $recommendations->append($article);
+        }
+
+        return $recommendations;
+    };
+
+    $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecent);
 
     $content = [
         'total' => count($recommendations),

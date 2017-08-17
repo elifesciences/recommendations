@@ -15,6 +15,7 @@ final class RecommendationsTest extends WebTestCase
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', []);
+        $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
@@ -34,7 +35,8 @@ final class RecommendationsTest extends WebTestCase
         $client = static::createClient();
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
-        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1236', 'research-article')]);
+        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')]);
+        $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
@@ -46,9 +48,70 @@ final class RecommendationsTest extends WebTestCase
             [
                 'total' => 3,
                 'items' => [
-                    $this->normalize($this->createArticlePoA('1236', 'research-article')),
+                    $this->normalize($this->createArticlePoA('1237', 'research-article')),
                     $this->normalize($this->createArticlePoA('1235', 'insight')),
                     $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                ],
+            ],
+            $response->getContent()
+        );
+        $this->assertTrue($response->isCacheable());
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_most_recent_article_recommendations_for_an_article()
+    {
+        $client = static::createClient();
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
+        $this->mockRelatedArticlesCall('1234', []);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/vnd.elife.recommendations+json; version=1', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(
+            [
+                'total' => 1,
+                'items' => [
+                    $this->normalize($this->createArticlePoA('1235', 'insight')),
+                ],
+            ],
+            $response->getContent()
+        );
+        $this->assertTrue($response->isCacheable());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_duplicate_recommendations_for_an_article()
+    {
+        $client = static::createClient();
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
+        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')]);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/vnd.elife.recommendations+json; version=1', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(
+            [
+                'total' => 4,
+                'items' => [
+                    $this->normalize($this->createArticlePoA('1237', 'research-article')),
+                    $this->normalize($this->createArticlePoA('1235', 'insight')),
+                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                    $this->normalize($this->createArticlePoA('1238', 'research-article')),
                 ],
             ],
             $response->getContent()
@@ -66,6 +129,7 @@ final class RecommendationsTest extends WebTestCase
 
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
         $this->mockRelatedArticlesCall('1234', []);
+        $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', "/recommendations/article/1234?page=$page");
         $response = $client->getResponse();
