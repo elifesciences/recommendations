@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__.'/../vendor/autoload.php';
+
 $config = [
     'api.uri' => 'http://end2end--gateway.elife.internal/',
 ];

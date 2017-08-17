@@ -4,16 +4,20 @@ namespace eLife\Recommendations;
 
 use Crell\ApiProblem\ApiProblem;
 use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
+use eLife\ApiClient\HttpClient\WarningCheckingHttpClient;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
+use eLife\Logging\LoggingFactory;
 use GuzzleHttp\Client;
 use InvalidArgumentException;
 use Negotiation\Accept;
+use Psr\Log\LogLevel;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +28,12 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
-require_once __DIR__.'/../vendor/autoload.php';
-
 $app = new Application([
     'api.uri' => $config['api.uri'] ?? 'https://api.elifesciences.org/',
     'api.timeout' => $config['api.timeout'] ?? 1,
+    'debug' => $config['debug'] ?? false,
+    'logger.path' => $config['logger.path'] ?? __DIR__.'/../var/logs',
+    'logger.level' => $config['logger.level'] ?? LogLevel::WARNING,
 ]);
 
 $app['elife.guzzle_client'] = function () use ($app) {
@@ -43,12 +48,26 @@ $app['elife.api_client'] = function () use ($app) {
     return new Guzzle6HttpClient($app['elife.guzzle_client']);
 };
 
+if ($app['debug']) {
+    $app->extend('elife.api_client', function (HttpClient $httpClient) use ($app) {
+        return new WarningCheckingHttpClient($httpClient, $app['logger']);
+    });
+}
+
 $app['elife.api_sdk'] = function () use ($app) {
     return new ApiSdk($app['elife.api_client']);
 };
 
 $app['elife.api_sdk.serializer'] = function () use ($app) {
     return $app['elife.api_sdk']->getSerializer();
+};
+
+$app['elife.logger.factory'] = function (Application $app) {
+    return new LoggingFactory($app['logger.path'], 'recommendations-api', $app['logger.level']);
+};
+
+$app['logger'] = function (Application $app) {
+    return $app['elife.logger.factory']->logger();
 };
 
 $app['negotiator'] = function () {
