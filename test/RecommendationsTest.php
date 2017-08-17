@@ -28,6 +28,36 @@ final class RecommendationsTest extends WebTestCase
 
     /**
      * @test
+     */
+    public function it_returns_order_related_article_recommendations_for_an_article()
+    {
+        $client = static::createClient();
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
+        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1236', 'research-article')]);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/vnd.elife.recommendations+json; version=1', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(
+            [
+                'total' => 3,
+                'items' => [
+                    $this->normalize($this->createArticlePoA('1236', 'research-article')),
+                    $this->normalize($this->createArticlePoA('1235', 'insight')),
+                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                ],
+            ],
+            $response->getContent()
+        );
+        $this->assertTrue($response->isCacheable());
+    }
+
+    /**
+     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_returns_a_404_for_an_invalid_page(string $page)

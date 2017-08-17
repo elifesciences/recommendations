@@ -91,11 +91,27 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         throw $e;
     }
 
-    $relations = $app['elife.api_sdk']->articles()->getRelatedArticles($id);
+    $relations = $app['elife.api_sdk']->articles()
+        ->getRelatedArticles($id)
+        ->sort(function (Article $a, Article $b) {
+            static $order = [
+                'retraction' => 1,
+                'correction' => 2,
+                'external-article' => 3,
+                'registered-report' => 4,
+                'replication-study' => 5,
+                'research-advance' => 6,
+                'scientific-correspondence' => 7,
+                'research-article' => 8,
+                'tools-resources' => 9,
+                'feature' => 10,
+                'insight' => 11,
+                'editorial' => 12,
+                'short-report' => 13,
+            ];
 
-    $relations = $relations->sort(function (Article $a, Article $b) {
-        return $a <=> $b;
-    });
+            return $order[$a->getType()] <=> $order[$b->getType()];
+        });
 
     $recommendations = $relations;
 

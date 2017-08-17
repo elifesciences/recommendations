@@ -120,7 +120,7 @@ abstract class ApiTestCase extends TestCase
         $response = new Response(
             200,
             ['Content-Type' => new MediaType(ArticlesClient::TYPE_ARTICLE_RELATED, 1)],
-            json_encode($articles)
+            json_encode(array_map([$this, 'normalize'], $articles))
         );
 
         $this->storage->save(
@@ -137,13 +137,13 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
-    final protected function createArticlePoA(string $id) : ArticlePoA
+    final protected function createArticlePoA(string $id, string $type = 'research-article') : ArticlePoA
     {
         return $this->denormalize([
             'status' => 'poa',
             'id' => $id,
             'version' => 1,
-            'type' => 'research-article',
+            'type' => $type,
             'doi' => "10.7554/eLife.$id",
             'title' => "Article $id",
             'stage' => 'published',
