@@ -26,8 +26,6 @@ use Throwable;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-$config = $config ?? [];
-
 $app = new Application([
     'api.uri' => $config['api.uri'] ?? 'https://api.elifesciences.org/',
     'api.timeout' => $config['api.timeout'] ?? 1,
