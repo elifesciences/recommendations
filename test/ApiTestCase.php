@@ -144,11 +144,16 @@ abstract class ApiTestCase extends TestCase
         array $items,
         int $page = 1,
         int $perPage = 100,
-        array $types = []
+        array $types = [],
+        array $subjects = []
     ) {
         $typesQuery = implode('', array_map(function (string $type) {
             return "&type[]=$type";
         }, $types));
+
+        $subjectsQuery = implode('', array_map(function (string $subject) {
+            return "&subject[]=$subject";
+        }, $subjects));
 
         $json = [
             'total' => $total,
@@ -184,7 +189,7 @@ abstract class ApiTestCase extends TestCase
         $this->storage->save(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/search?for=&page=$page&per-page=$perPage&sort=date&order=desc$typesQuery&use-date=default",
+                "http://api.elifesciences.org/search?for=&page=$page&per-page=$perPage&sort=date&order=desc$subjectsQuery$typesQuery&use-date=default",
                 ['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)]
             ),
             new Response(
@@ -197,7 +202,7 @@ abstract class ApiTestCase extends TestCase
 
     final protected function createArticlePoA(string $id, string $type = 'research-article', array $subjects = []) : ArticlePoA
     {
-        return $this->denormalize([
+        return $this->denormalize(array_filter([
             'status' => 'poa',
             'id' => $id,
             'version' => 1,
@@ -209,7 +214,10 @@ abstract class ApiTestCase extends TestCase
             'statusDate' => '2016-03-28T00:00:00Z',
             'volume' => 5,
             'elocationId' => "e$id",
-        ], ArticlePoA::class);
+            'subjects' => array_map(function (string $subject) {
+                return array_fill_keys(['id', 'name'], $subject);
+            }, $subjects),
+        ]), ArticlePoA::class);
     }
 
     final protected function denormalize(array $json, string $type) : Model

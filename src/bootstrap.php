@@ -6,6 +6,7 @@ use Crell\ApiProblem\ApiProblem;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\Identifier;
@@ -114,6 +115,18 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
             return $order[$a->getType()] <=> $order[$b->getType()];
         });
 
+    if ($article->getSubjects()->notEmpty()) {
+        $subject = $article->getSubjects()[0];
+
+        $mostRecentWithSubject = $app['elife.api_sdk']->search()
+            ->forType('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources')
+            ->sortBy('date')
+            ->forSubject($subject->getId())
+            ->slice(0, 5);
+    } else {
+        $mostRecentWithSubject = new EmptySequence();
+    }
+
     $mostRecent = $app['elife.api_sdk']->search()
         ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
         ->sortBy('date')
@@ -135,6 +148,7 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         return $recommendations;
     };
 
+    $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecentWithSubject);
     $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecent);
 
     $content = [
