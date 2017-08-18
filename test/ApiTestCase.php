@@ -6,6 +6,7 @@ use ComposerLocator;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
 use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\ApiClient\CollectionsClient;
+use eLife\ApiClient\ApiClient\PodcastClient;
 use eLife\ApiClient\ApiClient\SearchClient;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
@@ -15,6 +16,7 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\HasIdentifier;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use GuzzleHttp\Client;
@@ -145,6 +147,52 @@ abstract class ApiTestCase extends TestCase
             new Response(
                 200,
                 ['Content-Type' => new MediaType(CollectionsClient::TYPE_COLLECTION_LIST, 1)],
+                json_encode($json)
+            )
+        );
+    }
+
+    final protected function mockPodcastEpisodeCall(PodcastEpisode $episode)
+    {
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/podcast-episodes/{$episode->getNumber()}",
+                ['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)],
+                json_encode($this->normalize($episode, false))
+            )
+        );
+    }
+
+    final protected function mockPodcastEpisodesCall(
+        int $total,
+        array $podcastEpisodes,
+        int $page = 1,
+        int $perPage = 100,
+        array $containing = []
+    ) {
+        $containingQuery = implode('', array_map(function (Identifier $identifier) {
+            return "&containing[]=$identifier";
+        }, $containing));
+
+        $json = [
+            'total' => $total,
+            'items' => array_map([$this, 'normalize'], $podcastEpisodes),
+        ];
+
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/podcast-episodes?page=$page&per-page=$perPage&order=desc$containingQuery",
+                ['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE_LIST, 1)]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE_LIST, 1)],
                 json_encode($json)
             )
         );
@@ -289,14 +337,69 @@ abstract class ApiTestCase extends TestCase
             ], Collection::class);
     }
 
-    final protected function denormalize(array $json, string $type) : Model
+    final protected function createPodcastEpisode(int $number, array $chapters) : PodcastEpisode
     {
-        return $this->getApiSdk()->getSerializer()->denormalize($json, $type, 'json', ['snippet' => true, 'type' => true]);
+        return $this->denormalize(
+            [
+                'number' => $number,
+                'title' => "Episode $number",
+                'published' => '2016-07-01T08:30:15Z',
+                'image' => [
+                    'banner' => [
+                        'uri' => 'https://www.example.com/image',
+                        'alt' => '',
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image/full/full/0/default.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 1000,
+                            'height' => 1000,
+                        ],
+                    ],
+                    'thumbnail' => [
+                        'uri' => 'https://www.example.com/image',
+                        'alt' => '',
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image/full/full/0/default.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 1000,
+                            'height' => 1000,
+                        ],
+                    ],
+                ],
+                'sources' => [
+                    [
+                        'mediaType' => 'audio/mpeg',
+                        'uri' => "https://www.example.com/episode$number.mp3",
+                    ],
+                ],
+                'chapters' => $chapters,
+            ], PodcastEpisode::class, false);
     }
 
-    final protected function normalize(Model $model) : array
+    final protected function createPodcastEpisodeChapter(int $number, array $content) : array
     {
-        return $this->getApiSdk()->getSerializer()->normalize($model, 'json', ['snippet' => true, 'type' => true]);
+        return [
+            'number' => $number,
+            'title' => "Chapter $number",
+            'time' => $number,
+            'content' => array_map([$this, 'normalize'], $content),
+        ];
+    }
+
+    final protected function denormalize(array $json, string $type, bool $snippet = true) : Model
+    {
+        return $this->getApiSdk()->getSerializer()->denormalize($json, $type, 'json', ['snippet' => $snippet, 'type' => $snippet]);
+    }
+
+    final protected function normalize(Model $model, bool $snippet = true) : array
+    {
+        return $this->getApiSdk()->getSerializer()->normalize($model, 'json', ['snippet' => $snippet, 'type' => $snippet]);
     }
 
     final protected function assertResponseIsValid(HttpFoundationResponse $response)

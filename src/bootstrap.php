@@ -14,6 +14,8 @@ use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ExternalArticle;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Logging\LoggingFactory;
 use GuzzleHttp\Client;
 use InvalidArgumentException;
@@ -101,8 +103,15 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
     $page = $request->query->get('page', 1);
     $perPage = $request->query->get('per-page', 20);
 
+    $article = $app['elife.api_sdk']->articles()->getHistory($id);
+
+    // Do this early as we have to then request each episode.
+    $podcastEpisodes = $app['elife.api_sdk']->podcastEpisodes()
+        ->containing(Identifier::article($id))
+        ->slice(0, 100);
+
     try {
-        $article = $app['elife.api_sdk']->articles()->getHistory($id)->wait()->getVersions()[0];
+        $article = $article->wait()->getVersions()[0];
     } catch (BadResponse $e) {
         switch ($e->getResponse()->getStatusCode()) {
             case Response::HTTP_GONE:
@@ -139,6 +148,20 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         ->containing($article->getIdentifier())
         ->slice(0, 100);
 
+    $podcastEpisodeChapters = $podcastEpisodes
+        ->reduce(function (Sequence $chapters, PodcastEpisode $episode) use ($article) {
+            foreach ($episode->getChapters() as $chapter) {
+                foreach ($chapter->getContent() as $content) {
+                    if ($article->getId() === $content->getId()) {
+                        $chapters = $chapters->append(new PodcastEpisodeChapterModel($episode, $chapter));
+                        continue 2;
+                    }
+                }
+            }
+
+            return $chapters;
+        }, new EmptySequence());
+
     if ($article->getSubjects()->notEmpty()) {
         $subject = $article->getSubjects()[0];
 
@@ -167,6 +190,8 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
                     (
                         ($item instanceof ExternalArticle && $item->getId() === $recommendation->getId())
                         ||
+                        ($item instanceof PodcastEpisodeChapterModel && $item->getEpisode()->getNumber() === $recommendation->getEpisode()->getNumber() && $item->getChapter()->getNumber() === $recommendation->getChapter()->getNumber())
+                        ||
                         $item->getIdentifier() == $recommendation->getIdentifier()
                     )
                 ) {
@@ -181,6 +206,7 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
     };
 
     $recommendations = $recommendations->append(...$collections);
+    $recommendations = $recommendations->append(...$podcastEpisodeChapters);
     $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecentWithSubject);
     $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecent);
 
