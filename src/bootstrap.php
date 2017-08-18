@@ -11,6 +11,7 @@ use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
+use eLife\ApiSdk\Model\ExternalArticle;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\Logging\LoggingFactory;
@@ -158,14 +159,22 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
     $recommendations = $relations;
 
     $appendFirstThatDoesNotExist = function (Sequence $recommendations, Sequence $toInsert) : Sequence {
-        foreach ($toInsert as $article) {
+        foreach ($toInsert as $item) {
             foreach ($recommendations as $recommendation) {
-                if ($article->getId() === $recommendation->getId()) {
+                if (
+                    get_class($item) === get_class($recommendation)
+                    &&
+                    (
+                        ($item instanceof ExternalArticle && $item->getId() === $recommendation->getId())
+                        ||
+                        $item->getIdentifier() == $recommendation->getIdentifier()
+                    )
+                ) {
                     continue 2;
                 }
             }
 
-            return $recommendations->append($article);
+            return $recommendations->append($item);
         }
 
         return $recommendations;
