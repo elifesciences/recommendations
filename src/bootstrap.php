@@ -181,7 +181,7 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
 
     $recommendations = $relations;
 
-    $appendFirstThatDoesNotExist = function (Sequence $recommendations, Sequence $toInsert) : Sequence {
+    $appendFirstThatDoesNotAlreadyExist = function (Sequence $recommendations, Sequence $toInsert) : Sequence {
         foreach ($toInsert as $item) {
             foreach ($recommendations as $recommendation) {
                 if (
@@ -207,8 +207,8 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
 
     $recommendations = $recommendations->append(...$collections);
     $recommendations = $recommendations->append(...$podcastEpisodeChapters);
-    $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecentWithSubject);
-    $recommendations = $appendFirstThatDoesNotExist($recommendations, $mostRecent);
+    $recommendations = $appendFirstThatDoesNotAlreadyExist($recommendations, $mostRecentWithSubject);
+    $recommendations = $appendFirstThatDoesNotAlreadyExist($recommendations, $mostRecent);
 
     $content = [
         'total' => count($recommendations),
