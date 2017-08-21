@@ -33,7 +33,9 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
-$config = array_merge($config ?? [], include __DIR__.'/../config.php');
+$configFile = __DIR__.'/../config.php';
+
+$config = array_merge($config ?? [], file_exists($configFile) ? require $configFile : []);
 
 $app = new Application([
     'api.uri' => $config['api.uri'] ?? 'https://api.elifesciences.org/',
