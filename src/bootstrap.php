@@ -38,7 +38,7 @@ $app = new Application([
     'api.timeout' => $config['api.timeout'] ?? 1,
     'debug' => $config['debug'] ?? false,
     'logger.path' => $config['logger.path'] ?? __DIR__.'/../var/logs',
-    'logger.level' => $config['logger.level'] ?? LogLevel::WARNING,
+    'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
 
 $app['elife.guzzle_client'] = function () use ($app) {
