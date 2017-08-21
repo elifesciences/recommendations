@@ -3,6 +3,7 @@
 namespace eLife\Recommendations;
 
 use Crell\ApiProblem\ApiProblem;
+use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
@@ -12,6 +13,7 @@ use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ExternalArticle;
+use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
@@ -140,6 +142,13 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
                 'editorial' => 12,
                 'short-report' => 13,
             ];
+
+            if ($order[$a->getType()] === $order[$b->getType()]) {
+                $aDate = $a instanceof HasPublishedDate ? $a->getPublishedDate() : new DateTimeImmutable('0000-00-00');
+                $bDate = $b instanceof HasPublishedDate ? $b->getPublishedDate() : new DateTimeImmutable('0000-00-00');
+
+                return $bDate <=> $aDate;
+            }
 
             return $order[$a->getType()] <=> $order[$b->getType()];
         });

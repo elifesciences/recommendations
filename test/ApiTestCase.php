@@ -4,6 +4,7 @@ namespace test\eLife\Recommendations;
 
 use ComposerLocator;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
+use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\ApiClient\CollectionsClient;
 use eLife\ApiClient\ApiClient\PodcastClient;
@@ -281,8 +282,12 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
-    final protected function createArticlePoA(string $id, string $type = 'research-article', array $subjects = []) : ArticlePoA
+    final protected function createArticlePoA(string $id, string $type = 'research-article', array $subjects = [], DateTimeImmutable $publishedDate = null) : ArticlePoA
     {
+        if (!$publishedDate) {
+            $publishedDate = DateTimeImmutable::createFromFormat(DATE_ATOM, '2016-03-28T00:00:00Z');
+        }
+
         return $this->denormalize(array_filter([
             'status' => 'poa',
             'id' => $id,
@@ -291,8 +296,8 @@ abstract class ApiTestCase extends TestCase
             'doi' => "10.7554/eLife.$id",
             'title' => "Article $id",
             'stage' => 'published',
-            'published' => '2016-03-28T00:00:00Z',
-            'statusDate' => '2016-03-28T00:00:00Z',
+            'published' => $publishedDate->format(DATE_ATOM),
+            'statusDate' => $publishedDate->format(DATE_ATOM),
             'volume' => 5,
             'elocationId' => "e$id",
             'subjects' => array_map(function (string $subject) {

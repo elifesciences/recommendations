@@ -2,6 +2,7 @@
 
 namespace test\eLife\Recommendations;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use Traversable;
@@ -38,8 +39,14 @@ final class RecommendationsTest extends WebTestCase
     {
         $client = static::createClient();
 
+        $insight = $this->createArticlePoA('1235', 'insight');
+        $shortReport = $this->createArticlePoA('1236', 'short-report');
+        $research1 = $this->createArticlePoA('1237', 'research-article', [], new DateTimeImmutable('yesterday'));
+        $research2 = $this->createArticlePoA('1238', 'research-article', [], new DateTimeImmutable('today'));
+        $research3 = $this->createArticlePoA('1239', 'research-article', [], new DateTimeImmutable('2 days ago'));
+
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
-        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')]);
+        $this->mockRelatedArticlesCall('1234', [$insight, $shortReport, $research1, $research2, $research3]);
         $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
@@ -52,11 +59,13 @@ final class RecommendationsTest extends WebTestCase
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
-                'total' => 3,
+                'total' => 5,
                 'items' => [
-                    $this->normalize($this->createArticlePoA('1237', 'research-article')),
-                    $this->normalize($this->createArticlePoA('1235', 'insight')),
-                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                    $this->normalize($research2),
+                    $this->normalize($research1),
+                    $this->normalize($research3),
+                    $this->normalize($insight),
+                    $this->normalize($shortReport),
                 ],
             ],
             $response->getContent()
