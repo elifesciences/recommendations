@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b0c90ed5767cf23efa8993a8029e0d0",
+    "content-hash": "d5559b8d4f040006da0e7f2d8c8ccebd",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -117,16 +117,16 @@
         },
         {
             "name": "elife/api-client",
-            "version": "dev-podcast-episodes-containing",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "6d3b828cc38cfb398f8970463d58ab213e088fc4"
+                "reference": "0bb307c5ee9c20f1ed26593dc9494ca74b8f3af6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/6d3b828cc38cfb398f8970463d58ab213e088fc4",
-                "reference": "6d3b828cc38cfb398f8970463d58ab213e088fc4",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/0bb307c5ee9c20f1ed26593dc9494ca74b8f3af6",
+                "reference": "0bb307c5ee9c20f1ed26593dc9494ca74b8f3af6",
                 "shasum": ""
             },
             "require": {
@@ -169,24 +169,24 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2017-08-17T15:13:35+00:00"
+            "time": "2017-08-21T07:05:28+00:00"
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-podcast-episodes-containing",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "dd788bb6f54d04729f916d228dde1005e38bcae5"
+                "reference": "f82547ea8d939990e7cd83200ba2b5ac35e839d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/dd788bb6f54d04729f916d228dde1005e38bcae5",
-                "reference": "dd788bb6f54d04729f916d228dde1005e38bcae5",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/f82547ea8d939990e7cd83200ba2b5ac35e839d6",
+                "reference": "f82547ea8d939990e7cd83200ba2b5ac35e839d6",
                 "shasum": ""
             },
             "require": {
-                "elife/api-client": "dev-podcast-episodes-containing",
+                "elife/api-client": "^1.0@dev",
                 "guzzlehttp/promises": "^1.0",
                 "ocramius/package-versions": "^1.1",
                 "php": "^7.0",
@@ -217,7 +217,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-08-17T15:18:42+00:00"
+            "time": "2017-08-21T07:12:48+00:00"
         },
         {
             "name": "elife/logging-sdk",
@@ -1433,12 +1433,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "8bd686ac8ecf096c16b7f6f29bcd361b35bc1372"
+                "reference": "e5bf4553ca8bd9e675a3f4b4d20e65dd5749b75a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/8bd686ac8ecf096c16b7f6f29bcd361b35bc1372",
-                "reference": "8bd686ac8ecf096c16b7f6f29bcd361b35bc1372",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/e5bf4553ca8bd9e675a3f4b4d20e65dd5749b75a",
+                "reference": "e5bf4553ca8bd9e675a3f4b4d20e65dd5749b75a",
                 "shasum": ""
             },
             "conflict": {
@@ -1450,7 +1450,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2017-08-16T10:59:33+00:00"
+            "time": "2017-08-21T06:44:43+00:00"
         },
         {
             "name": "elife/api-validator",

@@ -15,8 +15,8 @@
     },
     "require": {
         "crell/api-problem": "^2.0",
-        "elife/api-client": "dev-podcast-episodes-containing",
-        "elife/api-sdk": "dev-podcast-episodes-containing",
+        "elife/api-client": "^1.0@dev",
+        "elife/api-sdk": "^1.0@dev",
         "elife/logging-sdk": "dev-master",
         "guzzlehttp/guzzle": "^6.3",
         "guzzlehttp/promises": "^1.3",
