@@ -310,6 +310,10 @@ final class RecommendationsTest extends WebTestCase
         $client = static::createClient();
 
         $this->mockNotFound('articles/1234/versions', ['Accept' => 'application/vnd.elife.article-history+json; version=1']);
+        $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
