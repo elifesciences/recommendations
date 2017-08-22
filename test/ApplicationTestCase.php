@@ -3,6 +3,7 @@
 namespace test\eLife\Recommendations;
 
 use eLife\ApiSdk\ApiSdk;
+use GuzzleHttp\HandlerStack;
 use Silex\Application;
 use function GuzzleHttp\json_encode;
 
@@ -15,8 +16,13 @@ abstract class ApplicationTestCase extends ApiTestCase
      */
     final public function setUpApp()
     {
+        $config = ['api.uri' => 'http://api.elifesciences.org/'];
         $this->app = require __DIR__.'/../src/bootstrap.php';
-        $this->app['elife.api_client'] = $this->getHttpClient();
+        $this->app->extend('elife.guzzle_client.handler', function (HandlerStack $stack) {
+            $stack->push($this->getMock());
+
+            return $stack;
+        });
     }
 
     final protected function getApp() : Application

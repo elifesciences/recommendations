@@ -3,6 +3,7 @@
 namespace eLife\Recommendations;
 
 use Crell\ApiProblem\ApiProblem;
+use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\StopwatchMiddleware;
 use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient;
@@ -20,10 +21,15 @@ use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Logging\LoggingFactory;
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 use InvalidArgumentException;
 use Negotiation\Accept;
 use Psr\Log\LogLevel;
 use Silex\Application;
+use Silex\Provider\HttpFragmentServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,10 +51,33 @@ $app = new Application([
     'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
 
+if ($app['debug']) {
+    $app->register(new HttpFragmentServiceProvider());
+    $app->register(new ServiceControllerServiceProvider());
+    $app->register(new TwigServiceProvider());
+    $app->register(new WebProfilerServiceProvider(), [
+        'profiler.cache_dir' => __DIR__.'/../var/cache/profiler',
+        'profiler.mount_prefix' => '/_profiler',
+    ]);
+}
+
+$app['elife.guzzle_client.handler'] = function () {
+    return HandlerStack::create();
+};
+
+if ($app['debug']) {
+    $app->extend('elife.guzzle_client.handler', function (HandlerStack $stack) use ($app) {
+        $stack->unshift(new StopwatchMiddleware($app['stopwatch']));
+
+        return $stack;
+    });
+}
+
 $app['elife.guzzle_client'] = function () use ($app) {
     return new Client([
         'base_uri' => $app['api.uri'],
         'connect_timeout' => 0.5,
+        'handler' => $app['elife.guzzle_client.handler'],
         'timeout' => $app['api.timeout'],
     ]);
 };
