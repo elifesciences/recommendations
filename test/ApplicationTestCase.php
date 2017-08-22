@@ -16,8 +16,8 @@ abstract class ApplicationTestCase extends ApiTestCase
      */
     final public function setUpApp()
     {
-        $config = ['api.uri' => 'http://api.elifesciences.org/'];
         $this->app = require __DIR__.'/../src/bootstrap.php';
+        $this->app['api.uri'] = 'http://api.elifesciences.org/';
         $this->app->extend('elife.guzzle_client.handler', function (HandlerStack $stack) {
             $stack->push($this->getMock());
 
