@@ -3,6 +3,7 @@
 namespace eLife\Recommendations;
 
 use Crell\ApiProblem\ApiProblem;
+use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\StopwatchMiddleware;
 use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient;
@@ -10,8 +11,10 @@ use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\WarningCheckingHttpClient;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\EmptySequence;
+use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
+use eLife\ApiSdk\Model\ArticleHistory;
 use eLife\ApiSdk\Model\ExternalArticle;
 use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\Identifier;
@@ -20,10 +23,15 @@ use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Logging\LoggingFactory;
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 use InvalidArgumentException;
 use Negotiation\Accept;
 use Psr\Log\LogLevel;
 use Silex\Application;
+use Silex\Provider\HttpFragmentServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +40,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function GuzzleHttp\Promise\all;
 
 $configFile = __DIR__.'/../config.php';
 
@@ -45,10 +54,33 @@ $app = new Application([
     'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
 
+if ($app['debug']) {
+    $app->register(new HttpFragmentServiceProvider());
+    $app->register(new ServiceControllerServiceProvider());
+    $app->register(new TwigServiceProvider());
+    $app->register(new WebProfilerServiceProvider(), [
+        'profiler.cache_dir' => __DIR__.'/../var/cache/profiler',
+        'profiler.mount_prefix' => '/_profiler',
+    ]);
+}
+
+$app['elife.guzzle_client.handler'] = function () {
+    return HandlerStack::create();
+};
+
+if ($app['debug']) {
+    $app->extend('elife.guzzle_client.handler', function (HandlerStack $stack) use ($app) {
+        $stack->unshift(new StopwatchMiddleware($app['stopwatch']));
+
+        return $stack;
+    });
+}
+
 $app['elife.guzzle_client'] = function () use ($app) {
     return new Client([
         'base_uri' => $app['api.uri'],
         'connect_timeout' => 0.5,
+        'handler' => $app['elife.guzzle_client.handler'],
         'timeout' => $app['api.timeout'],
     ]);
 };
@@ -109,23 +141,6 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
 
     $article = $app['elife.api_sdk']->articles()->getHistory($id);
 
-    // Do this early as we have to then request each episode.
-    $podcastEpisodes = $app['elife.api_sdk']->podcastEpisodes()
-        ->containing(Identifier::article($id))
-        ->slice(0, 100);
-
-    try {
-        $article = $article->wait()->getVersions()[0];
-    } catch (BadResponse $e) {
-        switch ($e->getResponse()->getStatusCode()) {
-            case Response::HTTP_GONE:
-            case Response::HTTP_NOT_FOUND:
-                throw new HttpException($e->getResponse()->getStatusCode(), "$identifier does not exist", $e);
-        }
-
-        throw $e;
-    }
-
     $relations = $app['elife.api_sdk']->articles()
         ->getRelatedArticles($id)
         ->sort(function (Article $a, Article $b) {
@@ -156,14 +171,38 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         });
 
     $collections = $app['elife.api_sdk']->collections()
-        ->containing($article->getIdentifier())
+        ->containing(Identifier::article($id))
         ->slice(0, 100);
 
-    $podcastEpisodeChapters = $podcastEpisodes
-        ->reduce(function (Sequence $chapters, PodcastEpisode $episode) use ($article) {
+    $mostRecent = $app['elife.api_sdk']->search()
+        ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
+        ->sortBy('date')
+        ->slice(0, 5);
+
+    $mostRecentWithSubject = new PromiseSequence($article
+        ->then(function (ArticleHistory $history) use ($app) {
+            $article = $history->getVersions()[0];
+
+            if ($article->getSubjects()->isEmpty()) {
+                return new EmptySequence();
+            }
+
+            $subject = $article->getSubjects()[0];
+
+            return $app['elife.api_sdk']->search()
+                ->forType('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources')
+                ->sortBy('date')
+                ->forSubject($subject->getId())
+                ->slice(0, 5);
+        }));
+
+    $podcastEpisodeChapters = $app['elife.api_sdk']->podcastEpisodes()
+        ->containing(Identifier::article($id))
+        ->slice(0, 100)
+        ->reduce(function (Sequence $chapters, PodcastEpisode $episode) use ($id) {
             foreach ($episode->getChapters() as $chapter) {
                 foreach ($chapter->getContent() as $content) {
-                    if ($article->getId() === $content->getId()) {
+                    if ($id === $content->getId()) {
                         $chapters = $chapters->append(new PodcastEpisodeChapterModel($episode, $chapter));
                         continue 2;
                     }
@@ -172,23 +211,6 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
 
             return $chapters;
         }, new EmptySequence());
-
-    if ($article->getSubjects()->notEmpty()) {
-        $subject = $article->getSubjects()[0];
-
-        $mostRecentWithSubject = $app['elife.api_sdk']->search()
-            ->forType('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources')
-            ->sortBy('date')
-            ->forSubject($subject->getId())
-            ->slice(0, 5);
-    } else {
-        $mostRecentWithSubject = new EmptySequence();
-    }
-
-    $mostRecent = $app['elife.api_sdk']->search()
-        ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
-        ->sortBy('date')
-        ->slice(0, 5);
 
     $recommendations = $relations;
 
@@ -215,6 +237,18 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
 
         return $recommendations;
     };
+
+    try {
+        all([$article, $relations, $collections, $podcastEpisodeChapters, $mostRecent, $mostRecentWithSubject])->wait();
+    } catch (BadResponse $e) {
+        switch ($e->getResponse()->getStatusCode()) {
+            case Response::HTTP_GONE:
+            case Response::HTTP_NOT_FOUND:
+                throw new HttpException($e->getResponse()->getStatusCode(), "$identifier does not exist", $e);
+        }
+
+        throw $e;
+    }
 
     $recommendations = $recommendations->append(...$collections);
     $recommendations = $recommendations->append(...$podcastEpisodeChapters);

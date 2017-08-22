@@ -9,8 +9,6 @@ use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\ApiClient\CollectionsClient;
 use eLife\ApiClient\ApiClient\PodcastClient;
 use eLife\ApiClient\ApiClient\SearchClient;
-use eLife\ApiClient\HttpClient;
-use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\Collection;
@@ -20,8 +18,6 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
-use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use JsonSchema\Validator;
@@ -37,8 +33,8 @@ abstract class ApiTestCase extends TestCase
     /** @var InMemoryStorageAdapter */
     private $storage;
 
-    /** @var HttpClient */
-    private $httpClient;
+    /** @var MockMiddleware */
+    private $mock;
 
     /** @var JsonMessageValidator */
     private $validator;
@@ -46,37 +42,19 @@ abstract class ApiTestCase extends TestCase
     /**
      * @before
      */
-    final public function setUpValidator()
+    final public function setUpMock()
     {
         $this->validator = new JsonMessageValidator(
             new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
             new Validator()
         );
+        $this->storage = new ValidatingStorageAdapter(new InMemoryStorageAdapter(), $this->validator);
+        $this->mock = new MockMiddleware($this->storage, 'replay');
     }
 
-    /**
-     * @after
-     */
-    final public function resetMocks()
+    final protected function getMock() : MockMiddleware
     {
-        $this->httpClient = null;
-    }
-
-    final protected function getHttpClient() : HttpClient
-    {
-        if (null === $this->httpClient) {
-            $this->storage = new ValidatingStorageAdapter(new InMemoryStorageAdapter(), $this->validator);
-
-            $stack = HandlerStack::create();
-            $stack->push(new MockMiddleware($this->storage, 'replay'));
-
-            $this->httpClient = new Guzzle6HttpClient(new Client([
-                'base_uri' => 'http://api.elifesciences.org',
-                'handler' => $stack,
-            ]));
-        }
-
-        return $this->httpClient;
+        return $this->mock;
     }
 
     abstract protected function getApiSdk();
