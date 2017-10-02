@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__.'/bootstrap.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-$config = include __DIR__.'/../config/prod.php';
+$app = require __DIR__.'/../src/bootstrap.php';
 
-(new eLife\App\Kernel($config))->run();
+$app->run();

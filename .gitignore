@@ -1,13 +1,5 @@
 /build/
+/config.php
+/var/
+!var/.gitkeep
 /vendor/
-/cache/
-/config/local.php
-/config/db.ini
-/tests/raml/
-!/tests/raml/.gitkeep
-coverage.xml
-
-var/logs/*
-!var/logs/.gitkeep
-var/cache/*
-!var/cache/.gitkeep

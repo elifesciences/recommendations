@@ -1,15 +1,7 @@
 <?php
 
-require_once __DIR__.'/bootstrap.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-use eLife\App\Kernel;
+$app = require __DIR__.'/../src/bootstrap.php';
 
-$config = include __DIR__.'/../config/ci.php';
-
-$kernel = new Kernel($config);
-
-$kernel->withApp(function ($app) use ($config) {
-    $app['debug'] = $config['debug'] ?? false;
-});
-
-$kernel->run();
+$app->run();

@@ -1,15 +1,15 @@
 <?php
 
-require_once __DIR__.'/bootstrap.php';
+use Psr\Log\LogLevel;
 
-use eLife\App\Kernel;
+require_once __DIR__.'/../vendor/autoload.php';
 
-$config = include __DIR__.'/../config/dev.php';
+$config = [
+    'api.timeout' => 5,
+    'debug' => true,
+    'logger.level' => LogLevel::DEBUG,
+];
 
-$kernel = new Kernel($config);
+$app = require __DIR__.'/../src/bootstrap.php';
 
-$kernel->withApp(function ($app) use ($config) {
-    $app['debug'] = $config['debug'] ?? false;
-});
-
-$kernel->run();
+$app->run();
