@@ -22,6 +22,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Logging\LoggingFactory;
+use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use InvalidArgumentException;
@@ -53,6 +54,8 @@ $app = new Application([
     'logger.path' => $config['logger.path'] ?? __DIR__.'/../var/logs',
     'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
+
+$app->register(new PingControllerProvider());
 
 if ($app['debug']) {
     $app->register(new HttpFragmentServiceProvider());
@@ -284,17 +287,6 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         $content,
         Response::HTTP_OK,
         $headers
-    );
-});
-
-$app->get('ping', function () use ($app) {
-    return new Response(
-        'pong',
-        Response::HTTP_OK,
-        [
-            'Cache-Control' => 'must-revalidate, no-cache, no-store, private',
-            'Content-Type' => 'text/plain; charset=UTF-8',
-        ]
     );
 });
 

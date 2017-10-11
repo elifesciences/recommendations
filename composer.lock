@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ded8477630f45ea8c374b8e954d63d44",
+    "content-hash": "c39851806b4619d2f179495646e64457",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -254,6 +254,56 @@
             ],
             "description": "eLife Sciences logging SDK",
             "time": "2017-08-17T14:03:04+00:00"
+        },
+        {
+            "name": "elife/ping",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elifesciences/ping-php.git",
+                "reference": "bface5eb45cc09c0905ab0e860bacbf198dedb31"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elifesciences/ping-php/zipball/bface5eb45cc09c0905ab0e860bacbf198dedb31",
+                "reference": "bface5eb45cc09c0905ab0e860bacbf198dedb31",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0",
+                "symfony/http-foundation": "^2.7 || ^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7 || ^6.0",
+                "pimple/pimple": "^3.0",
+                "silex/silex": "^2.0",
+                "symfony/browser-kit": "^2.7 || ^3.0",
+                "symfony/config": "^2.8 || ^3.0",
+                "symfony/dependency-injection": "^2.8 || ^3.0",
+                "symfony/framework-bundle": "^2.7 || ^3.0",
+                "symfony/http-kernel": "^2.7 || ^3.0"
+            },
+            "suggest": {
+                "silex/silex": "^2.0, to use PingControllerProvider",
+                "symfony/http-kernel": "^2.7 || ^3.0, to use PingBundle"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "eLife\\Ping\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "eLife Sciences ping controller",
+            "time": "2017-10-11T09:27:00+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3731,6 +3781,7 @@
         "elife/api-client": 20,
         "elife/api-sdk": 20,
         "elife/logging-sdk": 20,
+        "elife/ping": 20,
         "elife/api": 20,
         "elife/api-validator": 20
     },
