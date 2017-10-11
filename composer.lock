@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c39851806b4619d2f179495646e64457",
+    "content-hash": "2506f349c16bbdc3090a57ecdfb8e7d9",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -257,7 +257,7 @@
         },
         {
             "name": "elife/ping",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/ping-php.git",
@@ -3781,7 +3781,6 @@
         "elife/api-client": 20,
         "elife/api-sdk": 20,
         "elife/logging-sdk": 20,
-        "elife/ping": 20,
         "elife/api": 20,
         "elife/api-validator": 20
     },
