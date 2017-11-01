@@ -14,8 +14,8 @@
         }
     },
     "require": {
-        "crell/api-problem": "^2.0",
         "elife/api-client": "^1.0@dev",
+        "elife/api-problem": "dev-silex",
         "elife/api-sdk": "^1.0@dev",
         "elife/logging-sdk": "dev-master",
         "elife/ping": "^1.0",

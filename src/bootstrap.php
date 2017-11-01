@@ -2,13 +2,13 @@
 
 namespace eLife\Recommendations;
 
-use Crell\ApiProblem\ApiProblem;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\StopwatchMiddleware;
 use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\WarningCheckingHttpClient;
+use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
@@ -33,14 +33,14 @@ use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
+use Symfony\Component\HttpKernel\KernelEvents;
 use function GuzzleHttp\Promise\all;
 
 $configFile = __DIR__.'/../config.php';
@@ -55,6 +55,7 @@ $app = new Application([
     'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
 
+$app->register(new ApiProblemProvider());
 $app->register(new PingControllerProvider());
 
 if ($app['debug']) {
@@ -297,34 +298,14 @@ $app->after(function (Request $request, Response $response, Application $app) {
     }
 });
 
-$app->error(function (Throwable $e) {
-    if ($e instanceof HttpExceptionInterface) {
-        $status = $e->getStatusCode();
-        $message = $e->getMessage();
-        $extra = [];
-    } elseif ($e instanceof UnsupportedVersion) {
-        $status = Response::HTTP_NOT_ACCEPTABLE;
-        $message = $e->getMessage();
-        $extra = [];
-    } else {
-        $status = Response::HTTP_INTERNAL_SERVER_ERROR;
-        $extra = [
-            'exception' => $e->getMessage(),
-            'stacktrace' => $e->getTraceAsString(),
-        ];
+$app->on(KernelEvents::EXCEPTION, function (GetResponseForExceptionEvent $event) {
+    $exception = $event->getException();
+
+    if (false === $exception instanceof UnsupportedVersion) {
+        return;
     }
 
-    $problem = new ApiProblem(empty($message) ? 'Error' : $message, null);
-
-    foreach ($extra as $key => $value) {
-        $problem[$key] = $value;
-    }
-
-    return new JsonResponse(
-        $problem->asArray(),
-        $status,
-        ['Content-Type' => 'application/problem+json']
-    );
+    $event->setException(new NotAcceptableHttpException($exception->getMessage(), $exception));
 });
 
 return $app;
