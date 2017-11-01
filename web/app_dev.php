@@ -1,15 +1,15 @@
 <?php
 
-use Psr\Log\LogLevel;
+use eLife\Recommendations\AppKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-$config = [
-    'api.timeout' => 5,
-    'debug' => true,
-    'logger.level' => LogLevel::DEBUG,
-];
+$app = new AppKernel('dev');
 
-$app = require __DIR__.'/../src/bootstrap.php';
+$request = Request::createFromGlobals();
 
-$app->run();
+$response = $app->handle($request);
+$response->send();
+
+$this->terminate($request, $response);
