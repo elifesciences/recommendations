@@ -17,7 +17,6 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Recommendations\ApiResponse;
-use function GuzzleHttp\Promise\all;
 use InvalidArgumentException;
 use Negotiation\Accept;
 use Negotiation\Negotiator;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use function GuzzleHttp\Promise\all;
 
 final class RecommendationsController
 {
