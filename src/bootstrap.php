@@ -292,10 +292,6 @@ $app->error(function (Throwable $e) {
         $status = $e->getStatusCode();
         $message = $e->getMessage();
         $extra = [];
-    } elseif ($e instanceof UnsupportedVersion) {
-        $status = Response::HTTP_NOT_ACCEPTABLE;
-        $message = $e->getMessage();
-        $extra = [];
     } else {
         $status = Response::HTTP_INTERNAL_SERVER_ERROR;
         $extra = [
