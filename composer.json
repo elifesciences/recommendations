@@ -17,6 +17,7 @@
         "crell/api-problem": "^2.0",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "^1.0@dev",
+        "elife/content-negotiator": "dev-silex",
         "elife/logging-sdk": "dev-master",
         "elife/ping": "^1.0",
         "guzzlehttp/guzzle": "^6.3",

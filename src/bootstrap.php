@@ -21,6 +21,7 @@ use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
+use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\Logging\LoggingFactory;
 use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
@@ -55,6 +56,7 @@ $app = new Application([
     'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
 
+$app->register(new ContentNegotiationProvider());
 $app->register(new PingControllerProvider());
 
 if ($app['debug']) {
@@ -114,30 +116,16 @@ $app['logger'] = function (Application $app) {
     return $app['elife.logger.factory']->logger();
 };
 
-$app['negotiator'] = function () {
-    return new VersionedNegotiator();
-};
-
-$app->get('/recommendations/{type}/{id}', function (Request $request, string $type, string $id) use ($app) {
+$app->get('/recommendations/{contentType}/{id}', function (Request $request, Accept $type, string $contentType, string $id) use ($app) {
     try {
-        $identifier = Identifier::fromString("{$type}/{$id}");
+        $identifier = Identifier::fromString("{$contentType}/{$id}");
 
-        if ('article' !== $type) {
+        if ('article' !== $contentType) {
             throw new BadRequestHttpException('Not an article');
         }
     } catch (InvalidArgumentException $e) {
         throw new NotFoundHttpException();
     }
-
-    $accepts = [
-        'application/vnd.elife.recommendations+json; version=1',
-    ];
-
-    /** @var Accept $type */
-    $type = $app['negotiator']->getBest($request->headers->get('Accept'), $accepts);
-
-    $version = (int) $type->getParameter('version');
-    $type = $type->getType();
 
     $page = $request->query->get('page', 1);
     $perPage = $request->query->get('per-page', 20);
@@ -281,14 +269,16 @@ $app->get('/recommendations/{type}/{id}', function (Request $request, string $ty
         })
         ->toArray();
 
-    $headers = ['Content-Type' => sprintf('%s; version=%s', $type, $version)];
+    $headers = ['Content-Type' => $type->getNormalizedValue()];
 
     return new ApiResponse(
         $content,
         Response::HTTP_OK,
         $headers
     );
-});
+})->before($app['negotiate.accept'](
+    'application/vnd.elife.recommendations+json; version=1'
+));
 
 $app->after(function (Request $request, Response $response, Application $app) {
     if ($response->isCacheable()) {

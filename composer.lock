@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2506f349c16bbdc3090a57ecdfb8e7d9",
+    "content-hash": "d9c54ba0567ff6d27b16b15f343e0745",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -218,6 +218,55 @@
             ],
             "description": "eLife Sciences API SDK",
             "time": "2017-10-23T09:09:19+00:00"
+        },
+        {
+            "name": "elife/content-negotiator",
+            "version": "dev-silex",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elifesciences/content-negotiator-php.git",
+                "reference": "a50c113381dd6e027689b75a08fdaa8fdba15ec5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elifesciences/content-negotiator-php/zipball/a50c113381dd6e027689b75a08fdaa8fdba15ec5",
+                "reference": "a50c113381dd6e027689b75a08fdaa8fdba15ec5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0",
+                "symfony/http-foundation": "^2.7 || ^3.0",
+                "symfony/http-kernel": "^2.7 || ^3.0",
+                "willdurand/negotiation": "^2.0.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7.7 || ^6.0",
+                "pimple/pimple": "^3.0",
+                "silex/silex": "^2.0",
+                "symfony/browser-kit": "^2.7 || ^3.0",
+                "symfony/css-selector": "^2.7 || ^3.0",
+                "symfony/debug": "^2.8 || ^3.0"
+            },
+            "suggest": {
+                "silex/silex": "^2.0, to use ContentNegotiationProvider"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "eLife\\ContentNegotiator\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "eLife Sciences content negotiator",
+            "time": "2017-11-03T10:28:44+00:00"
         },
         {
             "name": "elife/logging-sdk",
@@ -3781,6 +3830,7 @@
     "stability-flags": {
         "elife/api-client": 20,
         "elife/api-sdk": 20,
+        "elife/content-negotiator": 20,
         "elife/logging-sdk": 20,
         "elife/api": 20,
         "elife/api-validator": 20

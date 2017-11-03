@@ -11,6 +11,40 @@ final class RecommendationsTest extends WebTestCase
 {
     /**
      * @test
+     * @dataProvider typeProvider
+     */
+    public function it_negotiates_type(string $type, int $statusCode)
+    {
+        $client = static::createClient();
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234')]);
+        $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockSearchCall(0, [], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
+
+        $client->request('GET', '/recommendations/article/1234', [], [], ['HTTP_ACCEPT' => $type]);
+        $response = $client->getResponse();
+        $this->assertSame($statusCode, $response->getStatusCode());
+    }
+
+    public function typeProvider() : Traversable
+    {
+        $types = [
+            'application/vnd.elife.recommendations+json' => 200,
+            'application/vnd.elife.recommendations+json; version=0' => 406,
+            'application/vnd.elife.recommendations+json; version=1' => 200,
+            'application/vnd.elife.recommendations+json; version=2' => 406,
+            'text/plain' => 406,
+        ];
+
+        foreach ($types as $type => $statusCode) {
+            yield $type => [$type, $statusCode];
+        }
+    }
+
+    /**
+     * @test
      */
     public function it_returns_empty_recommendations_for_an_article()
     {
