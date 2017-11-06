@@ -12,4 +12,4 @@ $request = Request::createFromGlobals();
 $response = $app->handle($request);
 $response->send();
 
-$this->terminate($request, $response);
+$app->terminate($request, $response);
