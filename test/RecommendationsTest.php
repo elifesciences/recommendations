@@ -274,7 +274,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
-        $this->assertJsonStringEqualsJson(['title' => "No page $page"], $response->getContent());
+        $this->assertJsonStringEqualsJson(['title' => "No page $page", 'type' => 'about:blank'], $response->getContent());
         $this->assertFalse($response->isCacheable());
     }
 
@@ -298,7 +298,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertSame(400, $response->getStatusCode());
         $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
-        $this->assertJsonStringEqualsJson(['title' => 'Not an article'], $response->getContent());
+        $this->assertJsonStringEqualsJson(['title' => 'Not an article', 'type' => 'about:blank'], $response->getContent());
         $this->assertFalse($response->isCacheable());
     }
 
@@ -321,7 +321,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
-        $this->assertJsonStringEqualsJson(['title' => 'article/1234 does not exist'], $response->getContent());
+        $this->assertJsonStringEqualsJson(['title' => 'article/1234 does not exist', 'type' => 'about:blank'], $response->getContent());
         $this->assertFalse($client->getResponse()->isCacheable());
     }
 }

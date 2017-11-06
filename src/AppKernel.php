@@ -3,12 +3,12 @@
 namespace eLife\Recommendations;
 
 use ComposerLocator;
-use Crell\ApiProblem\ApiProblem;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\StopwatchMiddleware;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\WarningCheckingHttpClient;
+use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
@@ -26,15 +26,15 @@ use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\TerminableInterface;
 use test\eLife\Recommendations\InMemoryStorageAdapter;
 use test\eLife\Recommendations\ValidatingStorageAdapter;
-use Throwable;
 
 final class AppKernel implements HttpKernelInterface, TerminableInterface
 {
@@ -57,6 +57,7 @@ final class AppKernel implements HttpKernelInterface, TerminableInterface
         ]);
         $this->container = new Psr11Container($this->app);
 
+        $this->app->register(new ApiProblemProvider());
         $this->app->register(new PingControllerProvider());
 
         if ($this->app['debug']) {
@@ -156,34 +157,14 @@ final class AppKernel implements HttpKernelInterface, TerminableInterface
             }
         });
 
-        $this->app->error(function (Throwable $e) {
-            if ($e instanceof HttpExceptionInterface) {
-                $status = $e->getStatusCode();
-                $message = $e->getMessage();
-                $extra = [];
-            } elseif ($e instanceof UnsupportedVersion) {
-                $status = Response::HTTP_NOT_ACCEPTABLE;
-                $message = $e->getMessage();
-                $extra = [];
-            } else {
-                $status = Response::HTTP_INTERNAL_SERVER_ERROR;
-                $extra = [
-                    'exception' => $e->getMessage(),
-                    'stacktrace' => $e->getTraceAsString(),
-                ];
+        $this->app->on(KernelEvents::EXCEPTION, function (GetResponseForExceptionEvent $event) {
+            $exception = $event->getException();
+
+            if (false === $exception instanceof UnsupportedVersion) {
+                return;
             }
 
-            $problem = new ApiProblem(empty($message) ? 'Error' : $message, null);
-
-            foreach ($extra as $key => $value) {
-                $problem[$key] = $value;
-            }
-
-            return new JsonResponse(
-                $problem->asArray(),
-                $status,
-                ['Content-Type' => 'application/problem+json']
-            );
+            $event->setException(new NotAcceptableHttpException($exception->getMessage(), $exception));
         });
     }
 
