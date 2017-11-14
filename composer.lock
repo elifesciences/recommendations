@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b723e3961c269573aa7b784c0c7ccc92",
+    "content-hash": "88bd6a483ce992cffd39fc614746c589",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -268,16 +268,16 @@
         },
         {
             "name": "elife/content-negotiator",
-            "version": "dev-silex",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/content-negotiator-php.git",
-                "reference": "a50c113381dd6e027689b75a08fdaa8fdba15ec5"
+                "reference": "82099671a3b7a716d01e36a0ff05e8317c9a3ced"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/content-negotiator-php/zipball/a50c113381dd6e027689b75a08fdaa8fdba15ec5",
-                "reference": "a50c113381dd6e027689b75a08fdaa8fdba15ec5",
+                "url": "https://api.github.com/repos/elifesciences/content-negotiator-php/zipball/82099671a3b7a716d01e36a0ff05e8317c9a3ced",
+                "reference": "82099671a3b7a716d01e36a0ff05e8317c9a3ced",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences content negotiator",
-            "time": "2017-11-03T10:28:44+00:00"
+            "time": "2017-11-14T07:45:05+00:00"
         },
         {
             "name": "elife/logging-sdk",
@@ -3876,7 +3876,6 @@
     "stability-flags": {
         "elife/api-client": 20,
         "elife/api-sdk": 20,
-        "elife/content-negotiator": 20,
         "elife/logging-sdk": 20,
         "elife/api": 20,
         "elife/api-validator": 20
