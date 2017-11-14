@@ -12,12 +12,14 @@ use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
+use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\Logging\LoggingFactory;
 use eLife\Ping\Silex\PingControllerProvider;
 use eLife\Recommendations\Controller\RecommendationsController;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use JsonSchema\Validator;
+use Negotiation\Accept;
 use Pimple\Psr11\Container as Psr11Container;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LogLevel;
@@ -28,10 +30,7 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\TerminableInterface;
 use test\eLife\Recommendations\InMemoryStorageAdapter;
 use test\eLife\Recommendations\ValidatingStorageAdapter;
@@ -58,6 +57,7 @@ final class AppKernel implements HttpKernelInterface, TerminableInterface
         $this->container = new Psr11Container($this->app);
 
         $this->app->register(new ApiProblemProvider());
+        $this->app->register(new ContentNegotiationProvider());
         $this->app->register(new PingControllerProvider());
 
         if ($this->app['debug']) {
@@ -140,31 +140,19 @@ final class AppKernel implements HttpKernelInterface, TerminableInterface
             return $this->app['elife.logger.factory']->logger();
         };
 
-        $this->app['negotiator'] = function () {
-            return new VersionedNegotiator();
-        };
+        $this->app->get('/recommendations/{contentType}/{id}', function (Request $request, Accept $type, string $contentType, string $id) {
+            $controller = new RecommendationsController($this->app['elife.api_sdk']);
 
-        $this->app->get('/recommendations/{type}/{id}', function (Request $request, string $type, string $id) {
-            $controller = new RecommendationsController($this->app['elife.api_sdk'], $this->app['negotiator']);
-
-            return $controller->recommendationsAction($request, $type, $id);
-        });
+            return $controller->recommendationsAction($request, $type, $contentType, $id);
+        })->before($this->app['negotiate.accept'](
+            'application/vnd.elife.recommendations+json; version=1'
+        ));
 
         $this->app->after(function (Request $request, Response $response, Application $app) {
             if ($response->isCacheable()) {
                 $response->headers->set('ETag', md5($response->getContent()));
                 $response->isNotModified($request);
             }
-        });
-
-        $this->app->on(KernelEvents::EXCEPTION, function (GetResponseForExceptionEvent $event) {
-            $exception = $event->getException();
-
-            if (false === $exception instanceof UnsupportedVersion) {
-                return;
-            }
-
-            $event->setException(new NotAcceptableHttpException($exception->getMessage(), $exception));
         });
     }
 

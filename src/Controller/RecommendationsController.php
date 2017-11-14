@@ -19,7 +19,6 @@ use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Recommendations\ApiResponse;
 use InvalidArgumentException;
 use Negotiation\Accept;
-use Negotiation\Negotiator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -30,35 +29,23 @@ use function GuzzleHttp\Promise\all;
 final class RecommendationsController
 {
     private $apiSdk;
-    private $negotiator;
 
-    public function __construct(ApiSdk $apiSdk, Negotiator $negotiator)
+    public function __construct(ApiSdk $apiSdk)
     {
         $this->apiSdk = $apiSdk;
-        $this->negotiator = $negotiator;
     }
 
-    public function recommendationsAction(Request $request, string $type, string $id) : Response
+    public function recommendationsAction(Request $request, Accept $type, string $contentType, string $id) : Response
     {
         try {
-            $identifier = Identifier::fromString("{$type}/{$id}");
+            $identifier = Identifier::fromString("{$contentType}/{$id}");
 
-            if ('article' !== $type) {
+            if ('article' !== $contentType) {
                 throw new BadRequestHttpException('Not an article');
             }
         } catch (InvalidArgumentException $e) {
             throw new NotFoundHttpException();
         }
-
-        $accepts = [
-            'application/vnd.elife.recommendations+json; version=1',
-        ];
-
-        /** @var Accept $type */
-        $type = $this->negotiator->getBest($request->headers->get('Accept'), $accepts);
-
-        $version = (int) $type->getParameter('version');
-        $type = $type->getType();
 
         $page = $request->query->get('page', 1);
         $perPage = $request->query->get('per-page', 20);
@@ -202,7 +189,7 @@ final class RecommendationsController
             })
             ->toArray();
 
-        $headers = ['Content-Type' => sprintf('%s; version=%s', $type, $version)];
+        $headers = ['Content-Type' => $type->getNormalizedValue()];
 
         return new ApiResponse(
             $content,
