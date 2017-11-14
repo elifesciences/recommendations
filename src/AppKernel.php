@@ -140,13 +140,14 @@ final class AppKernel implements HttpKernelInterface, TerminableInterface
             return $this->app['elife.logger.factory']->logger();
         };
 
-        $this->app->get('/recommendations/{contentType}/{id}', function (Request $request, Accept $type, string $contentType, string $id) {
-            $controller = new RecommendationsController($this->app['elife.api_sdk']);
+        $this->app['controllers.recommendations'] = function () {
+            return new RecommendationsController($this->app['elife.api_sdk']);
+        };
 
-            return $controller->recommendationsAction($request, $type, $contentType, $id);
-        })->before($this->app['negotiate.accept'](
-            'application/vnd.elife.recommendations+json; version=1'
-        ));
+        $this->app->get('/recommendations/{contentType}/{id}', 'controllers.recommendations:recommendationsAction')
+            ->before($this->app['negotiate.accept'](
+                'application/vnd.elife.recommendations+json; version=1'
+            ));
 
         $this->app->after(function (Request $request, Response $response, Application $app) {
             if ($response->isCacheable()) {
