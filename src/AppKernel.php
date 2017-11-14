@@ -20,7 +20,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use JsonSchema\Validator;
 use Negotiation\Accept;
-use Pimple\Psr11\Container as Psr11Container;
+use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LogLevel;
 use Silex\Application;
@@ -35,10 +35,9 @@ use Symfony\Component\HttpKernel\TerminableInterface;
 use test\eLife\Recommendations\InMemoryStorageAdapter;
 use test\eLife\Recommendations\ValidatingStorageAdapter;
 
-final class AppKernel implements HttpKernelInterface, TerminableInterface
+final class AppKernel implements ContainerInterface, HttpKernelInterface, TerminableInterface
 {
     private $app;
-    private $container;
 
     public function __construct(string $environment = 'dev')
     {
@@ -54,7 +53,6 @@ final class AppKernel implements HttpKernelInterface, TerminableInterface
             'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
             'mock' => $config['mock'] ?? false,
         ]);
-        $this->container = new Psr11Container($this->app);
 
         $this->app->register(new ApiProblemProvider());
         $this->app->register(new ContentNegotiationProvider());
@@ -167,8 +165,17 @@ final class AppKernel implements HttpKernelInterface, TerminableInterface
         $this->app->terminate($request, $response);
     }
 
-    public function getContainer() : ContainerInterface
+    public function get($id)
     {
-        return $this->container;
+        if (!isset($this->app[$id])) {
+            throw new UnknownIdentifierException($id);
+        }
+
+        return $this->app[$id];
+    }
+
+    public function has($id) : bool
+    {
+        return isset($this->app[$id]);
     }
 }

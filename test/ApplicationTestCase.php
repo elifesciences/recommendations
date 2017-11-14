@@ -28,17 +28,17 @@ abstract class ApplicationTestCase extends ApiTestCase
 
     final protected function getApiSdk() : ApiSdk
     {
-        return $this->app->getContainer()->get('elife.api_sdk');
+        return $this->app->get('elife.api_sdk');
     }
 
     final protected function getMockStorage() : StorageAdapterInterface
     {
-        return $this->app->getContainer()->get('elife.guzzle_client.mock.storage');
+        return $this->app->get('elife.guzzle_client.mock.storage');
     }
 
     final protected function getValidator() : MessageValidator
     {
-        return $this->app->getContainer()->get('elife.json_message_validator');
+        return $this->app->get('elife.json_message_validator');
     }
 
     final protected function assertJsonStringEqualsJson(array $expectedJson, string $actualJson, $message = '')
