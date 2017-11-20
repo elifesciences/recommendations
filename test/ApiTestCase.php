@@ -2,25 +2,23 @@
 
 namespace test\eLife\Recommendations;
 
-use ComposerLocator;
-use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
+use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\ApiClient\CollectionsClient;
 use eLife\ApiClient\ApiClient\PodcastClient;
 use eLife\ApiClient\ApiClient\SearchClient;
 use eLife\ApiClient\MediaType;
+use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\HasIdentifier;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
-use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
-use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
+use eLife\ApiValidator\MessageValidator;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
@@ -30,38 +28,15 @@ abstract class ApiTestCase extends TestCase
 {
     use HasDiactorosFactory;
 
-    /** @var InMemoryStorageAdapter */
-    private $storage;
+    abstract protected function getApiSdk() : ApiSdk;
 
-    /** @var MockMiddleware */
-    private $mock;
+    abstract protected function getMockStorage() : StorageAdapterInterface;
 
-    /** @var JsonMessageValidator */
-    private $validator;
-
-    /**
-     * @before
-     */
-    final public function setUpMock()
-    {
-        $this->validator = new JsonMessageValidator(
-            new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
-            new Validator()
-        );
-        $this->storage = new ValidatingStorageAdapter(new InMemoryStorageAdapter(), $this->validator);
-        $this->mock = new MockMiddleware($this->storage, 'replay');
-    }
-
-    final protected function getMock() : MockMiddleware
-    {
-        return $this->mock;
-    }
-
-    abstract protected function getApiSdk();
+    abstract protected function getValidator() : MessageValidator;
 
     final protected function mockNotFound(string $uri, array $headers = [])
     {
-        $this->storage->save(
+        $this->getMockStorage()->save(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/$uri",
@@ -87,7 +62,7 @@ abstract class ApiTestCase extends TestCase
             ])
         );
 
-        $this->storage->save(
+        $this->getMockStorage()->save(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/$id/versions",
@@ -117,7 +92,7 @@ abstract class ApiTestCase extends TestCase
             'items' => array_map([$this, 'normalize'], $collections),
         ];
 
-        $this->storage->save(
+        $this->getMockStorage()->save(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/collections?page=$page&per-page=$perPage&order=desc$containingQuery",
@@ -133,7 +108,7 @@ abstract class ApiTestCase extends TestCase
 
     final protected function mockPodcastEpisodeCall(PodcastEpisode $episode)
     {
-        $this->storage->save(
+        $this->getMockStorage()->save(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/podcast-episodes/{$episode->getNumber()}",
@@ -163,7 +138,7 @@ abstract class ApiTestCase extends TestCase
             'items' => array_map([$this, 'normalize'], $podcastEpisodes),
         ];
 
-        $this->storage->save(
+        $this->getMockStorage()->save(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/podcast-episodes?page=$page&per-page=$perPage&order=desc$containingQuery",
@@ -185,7 +160,7 @@ abstract class ApiTestCase extends TestCase
             json_encode(array_map([$this, 'normalize'], $articles))
         );
 
-        $this->storage->save(
+        $this->getMockStorage()->save(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/$id/related",
@@ -246,7 +221,7 @@ abstract class ApiTestCase extends TestCase
             }, []),
         ];
 
-        $this->storage->save(
+        $this->getMockStorage()->save(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/search?for=&page=$page&per-page=$perPage&sort=date&order=desc$subjectsQuery$typesQuery&use-date=default",
@@ -392,6 +367,6 @@ abstract class ApiTestCase extends TestCase
 
     final protected function assertMessageIsValid(MessageInterface $message)
     {
-        $this->validator->validate($message);
+        $this->getValidator()->validate($message);
     }
 }
