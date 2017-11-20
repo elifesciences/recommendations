@@ -241,6 +241,39 @@ final class RecommendationsTest extends WebTestCase
     /**
      * @test
      */
+    public function it_does_not_recommend_itself()
+    {
+        $client = static::createClient();
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
+        $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockSearchCall(1, [$this->createArticlePoA('1234', 'research-article'), $this->createArticlePoA('1235', 'insight')], 1, 5, ['correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+        $this->mockSearchCall(1, [$this->createArticlePoA('1234', 'research-article'), $this->createArticlePoA('1236', 'short-report')], 1, 5, ['research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study']);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/vnd.elife.recommendations+json; version=1', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(
+            [
+                'total' => 2,
+                'items' => [
+                    $this->normalize($this->createArticlePoA('1235', 'insight')),
+                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                ],
+            ],
+            $response->getContent()
+        );
+        $this->assertTrue($response->isCacheable());
+    }
+
+    /**
+     * @test
+     */
     public function it_does_not_duplicate_recommendations_for_an_article()
     {
         $client = static::createClient();
