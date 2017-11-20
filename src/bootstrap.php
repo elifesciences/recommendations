@@ -179,7 +179,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
             $subject = $article->getSubjects()[0];
 
             return $app['elife.api_sdk']->search()
-                ->forType('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources')
+                ->forType('editorial', 'feature', 'insight', 'research-advance', 'research-article', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources')
                 ->sortBy('date')
                 ->forSubject($subject->getId())
                 ->slice(0, 5);
