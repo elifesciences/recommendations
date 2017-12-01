@@ -167,12 +167,6 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         return $article->getId() !== $id;
     };
 
-    $mostRecent = $app['elife.api_sdk']->search()
-        ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
-        ->sortBy('date')
-        ->slice(0, 5)
-        ->filter($ignoreSelf);
-
     $mostRecentWithSubject = new PromiseSequence($article
         ->then(function (ArticleHistory $history) use ($app, $ignoreSelf) {
             $article = $history->getVersions()[0];
@@ -234,7 +228,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
     };
 
     try {
-        all([$article, $relations, $collections, $podcastEpisodeChapters, $mostRecent, $mostRecentWithSubject])->wait();
+        all([$article, $relations, $collections, $podcastEpisodeChapters, $mostRecentWithSubject])->wait();
     } catch (BadResponse $e) {
         switch ($e->getResponse()->getStatusCode()) {
             case Response::HTTP_GONE:
@@ -248,7 +242,6 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
     $recommendations = $recommendations->append(...$collections);
     $recommendations = $recommendations->append(...$podcastEpisodeChapters);
     $recommendations = $appendFirstThatDoesNotAlreadyExist($recommendations, $mostRecentWithSubject);
-    $recommendations = $appendFirstThatDoesNotAlreadyExist($recommendations, $mostRecent);
 
     $content = [
         'total' => count($recommendations),
