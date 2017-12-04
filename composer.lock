@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "beberlei/assert",
-            "version": "v2.7.11",
+            "version": "v2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beberlei/assert.git",
-                "reference": "53991547d6f0b8c81354fb2d098dcb71e81678cb"
+                "reference": "fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/assert/zipball/53991547d6f0b8c81354fb2d098dcb71e81678cb",
-                "reference": "53991547d6f0b8c81354fb2d098dcb71e81678cb",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337",
+                "reference": "fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "assertion",
                 "validation"
             ],
-            "time": "2017-11-13T18:35:09+00:00"
+            "time": "2017-11-30T13:25:15+00:00"
         },
         {
             "name": "crell/api-problem",
@@ -224,12 +224,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "690fd900374e2e5955216aaf81026c64d9f96032"
+                "reference": "af6b16023dbc578a439512a6b24eb4f2ea349959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/690fd900374e2e5955216aaf81026c64d9f96032",
-                "reference": "690fd900374e2e5955216aaf81026c64d9f96032",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/af6b16023dbc578a439512a6b24eb4f2ea349959",
+                "reference": "af6b16023dbc578a439512a6b24eb4f2ea349959",
                 "shasum": ""
             },
             "require": {
@@ -264,7 +264,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-11-27T09:58:57+00:00"
+            "time": "2017-11-29T14:31:36+00:00"
         },
         {
             "name": "elife/content-negotiator",
@@ -662,16 +662,16 @@
         },
         {
             "name": "ocramius/package-versions",
-            "version": "1.1.3",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/PackageVersions.git",
-                "reference": "72b226d2957e9e6a9ed09aeaa29cabd840d1a3b7"
+                "reference": "ad8a245decad4897cc6b432743913dad0d69753c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/72b226d2957e9e6a9ed09aeaa29cabd840d1a3b7",
-                "reference": "72b226d2957e9e6a9ed09aeaa29cabd840d1a3b7",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/ad8a245decad4897cc6b432743913dad0d69753c",
+                "reference": "ad8a245decad4897cc6b432743913dad0d69753c",
                 "shasum": ""
             },
             "require": {
@@ -682,7 +682,7 @@
                 "composer/composer": "^1.3",
                 "ext-zip": "*",
                 "humbug/humbug": "dev-master",
-                "phpunit/phpunit": "^5.7.5"
+                "phpunit/phpunit": "^6.4"
             },
             "type": "composer-plugin",
             "extra": {
@@ -707,7 +707,7 @@
                 }
             ],
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "time": "2017-09-06T15:24:43+00:00"
+            "time": "2017-11-24T11:07:03+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -1391,16 +1391,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v3.3.13",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "d6dc07653b872b3091c70140751d5f3f4905082a"
+                "reference": "ac3e016189682e7d388e00d5c5cd0e84f1c9e55c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/d6dc07653b872b3091c70140751d5f3f4905082a",
-                "reference": "d6dc07653b872b3091c70140751d5f3f4905082a",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/ac3e016189682e7d388e00d5c5cd0e84f1c9e55c",
+                "reference": "ac3e016189682e7d388e00d5c5cd0e84f1c9e55c",
                 "shasum": ""
             },
             "require": {
@@ -1411,19 +1411,19 @@
                 "symfony/dependency-injection": "<3.2",
                 "symfony/property-access": ">=3.0,<3.0.4|>=2.8,<2.8.4",
                 "symfony/property-info": "<3.1",
-                "symfony/yaml": "<3.3"
+                "symfony/yaml": "<3.4"
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "doctrine/cache": "~1.0",
                 "phpdocumentor/reflection-docblock": "^3.0|^4.0",
-                "symfony/cache": "~3.1",
-                "symfony/config": "~2.8|~3.0",
-                "symfony/dependency-injection": "~3.2",
-                "symfony/http-foundation": "~2.8|~3.0",
-                "symfony/property-access": "~2.8|~3.0",
-                "symfony/property-info": "~3.1",
-                "symfony/yaml": "~3.3"
+                "symfony/cache": "~3.1|~4.0",
+                "symfony/config": "~2.8|~3.0|~4.0",
+                "symfony/dependency-injection": "~3.2|~4.0",
+                "symfony/http-foundation": "~2.8|~3.0|~4.0",
+                "symfony/property-access": "~2.8|~3.0|~4.0",
+                "symfony/property-info": "~3.1|~4.0",
+                "symfony/yaml": "~3.4|~4.0"
             },
             "suggest": {
                 "doctrine/annotations": "For using the annotation mapping. You will also need doctrine/cache.",
@@ -1438,7 +1438,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -1465,7 +1465,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-07T14:16:22+00:00"
+            "time": "2017-11-29T13:28:14+00:00"
         },
         {
             "name": "willdurand/negotiation",
@@ -1581,12 +1581,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "aa436da03486837a743b40fda3f40554b4f50b0c"
+                "reference": "d2c08de4c7f3493cb8bbed9200b23f2cab0da226"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/aa436da03486837a743b40fda3f40554b4f50b0c",
-                "reference": "aa436da03486837a743b40fda3f40554b4f50b0c",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/d2c08de4c7f3493cb8bbed9200b23f2cab0da226",
+                "reference": "d2c08de4c7f3493cb8bbed9200b23f2cab0da226",
                 "shasum": ""
             },
             "conflict": {
@@ -1598,7 +1598,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2017-11-16T14:12:15+00:00"
+            "time": "2017-11-29T14:23:59+00:00"
         },
         {
             "name": "elife/api-validator",
