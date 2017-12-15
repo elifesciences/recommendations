@@ -9,7 +9,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Csa\\Bundle\\GuzzleBundle\\": "./vendor-extra/Csa/GuzzleBundle",
             "test\\eLife\\Recommendations\\": "test"
         }
     },
@@ -29,6 +28,7 @@
         "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
+        "csa/guzzle-cache-middleware": "^1.0",
         "elife/api": "dev-master",
         "elife/api-validator": "^1.0@dev",
         "justinrainbow/json-schema": "^5.2",
