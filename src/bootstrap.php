@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 use function GuzzleHttp\Promise\all;
 
 $configFile = __DIR__.'/../config.php';
@@ -289,7 +290,7 @@ $app->after(function (Request $request, Response $response, Application $app) {
     }
 });
 
-$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+$app->error(function (Throwable $e, Request $request, int $code) use ($app) {
     $app['logger']->error("$code response on {$request->getUri()}", ['exception' => $e]);
 });
 
