@@ -27,6 +27,7 @@ use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use InvalidArgumentException;
+use LogicException;
 use Negotiation\Accept;
 use Psr\Log\LogLevel;
 use Silex\Application;
@@ -65,6 +66,10 @@ if ($app['debug']) {
         'profiler.cache_dir' => __DIR__.'/../var/cache/profiler',
         'profiler.mount_prefix' => '/_profiler',
     ]);
+    $app->get('/error', function () use ($app) {
+        $app['logger']->error('Simulating error');
+        throw new LogicException('Simulated error');
+    });
 }
 
 $app['elife.guzzle_client.handler'] = function () {
@@ -282,6 +287,10 @@ $app->after(function (Request $request, Response $response, Application $app) {
         $response->headers->set('ETag', md5($response->getContent()));
         $response->isNotModified($request);
     }
+});
+
+$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+    $app['logger']->error("$code response on {$request->getUri()}", ['exception' => $e]);
 });
 
 return $app;
