@@ -292,6 +292,6 @@ $app->after(function (Request $request, Response $response, Application $app) {
 
 $app->error(function (Throwable $e, Request $request, int $code) use ($app) {
     $app['logger']->error("$code response on {$request->getUri()}", ['exception' => $e]);
-});
+}, 100);
 
 return $app;
