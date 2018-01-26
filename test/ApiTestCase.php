@@ -3,7 +3,7 @@
 namespace test\eLife\Recommendations;
 
 use ComposerLocator;
-use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
+use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\ApiClient\CollectionsClient;
