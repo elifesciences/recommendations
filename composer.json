@@ -18,7 +18,7 @@
         "elife/api-problem": "^1.0",
         "elife/api-sdk": "^1.0@dev",
         "elife/content-negotiator": "^1.0",
-        "elife/logging-sdk": "dev-master",
+        "elife/logging-sdk": "dev-silex",
         "elife/ping": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
         "guzzlehttp/promises": "^1.3",

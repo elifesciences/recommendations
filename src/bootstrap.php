@@ -22,7 +22,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
-use eLife\Logging\LoggingFactory;
+use eLife\Logging\Silex\LoggerProvider;
 use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -40,7 +40,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 use function GuzzleHttp\Promise\all;
 
 $configFile = __DIR__.'/../config.php';
@@ -51,12 +50,14 @@ $app = new Application([
     'api.uri' => $config['api.uri'] ?? 'https://api.elifesciences.org/',
     'api.timeout' => $config['api.timeout'] ?? 1,
     'debug' => $config['debug'] ?? false,
+    'logger.channel' => 'recommendations-api',
     'logger.path' => $config['logger.path'] ?? __DIR__.'/../var/logs',
     'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
 
 $app->register(new ApiProblemProvider());
 $app->register(new ContentNegotiationProvider());
+$app->register(new LoggerProvider());
 $app->register(new PingControllerProvider());
 
 if ($app['debug']) {
@@ -110,14 +111,6 @@ $app['elife.api_sdk'] = function () use ($app) {
 
 $app['elife.api_sdk.serializer'] = function () use ($app) {
     return $app['elife.api_sdk']->getSerializer();
-};
-
-$app['elife.logger.factory'] = function (Application $app) {
-    return new LoggingFactory($app['logger.path'], 'recommendations-api', $app['logger.level']);
-};
-
-$app['logger'] = function (Application $app) {
-    return $app['elife.logger.factory']->logger();
 };
 
 $app->get('/recommendations/{contentType}/{id}', function (Request $request, Accept $type, string $contentType, string $id) use ($app) {
@@ -289,9 +282,5 @@ $app->after(function (Request $request, Response $response, Application $app) {
         $response->isNotModified($request);
     }
 });
-
-$app->error(function (Throwable $e, Request $request, int $code) use ($app) {
-    $app['logger']->error("$code response on {$request->getUri()}", ['exception' => $e]);
-}, 100);
 
 return $app;

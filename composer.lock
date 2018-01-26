@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "88bd6a483ce992cffd39fc614746c589",
+    "content-hash": "6accbb1fae54d85fbebf45994eaeb7dc",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -318,28 +318,39 @@
         },
         {
             "name": "elife/logging-sdk",
-            "version": "dev-master",
+            "version": "dev-silex",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/logging-sdk-php.git",
-                "reference": "e4bfc0624dbd8340aee6dfc3d88e93a13a29dfc2"
+                "reference": "981d4915f93c6c37ac6419bb6de2e75bc4658020"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/e4bfc0624dbd8340aee6dfc3d88e93a13a29dfc2",
-                "reference": "e4bfc0624dbd8340aee6dfc3d88e93a13a29dfc2",
+                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/981d4915f93c6c37ac6419bb6de2e75bc4658020",
+                "reference": "981d4915f93c6c37ac6419bb6de2e75bc4658020",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "^1.22"
+                "monolog/monolog": "^1.22",
+                "php": "^7.0",
+                "psr/log": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.6"
+                "elife/api-problem": "^1.0",
+                "phpunit/phpunit": "^5.7 || ^6.0",
+                "pimple/pimple": "^3.0",
+                "silex/silex": "^2.0"
             },
             "suggest": {
-                "ext/newrelic": "Enables the Monitoring class"
+                "ext/newrelic": "Enables the Monitoring class",
+                "silex/silex": "^2.0, to use LoggerProvider"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "eLife\\Logging\\": "./src"
@@ -350,7 +361,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences logging SDK",
-            "time": "2017-08-17T14:03:04+00:00"
+            "time": "2018-01-26T14:30:42+00:00"
         },
         {
             "name": "elife/ping",
