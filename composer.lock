@@ -322,12 +322,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/logging-sdk-php.git",
-                "reference": "981d4915f93c6c37ac6419bb6de2e75bc4658020"
+                "reference": "b02daa395917c8fb5b0c2b033863636b5cdb1d71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/981d4915f93c6c37ac6419bb6de2e75bc4658020",
-                "reference": "981d4915f93c6c37ac6419bb6de2e75bc4658020",
+                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/b02daa395917c8fb5b0c2b033863636b5cdb1d71",
+                "reference": "b02daa395917c8fb5b0c2b033863636b5cdb1d71",
                 "shasum": ""
             },
             "require": {
@@ -336,10 +336,15 @@
                 "psr/log": "^1.0"
             },
             "require-dev": {
+                "crell/api-problem": "^2.0",
                 "elife/api-problem": "^1.0",
-                "phpunit/phpunit": "^5.7 || ^6.0",
+                "mikey179/vfsstream": "^1.6",
+                "phpunit/phpunit": "^5.7.7 || ^6.0",
                 "pimple/pimple": "^3.0",
-                "silex/silex": "^2.0"
+                "silex/silex": "^2.0",
+                "symfony/browser-kit": "^3.0",
+                "symfony/debug": "^2.8 || ^3.0",
+                "symfony/http-kernel": "^2.7 || ^3.0"
             },
             "suggest": {
                 "ext/newrelic": "Enables the Monitoring class",
@@ -361,7 +366,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences logging SDK",
-            "time": "2018-01-26T14:30:42+00:00"
+            "time": "2018-01-26T16:21:04+00:00"
         },
         {
             "name": "elife/ping",
