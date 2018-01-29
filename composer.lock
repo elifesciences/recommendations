@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b58d288101a9ce5f115edf77444b519c",
+    "content-hash": "276921777d8d9d5977a274b9ceb4661e",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -173,16 +173,16 @@
         },
         {
             "name": "elife/api-problem",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-problem-php.git",
-                "reference": "ad657b3fec405a8278fba36ff58b578016bf14bb"
+                "reference": "c1893237467f7038accb2b502a8be4631a2ea406"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-problem-php/zipball/ad657b3fec405a8278fba36ff58b578016bf14bb",
-                "reference": "ad657b3fec405a8278fba36ff58b578016bf14bb",
+                "url": "https://api.github.com/repos/elifesciences/api-problem-php/zipball/c1893237467f7038accb2b502a8be4631a2ea406",
+                "reference": "c1893237467f7038accb2b502a8be4631a2ea406",
                 "shasum": ""
             },
             "require": {
@@ -191,6 +191,7 @@
                 "symfony/http-foundation": "^2.7 || ^3.0"
             },
             "require-dev": {
+                "guzzlehttp/psr7": "^1.0",
                 "phpunit/phpunit": "^5.7.7 || ^6.0",
                 "pimple/pimple": "^3.0",
                 "silex/silex": "^2.0",
@@ -203,7 +204,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -216,7 +217,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences RFC 7807 handler",
-            "time": "2017-11-06T13:14:02+00:00"
+            "time": "2018-01-29T12:37:14+00:00"
         },
         {
             "name": "elife/api-sdk",
