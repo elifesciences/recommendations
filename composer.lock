@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a14ed40cd1b761230ba7da283dcb2795",
+    "content-hash": "b58d288101a9ce5f115edf77444b519c",
     "packages": [
         {
             "name": "beberlei/assert",
-            "version": "v2.8.1",
+            "version": "v2.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beberlei/assert.git",
-                "reference": "fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337"
+                "reference": "2d555f72f3f4ff9e72a7bc17cb8a53c86737c8a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/assert/zipball/fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337",
-                "reference": "fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/2d555f72f3f4ff9e72a7bc17cb8a53c86737c8a0",
+                "reference": "2d555f72f3f4ff9e72a7bc17cb8a53c86737c8a0",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "assertion",
                 "validation"
             ],
-            "time": "2017-11-30T13:25:15+00:00"
+            "time": "2018-01-25T13:33:16+00:00"
         },
         {
             "name": "crell/api-problem",
@@ -121,12 +121,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "dba08695e5748e1cb5ecb429aab6895843ceec53"
+                "reference": "560963f8d5c61673cebe4c51c733ce19b954208c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/dba08695e5748e1cb5ecb429aab6895843ceec53",
-                "reference": "dba08695e5748e1cb5ecb429aab6895843ceec53",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/560963f8d5c61673cebe4c51c733ce19b954208c",
+                "reference": "560963f8d5c61673cebe4c51c733ce19b954208c",
                 "shasum": ""
             },
             "require": {
@@ -169,7 +169,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2017-10-23T09:04:22+00:00"
+            "time": "2018-01-22T10:57:35+00:00"
         },
         {
             "name": "elife/api-problem",
@@ -224,12 +224,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "1be7c70b967d2b750d62231290c6965362af24f0"
+                "reference": "e9a8fdb80b3381c32dbe1c02abfc1ac3f54a6df4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/1be7c70b967d2b750d62231290c6965362af24f0",
-                "reference": "1be7c70b967d2b750d62231290c6965362af24f0",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/e9a8fdb80b3381c32dbe1c02abfc1ac3f54a6df4",
+                "reference": "e9a8fdb80b3381c32dbe1c02abfc1ac3f54a6df4",
                 "shasum": ""
             },
             "require": {
@@ -265,7 +265,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-01-03T11:49:41+00:00"
+            "time": "2018-01-24T14:22:31+00:00"
         },
         {
             "name": "elife/content-negotiator",
@@ -1594,6 +1594,53 @@
             "time": "2017-12-01T11:45:31+00:00"
         },
         {
+            "name": "csa/guzzle-stopwatch-middleware",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/csarrazi/guzzle-stopwatch-middleware.git",
+                "reference": "1612a9c87eb3c6167d38c4ea79ef3055cf50e93e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/csarrazi/guzzle-stopwatch-middleware/zipball/1612a9c87eb3c6167d38c4ea79ef3055cf50e93e",
+                "reference": "1612a9c87eb3c6167d38c4ea79ef3055cf50e93e",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.1",
+                "php": ">=5.6.0",
+                "symfony/stopwatch": "^2.7|^3.0|^4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "symfony/phpunit-bridge": "^2.7|^3.0|^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Csa\\GuzzleHttp\\Middleware\\Stopwatch\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Charles Sarrazin",
+                    "email": "charles@sarraz.in"
+                }
+            ],
+            "description": "A Stopwatch middleware for GuzzleHttp >= 6.0",
+            "time": "2017-12-01T11:52:02+00:00"
+        },
+        {
             "name": "doctrine/instantiator",
             "version": "1.0.5",
             "source": {
@@ -1653,12 +1700,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "b5fca48be37a52e9d18a17653275f41f5e6b0c69"
+                "reference": "a1c728364c94f68dc9fb7a723e92a84d7ef6140e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/b5fca48be37a52e9d18a17653275f41f5e6b0c69",
-                "reference": "b5fca48be37a52e9d18a17653275f41f5e6b0c69",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/a1c728364c94f68dc9fb7a723e92a84d7ef6140e",
+                "reference": "a1c728364c94f68dc9fb7a723e92a84d7ef6140e",
                 "shasum": ""
             },
             "conflict": {
@@ -1670,7 +1717,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-01-05T15:24:11+00:00"
+            "time": "2018-01-24T08:11:41+00:00"
         },
         {
             "name": "elife/api-validator",

@@ -29,6 +29,7 @@
     },
     "require-dev": {
         "csa/guzzle-cache-middleware": "^1.0",
+        "csa/guzzle-stopwatch-middleware": "^1.0",
         "elife/api": "dev-master",
         "elife/api-validator": "^1.0@dev",
         "justinrainbow/json-schema": "^5.2",

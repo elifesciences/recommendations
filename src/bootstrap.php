@@ -2,7 +2,7 @@
 
 namespace eLife\Recommendations;
 
-use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\StopwatchMiddleware;
+use Csa\GuzzleHttp\Middleware\Stopwatch\StopwatchMiddleware;
 use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\HttpClient;
