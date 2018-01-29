@@ -50,7 +50,7 @@ $app = new Application([
     'api.uri' => $config['api.uri'] ?? 'https://api.elifesciences.org/',
     'api.timeout' => $config['api.timeout'] ?? 1,
     'debug' => $config['debug'] ?? false,
-    'logger.channel' => 'recommendations-api',
+    'logger.channel' => 'recommendations',
     'logger.path' => $config['logger.path'] ?? __DIR__.'/../var/logs',
     'logger.level' => $config['logger.level'] ?? LogLevel::INFO,
 ]);
