@@ -69,7 +69,7 @@ if ($app['debug']) {
         'profiler.mount_prefix' => '/_profiler',
     ]);
     $app->get('/error', function () use ($app) {
-        $app['logger']->error('Simulating error');
+        $app['logger']->debug('Simulating error');
         throw new LogicException('Simulated error');
     });
 }
