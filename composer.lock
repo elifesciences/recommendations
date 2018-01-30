@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "276921777d8d9d5977a274b9ceb4661e",
+    "content-hash": "66ee48522a7933684d69e3f59051be87",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -319,16 +319,16 @@
         },
         {
             "name": "elife/logging-sdk",
-            "version": "dev-silex",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/logging-sdk-php.git",
-                "reference": "b02daa395917c8fb5b0c2b033863636b5cdb1d71"
+                "reference": "81a10f8a88f528ff516b1a83e957a91a1d391c75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/b02daa395917c8fb5b0c2b033863636b5cdb1d71",
-                "reference": "b02daa395917c8fb5b0c2b033863636b5cdb1d71",
+                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/81a10f8a88f528ff516b1a83e957a91a1d391c75",
+                "reference": "81a10f8a88f528ff516b1a83e957a91a1d391c75",
                 "shasum": ""
             },
             "require": {
@@ -367,7 +367,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences logging SDK",
-            "time": "2018-01-26T16:21:04+00:00"
+            "time": "2018-01-30T11:28:03+00:00"
         },
         {
             "name": "elife/ping",
