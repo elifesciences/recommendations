@@ -173,7 +173,7 @@ final class RecommendationsTest extends WebTestCase
     /**
      * @test
      */
-    public function it_returns_most_recent_article_with_first_subject_recommendations_for_an_article()
+    public function it_returns_3_most_recent_article_with_first_subject_recommendations_for_an_article()
     {
         $client = static::createClient();
 
@@ -191,9 +191,85 @@ final class RecommendationsTest extends WebTestCase
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
-                'total' => 1,
+                'total' => 3,
                 'items' => [
                     $this->normalize($this->createArticlePoA('1235', 'insight')),
+                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                    $this->normalize($this->createArticlePoA('1237', 'research-article')),
+                ],
+            ],
+            $response->getContent()
+        );
+        $this->assertTrue($response->isCacheable());
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_fewer_recent_articles_with_first_subject_recommendations_if_there_are_already_some()
+    {
+        $client = static::createClient();
+
+        $episode1Chapter1 = $this->createPodcastEpisodeChapter(1, [$this->createArticlePoA('1234'), $this->createArticlePoA('1235')]);
+        $episode1 = $this->createPodcastEpisode(1, [$episode1Chapter1]);
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
+        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report')]);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodeCall($episode1);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/vnd.elife.recommendations+json; version=1', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(
+            [
+                'total' => 3,
+                'items' => [
+                    $this->normalize($this->createArticlePoA('1235', 'insight')),
+                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
+                    $this->normalize($this->createArticlePoA('1238', 'research-article')),
+                ],
+            ],
+            $response->getContent()
+        );
+        $this->assertTrue($response->isCacheable());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_return_any_recent_articles_with_first_subject_recommendations_if_there_are_already_three()
+    {
+        $client = static::createClient();
+
+        $episode1Chapter1 = $this->createPodcastEpisodeChapter(1, [$this->createArticlePoA('1234'), $this->createArticlePoA('1235')]);
+        $episode1 = $this->createPodcastEpisode(1, [$episode1Chapter1]);
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
+        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight')]);
+        $this->mockCollectionsCall(1, [$this->createCollection('1234')], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodesCall(1, [$episode1], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodeCall($episode1);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('application/vnd.elife.recommendations+json; version=1', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(
+            [
+                'total' => 3,
+                'items' => [
+                    $this->normalize($this->createArticlePoA('1235', 'insight')),
+                    $this->normalize($this->createCollection('1234')),
+                    $this->normalize(new PodcastEpisodeChapterModel($episode1, $episode1->getChapters()[0])),
                 ],
             ],
             $response->getContent()
@@ -262,7 +338,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
-                'total' => 9,
+                'total' => 8,
                 'items' => [
                     $this->normalize($this->createArticlePoA('1237', 'research-article')),
                     $this->normalize($this->createArticlePoA('1235', 'insight')),
@@ -272,7 +348,6 @@ final class RecommendationsTest extends WebTestCase
                     $this->normalize(new PodcastEpisodeChapterModel($episode2, $episode1->getChapters()[0])),
                     $this->normalize(new PodcastEpisodeChapterModel($episode1, $episode1->getChapters()[0])),
                     $this->normalize(new PodcastEpisodeChapterModel($episode1, $episode1->getChapters()[2])),
-                    $this->normalize($this->createArticlePoA('1238', 'research-article')),
                 ],
             ],
             $response->getContent()

@@ -202,7 +202,9 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $recommendations = $relations;
 
-    $appendFirstThatDoesNotAlreadyExist = function (Sequence $recommendations, Sequence $toInsert) : Sequence {
+    $appendFirstThatDoesNotAlreadyExist = function (Sequence $recommendations, Sequence $toInsert, int $max = 1) : Sequence {
+        $found = 0;
+
         foreach ($toInsert as $item) {
             foreach ($recommendations as $recommendation) {
                 if (
@@ -220,7 +222,11 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                 }
             }
 
-            return $recommendations->append($item);
+            ++$found;
+            $recommendations = $recommendations->append($item);
+            if ($found === $max) {
+                return $recommendations;
+            }
         }
 
         return $recommendations;
@@ -240,7 +246,9 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $recommendations = $recommendations->append(...$collections);
     $recommendations = $recommendations->append(...$podcastEpisodeChapters);
-    $recommendations = $appendFirstThatDoesNotAlreadyExist($recommendations, $mostRecentWithSubject);
+    if ($recommendations->count() < 3) {
+        $recommendations = $appendFirstThatDoesNotAlreadyExist($recommendations, $mostRecentWithSubject, 3 - $recommendations->count());
+    }
 
     $content = [
         'total' => count($recommendations),
