@@ -15,7 +15,6 @@ use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleHistory;
-use eLife\ApiSdk\Model\ExternalArticle;
 use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
@@ -202,36 +201,6 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $recommendations = $relations;
 
-    $appendFirstThatDoesNotAlreadyExist = function (Sequence $recommendations, Sequence $toInsert, int $max = 1) : Sequence {
-        $found = 0;
-
-        foreach ($toInsert as $item) {
-            foreach ($recommendations as $recommendation) {
-                if (
-                    get_class($item) === get_class($recommendation)
-                    &&
-                    (
-                        ($item instanceof ExternalArticle && $item->getId() === $recommendation->getId())
-                        ||
-                        ($item instanceof PodcastEpisodeChapterModel && $item->getEpisode()->getNumber() === $recommendation->getEpisode()->getNumber() && $item->getChapter()->getNumber() === $recommendation->getChapter()->getNumber())
-                        ||
-                        $item->getIdentifier() == $recommendation->getIdentifier()
-                    )
-                ) {
-                    continue 2;
-                }
-            }
-
-            ++$found;
-            $recommendations = $recommendations->append($item);
-            if ($found === $max) {
-                return $recommendations;
-            }
-        }
-
-        return $recommendations;
-    };
-
     try {
         all([$article, $relations, $collections, $podcastEpisodeChapters, $mostRecentWithSubject])->wait();
     } catch (BadResponse $e) {
@@ -247,7 +216,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
     $recommendations = $recommendations->append(...$collections);
     $recommendations = $recommendations->append(...$podcastEpisodeChapters);
     if ($recommendations->count() < 3) {
-        $recommendations = $appendFirstThatDoesNotAlreadyExist($recommendations, $mostRecentWithSubject, 3 - $recommendations->count());
+        $recommendations = append_if_not_exists($recommendations, $mostRecentWithSubject, 3 - $recommendations->count());
     }
 
     $content = [
