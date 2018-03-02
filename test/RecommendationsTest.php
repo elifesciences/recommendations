@@ -173,7 +173,7 @@ final class RecommendationsTest extends WebTestCase
     /**
      * @test
      */
-    public function it_returns_3_most_recent_article_with_first_subject_recommendations_for_an_article()
+    public function it_returns_3_most_recent_articles_with_first_subject_recommendations_for_an_article()
     {
         $client = static::createClient();
 
