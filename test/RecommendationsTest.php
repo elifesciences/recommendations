@@ -230,9 +230,9 @@ final class RecommendationsTest extends WebTestCase
             [
                 'total' => 3,
                 'items' => [
-                    $this->normalize($this->createArticlePoA('1235', 'insight')),
-                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
-                    $this->normalize($this->createArticlePoA('1238', 'research-article')),
+                    $this->normalize($this->createArticlePoA('1235', 'insight')), // from related articles
+                    $this->normalize($this->createArticlePoA('1236', 'short-report')), // from related articles
+                    $this->normalize($this->createArticlePoA('1238', 'research-article')), // from subject
                 ],
             ],
             $response->getContent()
