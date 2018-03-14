@@ -1,5 +1,6 @@
 /build/
 /config.php
+/.php_cs.cache
 /var/
 !var/.gitkeep
 /vendor/
