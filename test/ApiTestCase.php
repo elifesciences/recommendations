@@ -226,6 +226,7 @@ abstract class ApiTestCase extends TestCase
                 'insight',
                 'research-advance',
                 'research-article',
+                'research-communication',
                 'retraction',
                 'registered-report',
                 'replication-study',
