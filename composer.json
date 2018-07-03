@@ -18,7 +18,7 @@
     "require": {
         "elife/api-client": "^1.0@dev",
         "elife/api-problem": "^1.1",
-        "elife/api-sdk": "dev-research-communication",
+        "elife/api-sdk": "^1.0@dev",
         "elife/content-negotiator": "^1.0",
         "elife/logging-sdk": "^1.0@dev",
         "elife/ping": "^1.0",
