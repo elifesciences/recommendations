@@ -225,12 +225,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "39d64be9da86987fbcc5e2acfeade6a1d5ec5a28"
+                "reference": "b1245f2a3f9c13f0d8f45693b4ea76bbdec87ceb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/39d64be9da86987fbcc5e2acfeade6a1d5ec5a28",
-                "reference": "39d64be9da86987fbcc5e2acfeade6a1d5ec5a28",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/b1245f2a3f9c13f0d8f45693b4ea76bbdec87ceb",
+                "reference": "b1245f2a3f9c13f0d8f45693b4ea76bbdec87ceb",
                 "shasum": ""
             },
             "require": {
@@ -266,7 +266,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-07-19T13:38:25+00:00"
+            "time": "2018-08-03T09:41:09+00:00"
         },
         {
             "name": "elife/content-negotiator",
@@ -1464,16 +1464,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v3.4.12",
+            "version": "v3.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "2e6d57dbbb37691f1480393440aff3a4b69dd9f7"
+                "reference": "40031683816470610af87c2d03ea86d1cf0f0104"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/2e6d57dbbb37691f1480393440aff3a4b69dd9f7",
-                "reference": "2e6d57dbbb37691f1480393440aff3a4b69dd9f7",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/40031683816470610af87c2d03ea86d1cf0f0104",
+                "reference": "40031683816470610af87c2d03ea86d1cf0f0104",
                 "shasum": ""
             },
             "require": {
@@ -1539,7 +1539,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2018-06-22T08:58:39+00:00"
+            "time": "2018-07-26T11:58:24+00:00"
         },
         {
             "name": "willdurand/negotiation",
@@ -1757,12 +1757,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "06e690a91bec0b989ea4fb4a1db6362a4db81fe5"
+                "reference": "3636c5ceea8bdf5fa50902a9b6940cb42bc44138"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/06e690a91bec0b989ea4fb4a1db6362a4db81fe5",
-                "reference": "06e690a91bec0b989ea4fb4a1db6362a4db81fe5",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/3636c5ceea8bdf5fa50902a9b6940cb42bc44138",
+                "reference": "3636c5ceea8bdf5fa50902a9b6940cb42bc44138",
                 "shasum": ""
             },
             "conflict": {
@@ -1774,7 +1774,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-07-19T12:50:10+00:00"
+            "time": "2018-07-31T10:50:36+00:00"
         },
         {
             "name": "elife/api-validator",
