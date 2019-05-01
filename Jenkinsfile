@@ -5,6 +5,13 @@ elifePipeline {
         commit = elifeGitRevision()
     }
 
+    stage 'Build image', {
+        node('containers-jenkins-plugin') {
+            checkout scm
+            dockerComposeBuild commit
+        }
+    }
+
     stage 'Project tests', {
         lock('recommendations--ci') {
             builderDeployRevision 'recommendations--ci', commit

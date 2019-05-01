@@ -1,0 +1,25 @@
+ARG image_tag=latest
+FROM elifesciences/proofreader-php:0.2 AS proofreader
+FROM elifesciences/recommendations_composer_dev:${image_tag} AS composer
+FROM elifesciences/recommendations:${image_tag}
+
+USER root
+RUN mkdir -p build/ci var/fixtures && \
+    touch .php_cs.cache && \
+    chown --recursive www-data:www-data build/ci .php_cs.cache var/fixtures
+
+
+COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
+RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+COPY --chown=elife:elife \
+    phpunit.xml.dist \
+    .php_cs \
+    ./
+COPY --chown=elife:elife composer.json composer.lock ./
+COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
+COPY --chown=elife:elife test/ test/
+
+USER www-data
