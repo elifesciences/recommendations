@@ -25,6 +25,7 @@ use eLife\Logging\Silex\LoggerProvider;
 use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
+use function GuzzleHttp\Promise\all;
 use InvalidArgumentException;
 use LogicException;
 use Negotiation\Accept;
@@ -39,7 +40,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function GuzzleHttp\Promise\all;
 
 $configFile = __DIR__.'/../config.php';
 
