@@ -1,9 +1,10 @@
 <?php
+
 use Psr\Log\LogLevel;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-if (getenv('APP_ENV') == 'dev') {
+if ('dev' == getenv('APP_ENV')) {
     $config = [
         'api.timeout' => 5,
         'debug' => true,
