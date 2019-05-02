@@ -24,6 +24,7 @@ services:
         #    - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
         depends_on:
             - composer
+            - api_dummy
     web:
         image: nginx:1.13.12-alpine
         volumes:

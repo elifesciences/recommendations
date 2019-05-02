@@ -11,7 +11,7 @@ services:
             - ./:/srv/recommendations
             - /srv/recommendations/build
             - /srv/recommendations/var
-              #- .docker/config.php:config.php
+            - .docker/config.php:/srv/recommendations/config.php
             - vendor:/srv/recommendations/vendor
         #env_file:
         #    - dev.env
