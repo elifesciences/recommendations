@@ -24,3 +24,4 @@ COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife test/ test/
 
 USER www-data
+CMD ["./project_tests.sh"]
