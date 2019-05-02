@@ -4,9 +4,9 @@ FROM elifesciences/recommendations_composer_dev:${image_tag} AS composer
 FROM elifesciences/recommendations:${image_tag}
 
 USER root
-RUN mkdir -p build/ci var/fixtures && \
+RUN mkdir -p build/ && \
     touch .php_cs.cache && \
-    chown --recursive www-data:www-data build/ci .php_cs.cache var/fixtures
+    chown --recursive www-data:www-data build/ .php_cs.cache
 
 
 COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
