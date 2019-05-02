@@ -1,5 +1,5 @@
 ARG image_tag=latest
-FROM elifesciences/proofreader-php:49b8d6727ebd7ec599d33fc7f727f0f8ca5204a2 AS proofreader
+FROM elifesciences/proofreader-php:afd285fdc826f60639b95ffde86eba2eb70b43ac AS proofreader
 FROM elifesciences/recommendations_composer_dev:${image_tag} AS composer
 FROM elifesciences/recommendations:${image_tag}
 
