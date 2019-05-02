@@ -224,7 +224,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         'total' => count($recommendations),
     ];
 
-    $recommendations = $recommendations->slice(($page * $perPage) - $perPage, $perPage);
+    $recommendations = $recommendations->slice(((int) $page * $perPage) - $perPage, $perPage);
 
     if ($page < 1 || (0 === count($recommendations) && $page > 1)) {
         throw new NotFoundHttpException('No page '.$page);
