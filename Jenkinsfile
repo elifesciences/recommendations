@@ -13,10 +13,7 @@ elifePipeline {
     }
 
     stage 'Project tests', {
-        lock('recommendations--ci') {
-            builderDeployRevision 'recommendations--ci', commit
-            builderProjectTests 'recommendations--ci', '/srv/recommendations', ['/srv/recommendations/build/phpunit.xml']
-        }
+        dockerProjectTests 'recommendations', commit
     }
 
     elifeMainlineOnly {
