@@ -5,15 +5,15 @@ elifePipeline {
         commit = elifeGitRevision()
     }
 
-    stage 'Build image', {
-        node('containers-jenkins-plugin') {
-            checkout scm
-            dockerComposeBuild commit
+    node('containers-jenkins-plugin') {
+        stage 'Build image', {
+                checkout scm
+                dockerComposeBuild commit
         }
-    }
 
-    stage 'Project tests', {
-        dockerProjectTests 'recommendations', commit
+        stage 'Project tests', {
+            dockerProjectTests 'recommendations', commit
+        }
     }
 
     elifeMainlineOnly {
