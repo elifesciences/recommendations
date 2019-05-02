@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+    composer:
+        volumes:
+            - ./composer.json:/app/composer.json
+            - ./composer.lock:/app/composer.lock
+            - vendor:/app/vendor
+    fpm:
+        volumes:
+            - ./:/srv/recommendations
+            - /srv/recommendations/build
+            - /srv/recommendations/var
+              #- .docker/config.php:config.php
+            - vendor:/srv/recommendations/vendor
+        #env_file:
+        #    - dev.env
+
+volumes:
+    vendor:
