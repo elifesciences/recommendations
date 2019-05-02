@@ -18,13 +18,13 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
+use function GuzzleHttp\json_encode;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
-use function GuzzleHttp\json_encode;
 
 abstract class ApiTestCase extends TestCase
 {

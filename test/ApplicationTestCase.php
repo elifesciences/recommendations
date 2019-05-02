@@ -4,8 +4,8 @@ namespace test\eLife\Recommendations;
 
 use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\HandlerStack;
-use Silex\Application;
 use function GuzzleHttp\json_encode;
+use Silex\Application;
 
 abstract class ApplicationTestCase extends ApiTestCase
 {
