@@ -17,6 +17,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --chown=elife:elife \
     phpunit.xml.dist \
     .php_cs \
+    project_tests.sh \
     ./
 COPY --chown=elife:elife composer.json composer.lock ./
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
