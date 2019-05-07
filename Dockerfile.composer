@@ -2,9 +2,6 @@ FROM composer:1.6.4
 
 ARG composer_dev_arg
 
-RUN apk add --no-cache \
-    patch
-
 COPY composer.json \
     composer.lock \
     ./
