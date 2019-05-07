@@ -13,8 +13,6 @@ services:
             - /srv/recommendations/var
             - .docker/config.php:/srv/recommendations/config.php
             - vendor:/srv/recommendations/vendor
-        #env_file:
-        #    - dev.env
 
 volumes:
     vendor:

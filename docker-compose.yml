@@ -15,13 +15,7 @@ services:
             args:
                 image_tag: ${IMAGE_TAG}
                 php_version: ${PHP_VERSION}
-        #environment:
-        #    - SYMFONY__API_URL=${API_URL}
-        #    - SYMFONY__API_URL_PUBLIC=${API_URL_PUBLIC}
-        #    - SYMFONY__API_KEY=${API_KEY}
         image: elifesciences/recommendations:${IMAGE_TAG}
-        #volumes:
-        #    - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
         depends_on:
             - composer
             - api_dummy
