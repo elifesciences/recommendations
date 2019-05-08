@@ -8,6 +8,9 @@ elifePipeline {
     stage 'Deploy', {
         elifeDeploySlackNotification 'recommendations', 'prod'
         elifeGitMoveToBranch commit, 'master'
+        node('containers-jenkins-plugin') {
+            DockerImage.elifesciences(this, "recommendations", commit).pull().tag('latest').push()
+        }
         builderDeployRevision 'recommendations--prod', commit
         builderSmokeTests 'recommendations--prod', '/srv/recommendations'
     }
