@@ -14,6 +14,12 @@ elifePipeline {
         stage 'Project tests', {
             dockerProjectTests 'recommendations', commit
         }
+
+        elifeMainlineOnly {
+            stage 'Push image', {
+                DockerImage.elifesciences(this, "recommendations", commit).push()
+            }
+        }
     }
 
     elifeMainlineOnly {
