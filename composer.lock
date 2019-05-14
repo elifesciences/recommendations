@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66ee48522a7933684d69e3f59051be87",
+    "content-hash": "b9fd734e1ca11ee5f8a08e2da3d444e9",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -323,12 +323,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/logging-sdk-php.git",
-                "reference": "81a10f8a88f528ff516b1a83e957a91a1d391c75"
+                "reference": "dfdd87eb422d36f9e82c3066ad05abb2d199a68b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/81a10f8a88f528ff516b1a83e957a91a1d391c75",
-                "reference": "81a10f8a88f528ff516b1a83e957a91a1d391c75",
+                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/dfdd87eb422d36f9e82c3066ad05abb2d199a68b",
+                "reference": "dfdd87eb422d36f9e82c3066ad05abb2d199a68b",
                 "shasum": ""
             },
             "require": {
@@ -367,7 +367,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences logging SDK",
-            "time": "2018-01-30T11:28:03+00:00"
+            "time": "2018-03-15T10:08:12+00:00"
         },
         {
             "name": "elife/ping",
@@ -1761,12 +1761,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "3966aeb1666f8766e104ae17561f6e6f966e2a54"
+                "reference": "90eaabd0c642a70e39f1490dda33547c7b02f678"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/3966aeb1666f8766e104ae17561f6e6f966e2a54",
-                "reference": "3966aeb1666f8766e104ae17561f6e6f966e2a54",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/90eaabd0c642a70e39f1490dda33547c7b02f678",
+                "reference": "90eaabd0c642a70e39f1490dda33547c7b02f678",
                 "shasum": ""
             },
             "conflict": {
@@ -1778,7 +1778,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-10-01T12:55:07+00:00"
+            "time": "2018-10-30T10:22:17+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -1786,12 +1786,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "4307a752a29e8e98a305358d991d755c26f07063"
+                "reference": "4a3d68807949ae02603936d514cc4cd13db42820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4307a752a29e8e98a305358d991d755c26f07063",
-                "reference": "4307a752a29e8e98a305358d991d755c26f07063",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4a3d68807949ae02603936d514cc4cd13db42820",
+                "reference": "4a3d68807949ae02603936d514cc4cd13db42820",
                 "shasum": ""
             },
             "require": {
@@ -1822,7 +1822,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2017-03-15T12:52:36+00:00"
+            "time": "2018-03-15T10:16:56+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2723,7 +2723,60 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2017-08-03T14:08:16+00:00"
+        },
+        {
+            "name": "psr/http-factory",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-factory.git",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for PSR-7 HTTP message factories",
+            "keywords": [
+                "factory",
+                "http",
+                "message",
+                "psr",
+                "psr-17",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2019-04-30T12:38:16+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -4051,55 +4104,69 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.4.0",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "b03f285a333f51e58c95cce54109a4a9ed691436"
+                "reference": "37bf68b428850ee26ed7c3be6c26236dd95a95f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/b03f285a333f51e58c95cce54109a4a9ed691436",
-                "reference": "b03f285a333f51e58c95cce54109a4a9ed691436",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/37bf68b428850ee26ed7c3be6c26236dd95a95f1",
+                "reference": "37bf68b428850ee26ed7c3be6c26236dd95a95f1",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.4 || ^7.0",
-                "psr/http-message": "~1.0"
+                "php": "^7.1",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0"
             },
             "provide": {
+                "psr/http-factory-implementation": "1.0",
                 "psr/http-message-implementation": "1.0"
             },
             "require-dev": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
-                "phpunit/phpunit": "^4.6 || ^5.5",
+                "http-interop/http-factory-tests": "^0.5.0",
+                "php-http/psr7-integration-tests": "dev-master",
+                "phpunit/phpunit": "^7.0.2",
                 "zendframework/zend-coding-standard": "~1.0.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev",
-                    "dev-develop": "1.5-dev"
+                    "dev-master": "2.1.x-dev",
+                    "dev-develop": "2.2.x-dev",
+                    "dev-release-1.8": "1.8.x-dev"
                 }
             },
             "autoload": {
+                "files": [
+                    "src/functions/create_uploaded_file.php",
+                    "src/functions/marshal_headers_from_sapi.php",
+                    "src/functions/marshal_method_from_sapi.php",
+                    "src/functions/marshal_protocol_version_from_sapi.php",
+                    "src/functions/marshal_uri_from_sapi.php",
+                    "src/functions/normalize_server.php",
+                    "src/functions/normalize_uploaded_files.php",
+                    "src/functions/parse_cookie_header.php"
+                ],
                 "psr-4": {
                     "Zend\\Diactoros\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-2-Clause"
+                "BSD-3-Clause"
             ],
             "description": "PSR HTTP Message implementations",
-            "homepage": "https://github.com/zendframework/zend-diactoros",
             "keywords": [
                 "http",
                 "psr",
                 "psr-7"
             ],
-            "time": "2017-04-06T16:18:34+00:00"
+            "time": "2019-04-29T21:11:00+00:00"
         }
     ],
     "aliases": [],
