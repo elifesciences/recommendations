@@ -270,16 +270,16 @@
         },
         {
             "name": "elife/content-negotiator",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/content-negotiator-php.git",
-                "reference": "82099671a3b7a716d01e36a0ff05e8317c9a3ced"
+                "reference": "43fff10c0f0d69a6d6103f553f9ea31599e9d2bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/content-negotiator-php/zipball/82099671a3b7a716d01e36a0ff05e8317c9a3ced",
-                "reference": "82099671a3b7a716d01e36a0ff05e8317c9a3ced",
+                "url": "https://api.github.com/repos/elifesciences/content-negotiator-php/zipball/43fff10c0f0d69a6d6103f553f9ea31599e9d2bb",
+                "reference": "43fff10c0f0d69a6d6103f553f9ea31599e9d2bb",
                 "shasum": ""
             },
             "require": {
@@ -315,7 +315,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences content negotiator",
-            "time": "2017-11-14T07:45:05+00:00"
+            "time": "2018-03-16T09:05:57+00:00"
         },
         {
             "name": "elife/logging-sdk",
