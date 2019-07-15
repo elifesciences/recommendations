@@ -230,6 +230,7 @@ abstract class ApiTestCase extends TestCase
                 'retraction',
                 'registered-report',
                 'replication-study',
+                'review-article',
                 'scientific-correspondence',
                 'short-report',
                 'tools-resources',

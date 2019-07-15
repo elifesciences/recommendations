@@ -181,7 +181,7 @@ final class RecommendationsTest extends WebTestCase
         $this->mockRelatedArticlesCall('1234', []);
         $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
@@ -218,7 +218,7 @@ final class RecommendationsTest extends WebTestCase
         $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodeCall($episode1);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
@@ -255,7 +255,7 @@ final class RecommendationsTest extends WebTestCase
         $this->mockCollectionsCall(1, [$this->createCollection('1234')], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodesCall(1, [$episode1], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodeCall($episode1);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
@@ -288,7 +288,7 @@ final class RecommendationsTest extends WebTestCase
         $this->mockRelatedArticlesCall('1234', []);
         $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockSearchCall(1, [$this->createArticlePoA('1234', 'research-article'), $this->createArticlePoA('1235', 'insight')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+        $this->mockSearchCall(1, [$this->createArticlePoA('1234', 'research-article'), $this->createArticlePoA('1235', 'insight')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
@@ -328,7 +328,7 @@ final class RecommendationsTest extends WebTestCase
         $this->mockPodcastEpisodesCall(0, [$episode2, $episode1], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodeCall($episode1);
         $this->mockPodcastEpisodeCall($episode2);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();

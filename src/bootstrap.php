@@ -146,6 +146,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                 'insight' => 11,
                 'editorial' => 12,
                 'short-report' => 13,
+                'review-article' => 14,
             ];
 
             if ($order[$a->getType()] === $order[$b->getType()]) {
@@ -177,7 +178,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
             $subject = $article->getSubjects()[0];
 
             return $app['elife.api_sdk']->search()
-                ->forType('editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources')
+                ->forType('editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources')
                 ->sortBy('date')
                 ->forSubject($subject->getId())
                 ->slice(0, 5)
