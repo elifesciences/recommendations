@@ -12,6 +12,7 @@ elifePipeline {
         }
 
         stage 'Project tests', {
+            sh 'mkdir -p build/'
             dockerProjectTests 'recommendations', commit
         }
 
