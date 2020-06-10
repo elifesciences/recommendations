@@ -121,12 +121,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "abc08e2b8ae22864d7dbc30a1e96912fbd81cb42"
+                "reference": "f89bb6bfc3ca3dfb8265d1bba34fc541395e8669"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/abc08e2b8ae22864d7dbc30a1e96912fbd81cb42",
-                "reference": "abc08e2b8ae22864d7dbc30a1e96912fbd81cb42",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/f89bb6bfc3ca3dfb8265d1bba34fc541395e8669",
+                "reference": "f89bb6bfc3ca3dfb8265d1bba34fc541395e8669",
                 "shasum": ""
             },
             "require": {
@@ -143,7 +143,7 @@
                 "guzzlehttp/guzzle": "^6.0",
                 "mtdowling/jmespath.php": "^2.0",
                 "phpspec/phpspec": "^2.4",
-                "phpspec/prophecy": "^1.5",
+                "phpspec/prophecy": "^1.10",
                 "phpunit/phpunit": "^5.2",
                 "psr/log": "^1.0"
             },
@@ -169,7 +169,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2019-08-06T08:48:30+00:00"
+            "time": "2020-06-08T01:08:39+00:00"
         },
         {
             "name": "elife/api-problem",
@@ -225,12 +225,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "9e8929f74a86412a437b7bafd4e57bc0f50f3468"
+                "reference": "81fae305fe3bb7fea86a3e52d6a2a4e7f5ecf169"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/9e8929f74a86412a437b7bafd4e57bc0f50f3468",
-                "reference": "9e8929f74a86412a437b7bafd4e57bc0f50f3468",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/81fae305fe3bb7fea86a3e52d6a2a4e7f5ecf169",
+                "reference": "81fae305fe3bb7fea86a3e52d6a2a4e7f5ecf169",
                 "shasum": ""
             },
             "require": {
@@ -239,6 +239,9 @@
                 "ocramius/package-versions": "^1.1",
                 "php": "^7.0",
                 "symfony/serializer": "^2.8.2 || ^3.0.2"
+            },
+            "conflict": {
+                "sebastian/comparator": "<1.2.3"
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
@@ -267,7 +270,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2019-08-22T12:07:31+00:00"
+            "time": "2020-06-08T18:04:49+00:00"
         },
         {
             "name": "elife/content-negotiator",
@@ -1222,16 +1225,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v3.4.35",
+            "version": "v3.4.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "9e4b3ac8fa3348b4811674d23de32d201de225ce"
+                "reference": "fbd216d2304b1a3fe38d6392b04729c8dd356359"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/9e4b3ac8fa3348b4811674d23de32d201de225ce",
-                "reference": "9e4b3ac8fa3348b4811674d23de32d201de225ce",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/fbd216d2304b1a3fe38d6392b04729c8dd356359",
+                "reference": "fbd216d2304b1a3fe38d6392b04729c8dd356359",
                 "shasum": ""
             },
             "require": {
@@ -1272,7 +1275,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2019-11-11T12:53:10+00:00"
+            "time": "2020-05-16T13:15:54+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -1424,16 +1427,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.12.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17"
+                "reference": "fa79b11539418b02fc5e1897267673ba2c19419c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/b42a2f66e8f1b15ccf25652c3424265923eb4f17",
-                "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fa79b11539418b02fc5e1897267673ba2c19419c",
+                "reference": "fa79b11539418b02fc5e1897267673ba2c19419c",
                 "shasum": ""
             },
             "require": {
@@ -1445,7 +1448,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1479,7 +1482,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2020-05-12T16:47:27+00:00"
         },
         {
             "name": "symfony/polyfill-php56",
@@ -1539,16 +1542,16 @@
         },
         {
             "name": "symfony/polyfill-php70",
-            "version": "v1.12.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "54b4c428a0054e254223797d2713c31e08610831"
+                "reference": "82225c2d7d23d7e70515496d249c0152679b468e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/54b4c428a0054e254223797d2713c31e08610831",
-                "reference": "54b4c428a0054e254223797d2713c31e08610831",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/82225c2d7d23d7e70515496d249c0152679b468e",
+                "reference": "82225c2d7d23d7e70515496d249c0152679b468e",
                 "shasum": ""
             },
             "require": {
@@ -1558,7 +1561,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1594,7 +1597,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2020-05-12T16:47:27+00:00"
         },
         {
             "name": "symfony/polyfill-util",
@@ -2021,12 +2024,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "fb9244b3175bc63c17c9da873febe763283837c4"
+                "reference": "40309efa97bf0ba3049da54037ebf52af059eabc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/fb9244b3175bc63c17c9da873febe763283837c4",
-                "reference": "fb9244b3175bc63c17c9da873febe763283837c4",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/40309efa97bf0ba3049da54037ebf52af059eabc",
+                "reference": "40309efa97bf0ba3049da54037ebf52af059eabc",
                 "shasum": ""
             },
             "conflict": {
@@ -2038,7 +2041,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2019-08-22T09:15:05+00:00"
+            "time": "2020-06-08T13:46:14+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -2046,12 +2049,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "4a3d68807949ae02603936d514cc4cd13db42820"
+                "reference": "b87e36a48be01b1c466c506d7024f5558974245a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4a3d68807949ae02603936d514cc4cd13db42820",
-                "reference": "4a3d68807949ae02603936d514cc4cd13db42820",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b87e36a48be01b1c466c506d7024f5558974245a",
+                "reference": "b87e36a48be01b1c466c506d7024f5558974245a",
                 "shasum": ""
             },
             "require": {
@@ -2082,7 +2085,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2018-03-15T10:16:56+00:00"
+            "time": "2020-03-05T04:54:17+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -3562,7 +3565,7 @@
             ],
             "description": "A WebProfiler for Silex",
             "homepage": "http://silex.sensiolabs.org/",
-            "abandoned": true,
+            "abandoned": "symfony/web-profiler-bundle",
             "time": "2018-04-04T11:41:51+00:00"
         },
         {
