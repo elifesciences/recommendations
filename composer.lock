@@ -1917,26 +1917,26 @@
         },
         {
             "name": "csa/guzzle-stopwatch-middleware",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csarrazi/guzzle-stopwatch-middleware.git",
-                "reference": "1612a9c87eb3c6167d38c4ea79ef3055cf50e93e"
+                "reference": "9fa43b92a5d80ce86c2d999782e75f45da180aa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csarrazi/guzzle-stopwatch-middleware/zipball/1612a9c87eb3c6167d38c4ea79ef3055cf50e93e",
-                "reference": "1612a9c87eb3c6167d38c4ea79ef3055cf50e93e",
+                "url": "https://api.github.com/repos/csarrazi/guzzle-stopwatch-middleware/zipball/9fa43b92a5d80ce86c2d999782e75f45da180aa9",
+                "reference": "9fa43b92a5d80ce86c2d999782e75f45da180aa9",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.1",
                 "php": ">=5.6.0",
-                "symfony/stopwatch": "^2.7|^3.0|^4.0"
+                "symfony/stopwatch": "^2.7|^3.0|^4.0|^5.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8",
-                "symfony/phpunit-bridge": "^2.7|^3.0|^4.0"
+                "symfony/phpunit-bridge": "^2.7|^3.0|^4.0|^5.0"
             },
             "type": "library",
             "extra": {
@@ -1960,7 +1960,7 @@
                 }
             ],
             "description": "A Stopwatch middleware for GuzzleHttp >= 6.0",
-            "time": "2017-12-01T11:52:02+00:00"
+            "time": "2019-11-26T09:35:03+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -3968,16 +3968,16 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.4.27",
+            "version": "v3.4.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
-                "reference": "2a651c2645c10bbedd21170771f122d935e0dd58"
+                "reference": "a7a98f40dcc382a332c3729a6d04b298ffbb8f1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/2a651c2645c10bbedd21170771f122d935e0dd58",
-                "reference": "2a651c2645c10bbedd21170771f122d935e0dd58",
+                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/a7a98f40dcc382a332c3729a6d04b298ffbb8f1f",
+                "reference": "a7a98f40dcc382a332c3729a6d04b298ffbb8f1f",
                 "shasum": ""
             },
             "require": {
@@ -4013,7 +4013,7 @@
             ],
             "description": "Symfony Stopwatch Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-16T09:39:14+00:00"
+            "time": "2020-03-15T09:38:08+00:00"
         },
         {
             "name": "symfony/twig-bridge",
