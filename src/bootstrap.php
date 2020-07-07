@@ -248,6 +248,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                     ->then(function (ArticleVersion $complete) use ($app) {
                         if ($complete->getAbstract()) {
                             $withAbstract = json_decode($app['elife.api_sdk.serializer']->serialize($complete, 'json'), true);
+
                             return [
                                 'abstract' => $withAbstract['abstract'],
                             ];
