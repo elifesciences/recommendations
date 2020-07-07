@@ -242,7 +242,6 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                 'snippet' => true,
                 'type' => true,
             ]), true);
-
             if ($model instanceof ArticleVersion) {
                 $data += $app['elife.api_sdk']->articles()
                     ->get($model->getId())
