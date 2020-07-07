@@ -15,6 +15,7 @@ use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleHistory;
+use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
@@ -237,10 +238,22 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $content['items'] = $recommendations
         ->map(function (Model $model) use ($app) {
-            return json_decode($app['elife.api_sdk.serializer']->serialize($model, 'json', [
+            $data = json_decode($app['elife.api_sdk.serializer']->serialize($model, 'json', [
                 'snippet' => true,
                 'type' => true,
             ]), true);
+
+            if ($model instanceof ArticleVersion) {
+                $complete = $app['elife.api_sdk']->articles()
+                    ->get($model->getId())
+                    ->wait();
+                if ($complete->getAbstract()) {
+                    $withAbstract = json_decode($app['elife.api_sdk.serializer']->serialize($model, 'json'), true);
+                    $data['abstract'] = $withAbstract['abstract'];
+                }
+            }
+
+            return $data;
         })
         ->toArray();
 
@@ -252,7 +265,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         $headers
     );
 })->before($app['negotiate.accept'](
-    'application/vnd.elife.recommendations+json; version=1'
+    'application/vnd.elife.recommendations+json; version=2'
 ));
 
 $app->after(function (Request $request, Response $response, Application $app) {
