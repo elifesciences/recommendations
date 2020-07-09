@@ -252,7 +252,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         $headers
     );
 })->before($app['negotiate.accept'](
-    'application/vnd.elife.recommendations+json; version=1'
+    'application/vnd.elife.recommendations+json; version=2'
 ));
 
 $app->after(function (Request $request, Response $response, Application $app) {
