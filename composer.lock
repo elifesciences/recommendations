@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "811839c52778301e811d0e4cde18f888",
+    "content-hash": "f96fa59ac12c0ce399f185e1964fcfac",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -221,16 +221,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-structured-abstract",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "2e72b611c40f6b03d1400499619b6cd8d792b7cd"
+                "reference": "5047cba22f934b6fc89efd058a5731c49d066694"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/2e72b611c40f6b03d1400499619b6cd8d792b7cd",
-                "reference": "2e72b611c40f6b03d1400499619b6cd8d792b7cd",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/5047cba22f934b6fc89efd058a5731c49d066694",
+                "reference": "5047cba22f934b6fc89efd058a5731c49d066694",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +270,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-06-12T19:02:28+00:00"
+            "time": "2020-07-09T11:03:37+00:00"
         },
         {
             "name": "elife/content-negotiator",
