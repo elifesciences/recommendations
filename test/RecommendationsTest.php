@@ -32,7 +32,7 @@ final class RecommendationsTest extends WebTestCase
         $types = [
             'application/vnd.elife.recommendations+json' => 200,
             'application/vnd.elife.recommendations+json; version=0' => 406,
-            'application/vnd.elife.recommendations+json; version=1' => 406,
+            'application/vnd.elife.recommendations+json; version=1' => 200,
             'application/vnd.elife.recommendations+json; version=2' => 200,
             'application/vnd.elife.recommendations+json; version=3' => 406,
             'text/plain' => 406,
