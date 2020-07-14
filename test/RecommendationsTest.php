@@ -183,6 +183,12 @@ final class RecommendationsTest extends WebTestCase
         $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
+        $this->mockArticleVoRCall('1235', $insight = $this->createArticlePoA('1235', 'insight', [], null, false));
+        $this->mockArticleVoRCall('1236', $shortReport = $this->createArticlePoA('1236', 'short-report', [], null, false));
+        $this->mockArticleVoRCall('1237', $researchArticle = $this->createArticlePoA('1237', 'research-article', [], null, false));
+        unset($insight['copyright']);
+        unset($shortReport['copyright']);
+        unset($researchArticle['copyright']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
@@ -194,9 +200,9 @@ final class RecommendationsTest extends WebTestCase
             [
                 'total' => 3,
                 'items' => [
-                    $this->normalize($this->createArticlePoA('1235', 'insight')),
-                    $this->normalize($this->createArticlePoA('1236', 'short-report')),
-                    $this->normalize($this->createArticlePoA('1237', 'research-article')),
+                    $this->normalize($insight),
+                    $this->normalize($shortReport),
+                    $this->normalize($researchArticle),
                 ],
             ],
             $response->getContent()

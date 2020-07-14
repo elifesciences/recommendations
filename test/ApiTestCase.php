@@ -101,6 +101,29 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
+    final protected function mockArticleVoRCall(string $id, ArticlePoA $article)
+    {
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/articles/$id",
+                [
+                    'Accept' => implode(', ', [
+                        new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
+                        new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 4),
+                    ]),
+                ]
+            ),
+            new Response(
+                200,
+                [
+                    'Content-Type' => new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
+                ],
+                json_encode($this->normalize($article, false))
+            )
+        );
+    }
+
     final protected function mockCollectionsCall(
         int $total,
         array $collections,
