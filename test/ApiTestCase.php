@@ -322,7 +322,7 @@ abstract class ApiTestCase extends TestCase
             'subjects' => array_map(function (string $subject) {
                 return array_fill_keys(['id', 'name'], $subject);
             }, $subjects),
-        ] + $complete), ArticlePoA::class);
+        ] + $complete), ArticlePoA::class, $snippet);
     }
 
     final protected function createCollection(string $id) : Collection
