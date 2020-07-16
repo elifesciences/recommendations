@@ -16,6 +16,7 @@ use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleHistory;
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
@@ -238,28 +239,34 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $content['items'] = $recommendations
         ->map(function (Model $model) use ($app, $type) {
-            $data = json_decode($app['elife.api_sdk.serializer']->serialize($model, 'json', [
-                'snippet' => true,
-                'type' => true,
-            ]), true);
-            if ($type->getParameter('version') > 1 && $model instanceof ArticleVersion) {
-                $data += $app['elife.api_sdk']->articles()
+            if ($model instanceof ArticleVersion) {
+                $abstract = $app['elife.api_sdk']->articles()
                     ->get($model->getId())
                     ->then(function (ArticleVersion $complete) use ($app) {
                         if ($complete->getAbstract()) {
-                            $withAbstract = json_decode($app['elife.api_sdk.serializer']->serialize($complete, 'json'), true);
-
-                            return [
-                                'abstract' => $withAbstract['abstract'],
+                            $abstract = [
+                                'content' => $complete->getAbstract()->getContent()->map(function (Block $block) use ($app) {
+                                    return $app['elife.api_sdk.serializer']->serialize($block, 'json');
+                                }),
                             ];
-                        }
 
-                        return [];
+                            if ($complete->getAbstract()->getDoi()) {
+                                $abstract['doi'] = $complete->getAbstract()->getDoi();
+                            }
+
+                            return json_decode($abstract, true);
+                        }
                     })
                     ->wait();
+                if ($abstract) {
+                    $data['abstract'] = $abstract;
+                }
             }
 
-            return $data;
+            return ($data ?? []) + json_decode($app['elife.api_sdk.serializer']->serialize($model, 'json', [
+                    'snippet' => true,
+                    'type' => true,
+                ]), true);
         })
         ->toArray();
 
