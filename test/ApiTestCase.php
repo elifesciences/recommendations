@@ -101,7 +101,7 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
-    final protected function mockArticleVoRCall(string $id, ArticlePoA $article)
+    final protected function mockArticlePoACall(string $id, ArticlePoA $article)
     {
         $this->storage->save(
             new Request(
