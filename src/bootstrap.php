@@ -246,7 +246,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                         if ($complete->getAbstract()) {
                             $abstract = [
                                 'content' => $complete->getAbstract()->getContent()->map(function (Block $block) use ($app) {
-                                    return $app['elife.api_sdk.serializer']->serialize($block, 'json');
+                                    return json_decode($app['elife.api_sdk.serializer']->serialize($block, 'json'), true);
                                 }),
                             ];
 
@@ -254,7 +254,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                                 $abstract['doi'] = $complete->getAbstract()->getDoi();
                             }
 
-                            return json_decode($abstract, true);
+                            return $abstract;
                         }
                     })
                     ->wait();
