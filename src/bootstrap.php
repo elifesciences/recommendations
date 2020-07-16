@@ -239,7 +239,8 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $content['items'] = $recommendations
         ->map(function (Model $model) use ($app, $type) {
-            if ($model instanceof ArticleVersion) {
+            $shouldContainAbstract = $type->getParameter('version') > 1;
+            if ($shouldContainAbstract && $model instanceof ArticleVersion) {
                 $abstract = $app['elife.api_sdk']->articles()
                     ->get($model->getId())
                     ->then(function (ArticleVersion $complete) use ($app) {
@@ -247,7 +248,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                             $abstract = [
                                 'content' => $complete->getAbstract()->getContent()->map(function (Block $block) use ($app) {
                                     return json_decode($app['elife.api_sdk.serializer']->serialize($block, 'json'), true);
-                                }),
+                                })->toArray(),
                             ];
 
                             if ($complete->getAbstract()->getDoi()) {
