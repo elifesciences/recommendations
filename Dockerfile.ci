@@ -1,5 +1,4 @@
 ARG image_tag=latest
-FROM elifesciences/proofreader-php:afd285fdc826f60639b95ffde86eba2eb70b43ac AS proofreader
 FROM elifesciences/recommendations_composer_dev:${image_tag} AS composer
 FROM elifesciences/recommendations:${image_tag}
 
@@ -9,14 +8,11 @@ RUN mkdir -p build/ && \
     chown --recursive www-data:www-data build/ .php_cs.cache
 
 
-COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
-RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
-
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 COPY --chown=elife:elife \
     phpunit.xml.dist \
-    .php_cs \
+    phpcs.xml.dist \
     project_tests.sh \
     ./
 COPY --chown=elife:elife composer.json composer.lock ./
