@@ -16,7 +16,6 @@
         }
     },
     "require": {
-        "elife/api": "~1.1.0",
         "elife/api-client": "^1.0@dev",
         "elife/api-problem": "^1.1",
         "elife/api-sdk": "dev-reference-journal-without-pages",
@@ -34,6 +33,7 @@
     "require-dev": {
         "csa/guzzle-cache-middleware": "^1.0",
         "csa/guzzle-stopwatch-middleware": "^1.0",
+        "elife/api": "~1.1.0",
         "elife/api-validator": "^1.0@dev",
         "justinrainbow/json-schema": "^5.2",
         "mindplay/composer-locator": "^2.1",
