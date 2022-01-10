@@ -276,6 +276,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         'count' => $app['elife.api_sdk']->callCount(),
         'identifier' => $identifier->getType().'/'.$identifier->getId(),
     ]);
+
     return new ApiResponse(
         $content,
         Response::HTTP_OK,
