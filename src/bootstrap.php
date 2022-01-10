@@ -9,7 +9,6 @@ use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\WarningCheckingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
-use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
@@ -272,6 +271,11 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         ->toArray();
 
     $headers = ['Content-Type' => $type->getNormalizedValue()];
+
+    $app['logger']->info('Calls made to ApiSdk: '.$app['elife.api_sdk']->callCount(), [
+        'count' => $app['elife.api_sdk']->callCount(),
+        'identifier' => $identifier->getType().'/'.$identifier->getId(),
+    ]);
 
     return new ApiResponse(
         $content,
