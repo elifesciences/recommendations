@@ -24,8 +24,7 @@ final class HttpClient implements ApiHttpClient
 
     private function record(RequestInterface $request) : void
     {
-        $accept = $request->getHeaderLine('Accept');
-        $this->details[$accept][] = implode('?', array_filter([
+        $this->details[$request->getHeaderLine('Accept')][] = implode('?', array_filter([
             $request->getUri()->getPath(),
             $request->getUri()->getQuery(),
         ]));
