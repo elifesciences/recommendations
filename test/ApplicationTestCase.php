@@ -2,7 +2,7 @@
 
 namespace test\eLife\Recommendations;
 
-use eLife\Recommendations\ApiSdk;
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\HandlerStack;
 use function GuzzleHttp\json_encode;
 use Silex\Application;
