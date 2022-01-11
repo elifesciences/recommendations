@@ -9,6 +9,7 @@ use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\WarningCheckingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
+use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
@@ -24,6 +25,7 @@ use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\Logging\Silex\LoggerProvider;
 use eLife\Ping\Silex\PingControllerProvider;
+use eLife\Recommendations\HttpClient as RecommendationsHttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use function GuzzleHttp\Promise\all;
@@ -104,6 +106,10 @@ if ($app['debug']) {
         return new WarningCheckingHttpClient($httpClient, $app['logger']);
     });
 }
+
+$app->extend('elife.api_client', function (HttpClient $httpClient) use ($app) {
+    return new RecommendationsHttpClient($httpClient);
+});
 
 $app['elife.api_sdk'] = function () use ($app) {
     return new ApiSdk($app['elife.api_client']);
@@ -272,9 +278,10 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $headers = ['Content-Type' => $type->getNormalizedValue()];
 
-    $app['logger']->info('Calls made to ApiSdk: '.$app['elife.api_sdk']->callCount(), [
-        'count' => $app['elife.api_sdk']->callCount(),
+    $app['logger']->info('Calls made to ApiSdk: '.$app['elife.api_client']->count(), [
+        'count' => $app['elife.api_client']->count(),
         'identifier' => $identifier->getType().'/'.$identifier->getId(),
+        'details' => $app['elife.api_client']->getDetails(),
     ]);
 
     return new ApiResponse(
