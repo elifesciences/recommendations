@@ -9,6 +9,7 @@ use eLife\ApiClient\ApiClient\ArticlesClient;
 use eLife\ApiClient\ApiClient\CollectionsClient;
 use eLife\ApiClient\ApiClient\PodcastClient;
 use eLife\ApiClient\ApiClient\SearchClient;
+use eLife\ApiClient\ApiClient\ReviewedPreprintsClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\Collection;
@@ -110,7 +111,7 @@ abstract class ApiTestCase extends TestCase
                 [
                     'Accept' => implode(', ', [
                         (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 7),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 5),
                     ]),
                 ]
             ),
