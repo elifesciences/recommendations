@@ -111,7 +111,7 @@ abstract class ApiTestCase extends TestCase
                 [
                     'Accept' => implode(', ', [
                         (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 5),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 7),
                     ]),
                 ]
             ),
