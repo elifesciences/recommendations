@@ -45,6 +45,9 @@
         "zendframework/zend-diactoros": "^2.2"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "mindplay/composer-locator": true
+        }
     }
 }
