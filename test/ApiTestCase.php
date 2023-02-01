@@ -262,6 +262,7 @@ abstract class ApiTestCase extends TestCase
                 'interview',
                 'labs-post',
                 'podcast-episode',
+                'reviewed-preprint',
             ], function (array $carry, string $type) use ($items) {
                 $carry[$type] = count(array_filter($items, function (HasIdentifier $model) use ($type) {
                     return $type === $model->getIdentifier();

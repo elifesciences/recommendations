@@ -422,7 +422,7 @@ final class RecommendationsTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->mockNotFound('articles/1234/versions', ['Accept' => 'application/vnd.elife.article-history+json; version=1']);
+        $this->mockNotFound('articles/1234/versions', ['Accept' => 'application/vnd.elife.article-history+json; version=2']);
         $this->mockRelatedArticlesCall('1234', []);
         $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
