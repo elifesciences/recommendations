@@ -18,6 +18,7 @@ use eLife\ApiSdk\Model\ArticleHistory;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\HasPublishedDate;
+use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
@@ -176,7 +177,10 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $mostRecentWithSubject = new PromiseSequence($article
         ->then(function (ArticleHistory $history) use ($app, $ignoreSelf) {
-            $article = $history->getVersions()[0];
+            $articleVersions = $history->getVersions()->filter(function ($version) {
+                return $version instanceof HasSubjects;
+            });
+            $article = $articleVersions[0];
 
             if ($article->getSubjects()->isEmpty()) {
                 return new EmptySequence();
