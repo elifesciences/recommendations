@@ -177,10 +177,9 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $mostRecentWithSubject = new PromiseSequence($article
         ->then(function (ArticleHistory $history) use ($app, $ignoreSelf) {
-            $articleVersions = $history->getVersions()->filter(function ($version) {
+            $article = $history->getVersions()->filter(function ($version) {
                 return $version instanceof HasSubjects;
-            });
-            $article = $articleVersions[0];
+            })->offsetGet(0);
 
             if ($article->getSubjects()->isEmpty()) {
                 return new EmptySequence();
