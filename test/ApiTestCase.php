@@ -275,11 +275,11 @@ abstract class ApiTestCase extends TestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/search?for=&page=$page&per-page=$perPage&sort=date&order=desc$subjectsQuery$typesQuery&use-date=default",
-                ['Accept' => (string) new MediaType(SearchClient::TYPE_SEARCH, 1)]
+                ['Accept' => (string) new MediaType(SearchClient::TYPE_SEARCH, 2)]
             ),
             new Response(
                 200,
-                ['Content-Type' => (string) new MediaType(SearchClient::TYPE_SEARCH, 1)],
+                ['Content-Type' => (string) new MediaType(SearchClient::TYPE_SEARCH, 2)],
                 json_encode($json)
             )
         );
