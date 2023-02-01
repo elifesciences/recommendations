@@ -81,7 +81,7 @@ abstract class ApiTestCase extends TestCase
     {
         $response = new Response(
             200,
-            ['Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 1)],
+            ['Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 2)],
             json_encode([
                 'versions' => array_map([$this, 'normalize'], $versions),
             ])
@@ -93,7 +93,7 @@ abstract class ApiTestCase extends TestCase
                 "http://api.elifesciences.org/articles/$id/versions",
                 [
                     'Accept' => [
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 1),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 2),
                     ],
                 ]
             ),
