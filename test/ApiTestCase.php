@@ -81,7 +81,7 @@ abstract class ApiTestCase extends TestCase
     {
         $response = new Response(
             200,
-            ['Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 1)],
+            ['Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 2)],
             json_encode([
                 'versions' => array_map([$this, 'normalize'], $versions),
             ])
@@ -93,7 +93,7 @@ abstract class ApiTestCase extends TestCase
                 "http://api.elifesciences.org/articles/$id/versions",
                 [
                     'Accept' => [
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 1),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_HISTORY, 2),
                     ],
                 ]
             ),
@@ -110,7 +110,7 @@ abstract class ApiTestCase extends TestCase
                 [
                     'Accept' => implode(', ', [
                         (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 5),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 6),
                     ]),
                 ]
             ),
@@ -262,6 +262,7 @@ abstract class ApiTestCase extends TestCase
                 'interview',
                 'labs-post',
                 'podcast-episode',
+                'reviewed-preprint',
             ], function (array $carry, string $type) use ($items) {
                 $carry[$type] = count(array_filter($items, function (HasIdentifier $model) use ($type) {
                     return $type === $model->getIdentifier();
@@ -275,11 +276,11 @@ abstract class ApiTestCase extends TestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/search?for=&page=$page&per-page=$perPage&sort=date&order=desc$subjectsQuery$typesQuery&use-date=default",
-                ['Accept' => (string) new MediaType(SearchClient::TYPE_SEARCH, 1)]
+                ['Accept' => (string) new MediaType(SearchClient::TYPE_SEARCH, 2)]
             ),
             new Response(
                 200,
-                ['Content-Type' => (string) new MediaType(SearchClient::TYPE_SEARCH, 1)],
+                ['Content-Type' => (string) new MediaType(SearchClient::TYPE_SEARCH, 2)],
                 json_encode($json)
             )
         );

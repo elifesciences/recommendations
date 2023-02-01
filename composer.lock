@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a12f58ec1387b0b56c62c8888e3d634b",
+    "content-hash": "307bfb11858a16cab93e2e45bb550315",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -60,6 +60,75 @@
                 "validation"
             ],
             "time": "2018-06-11T17:15:25+00:00"
+        },
+        {
+            "name": "composer/package-versions-deprecated",
+            "version": "1.11.99.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/package-versions-deprecated.git",
+                "reference": "c6522afe5540d5fc46675043d3ed5a45a740b27c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/c6522afe5540d5fc46675043d3ed5a45a740b27c",
+                "reference": "c6522afe5540d5fc46675043d3ed5a45a740b27c",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1.0 || ^2.0",
+                "php": "^7 || ^8"
+            },
+            "replace": {
+                "ocramius/package-versions": "1.11.99"
+            },
+            "require-dev": {
+                "composer/composer": "^1.9.3 || ^2.0@dev",
+                "ext-zip": "^1.13",
+                "phpunit/phpunit": "^6.5 || ^7"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PackageVersions\\Installer",
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PackageVersions\\": "src/PackageVersions"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be"
+                }
+            ],
+            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-05-24T07:46:03+00:00"
         },
         {
             "name": "crell/api-problem",
@@ -121,20 +190,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "f89bb6bfc3ca3dfb8265d1bba34fc541395e8669"
+                "reference": "42c424ea570a1d8c9eed977dd565cad84464de6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/f89bb6bfc3ca3dfb8265d1bba34fc541395e8669",
-                "reference": "f89bb6bfc3ca3dfb8265d1bba34fc541395e8669",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/42c424ea570a1d8c9eed977dd565cad84464de6f",
+                "reference": "42c424ea570a1d8c9eed977dd565cad84464de6f",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^2.2",
+                "composer/package-versions-deprecated": "1.11.99.2",
                 "crell/api-problem": "^2.0",
                 "guzzlehttp/promises": "^1.0",
                 "guzzlehttp/psr7": "^1.0",
-                "ocramius/package-versions": "^1.0",
                 "php": "^7.0",
                 "psr/http-message": "^1.0"
             },
@@ -169,7 +238,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2020-06-08T01:08:39+00:00"
+            "time": "2022-08-18T18:50:00+00:00"
         },
         {
             "name": "elife/api-problem",
@@ -225,18 +294,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "8c582e68c383c64e505fdbfaf282f4e0d1e8f036"
+                "reference": "e84569cbddac0fa1297ebd183a744e285d91b800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/8c582e68c383c64e505fdbfaf282f4e0d1e8f036",
-                "reference": "8c582e68c383c64e505fdbfaf282f4e0d1e8f036",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/e84569cbddac0fa1297ebd183a744e285d91b800",
+                "reference": "e84569cbddac0fa1297ebd183a744e285d91b800",
                 "shasum": ""
             },
             "require": {
+                "composer/package-versions-deprecated": "1.11.99.2",
                 "elife/api-client": "^1.0@dev",
                 "guzzlehttp/promises": "^1.0",
-                "ocramius/package-versions": "^1.1",
                 "php": "^7.0",
                 "symfony/serializer": "^2.8.2 || ^3.0.2"
             },
@@ -245,7 +314,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "~1.1.0",
+                "elife/api": "^2.13.0",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -271,7 +340,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2021-03-02T18:09:19+00:00"
+            "time": "2022-12-01T15:20:39+00:00"
         },
         {
             "name": "elife/content-negotiator",
@@ -769,55 +838,6 @@
                 "psr-3"
             ],
             "time": "2017-06-19T01:22:40+00:00"
-        },
-        {
-            "name": "ocramius/package-versions",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Ocramius/PackageVersions.git",
-                "reference": "ad8a245decad4897cc6b432743913dad0d69753c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/ad8a245decad4897cc6b432743913dad0d69753c",
-                "reference": "ad8a245decad4897cc6b432743913dad0d69753c",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.0",
-                "php": "~7.0"
-            },
-            "require-dev": {
-                "composer/composer": "^1.3",
-                "ext-zip": "*",
-                "humbug/humbug": "dev-master",
-                "phpunit/phpunit": "^6.4"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "PackageVersions\\Installer",
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PackageVersions\\": "src/PackageVersions"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com"
-                }
-            ],
-            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "time": "2017-11-24T11:07:03+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2586,16 +2606,16 @@
         },
         {
             "name": "elife/api",
-            "version": "2.0.0",
+            "version": "2.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "b306396174371caa5e13d0dd74fa6012b38f3462"
+                "reference": "b9857d750b2cf0497649cd25f45e4dfd7cb96d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/b306396174371caa5e13d0dd74fa6012b38f3462",
-                "reference": "b306396174371caa5e13d0dd74fa6012b38f3462",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/b9857d750b2cf0497649cd25f45e4dfd7cb96d48",
+                "reference": "b9857d750b2cf0497649cd25f45e4dfd7cb96d48",
                 "shasum": ""
             },
             "conflict": {
@@ -2607,7 +2627,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2021-03-04T08:16:22+00:00"
+            "time": "2023-01-27T21:08:21+00:00"
         },
         {
             "name": "elife/api-validator",
