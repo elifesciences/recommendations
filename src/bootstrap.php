@@ -155,6 +155,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                 'editorial' => 12,
                 'short-report' => 13,
                 'review-article' => 14,
+                'reviewed-preprint' => 15,
             ];
 
             if ($order[$a->getType()] === $order[$b->getType()]) {

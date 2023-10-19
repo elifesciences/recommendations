@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "307bfb11858a16cab93e2e45bb550315",
+    "content-hash": "3a05189b5a0b54337d19c4c703921568",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -185,6 +185,31 @@
             "time": "2016-07-24T18:53:45+00:00"
         },
         {
+            "name": "elife/api",
+            "version": "2.25.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elifesciences/api-raml.git",
+                "reference": "84d590f2593deee7d17f87b9bd4308c8e2f5b4dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/84d590f2593deee7d17f87b9bd4308c8e2f5b4dd",
+                "reference": "84d590f2593deee7d17f87b9bd4308c8e2f5b4dd",
+                "shasum": ""
+            },
+            "conflict": {
+                "justinrainbow/json-schema": "<3.0.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "eLife Sciences API specification",
+            "time": "2023-10-10T13:58:24+00:00"
+        },
+        {
             "name": "elife/api-client",
             "version": "dev-master",
             "source": {
@@ -290,16 +315,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-rp-related",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "e84569cbddac0fa1297ebd183a744e285d91b800"
+                "reference": "c1fa27acc0562c9a6a826a946147969bf8c3785d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/e84569cbddac0fa1297ebd183a744e285d91b800",
-                "reference": "e84569cbddac0fa1297ebd183a744e285d91b800",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/c1fa27acc0562c9a6a826a946147969bf8c3785d",
+                "reference": "c1fa27acc0562c9a6a826a946147969bf8c3785d",
                 "shasum": ""
             },
             "require": {
@@ -314,7 +339,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "^2.13.0",
+                "elife/api": "^2.25",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -340,7 +365,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2022-12-01T15:20:39+00:00"
+            "time": "2023-10-13T12:05:45+00:00"
         },
         {
             "name": "elife/content-negotiator",
@@ -2603,31 +2628,6 @@
                 }
             ],
             "time": "2020-05-29T17:27:14+00:00"
-        },
-        {
-            "name": "elife/api",
-            "version": "2.15.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "b9857d750b2cf0497649cd25f45e4dfd7cb96d48"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/b9857d750b2cf0497649cd25f45e4dfd7cb96d48",
-                "reference": "b9857d750b2cf0497649cd25f45e4dfd7cb96d48",
-                "shasum": ""
-            },
-            "conflict": {
-                "justinrainbow/json-schema": "<3.0.0"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "eLife Sciences API specification",
-            "time": "2023-01-27T21:08:21+00:00"
         },
         {
             "name": "elife/api-validator",
