@@ -236,6 +236,12 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         $recommendations = append_if_not_exists($recommendations, $mostRecentWithSubject, 3 - $recommendations->count());
     }
 
+    foreach ($recommendations as $model) {
+        if ($model instanceof ReviewedPreprint && $type->getParameter('version') < 3) {
+            throw new HttpException(406, 'This recommendation requires version 3.');
+        }
+    }
+
     $content = [
         'total' => count($recommendations),
     ];
@@ -298,8 +304,8 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         $headers
     );
 })->before($app['negotiate.accept'](
-    'application/vnd.elife.recommendations+json; version=2',
-    'application/vnd.elife.recommendations+json; version=1'
+    'application/vnd.elife.recommendations+json; version=3',
+    'application/vnd.elife.recommendations+json; version=2'
 ));
 
 $app->after(function (Request $request, Response $response, Application $app) {
