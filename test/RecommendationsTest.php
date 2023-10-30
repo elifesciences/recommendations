@@ -32,9 +32,10 @@ final class RecommendationsTest extends WebTestCase
         $types = [
             'application/vnd.elife.recommendations+json' => 200,
             'application/vnd.elife.recommendations+json; version=0' => 406,
-            'application/vnd.elife.recommendations+json; version=1' => 200,
+            'application/vnd.elife.recommendations+json; version=1' => 406,
             'application/vnd.elife.recommendations+json; version=2' => 200,
-            'application/vnd.elife.recommendations+json; version=3' => 406,
+            'application/vnd.elife.recommendations+json; version=3' => 200,
+            'application/vnd.elife.recommendations+json; version=4' => 406,
             'text/plain' => 406,
         ];
 
@@ -59,7 +60,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(['total' => 0, 'items' => []], $response->getContent());
         $this->assertTrue($response->isCacheable());
@@ -92,7 +93,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
@@ -126,7 +127,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
@@ -161,7 +162,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
 
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
@@ -196,7 +197,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
@@ -232,7 +233,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
@@ -270,7 +271,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
@@ -304,7 +305,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
@@ -347,7 +348,7 @@ final class RecommendationsTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=2', $response->headers->get('Content-Type'));
+        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
         $this->assertJsonStringEqualsJson(
             [
