@@ -1,0 +1,23 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: symfony/browser-kit
+    versions:
+    - ">= 5.a, < 6"
+  - dependency-name: phpunit/phpunit
+    versions:
+    - 9.5.1
+    - 9.5.2
+    - 9.5.3
+  - dependency-name: guzzlehttp/promises
+    versions:
+    - 1.4.0
+  - dependency-name: symfony/browser-kit
+    versions:
+    - 4.4.18
+    - 4.4.19
