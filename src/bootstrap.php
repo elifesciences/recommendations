@@ -23,6 +23,7 @@ use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
+use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\Logging\Silex\LoggerProvider;
 use eLife\Ping\Silex\PingControllerProvider;
@@ -138,7 +139,10 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $relations = $app['elife.api_sdk']->articles()
         ->getRelatedArticles($id)
-        ->sort(function (Article $a, Article $b) {
+        ->sort(function (Model $a, Model $b) {
+            $aType = $a instanceof ReviewedPreprint ? 'reviewed-preprint' : $a->getType();
+            $bType = $b instanceof ReviewedPreprint ? 'reviewed-preprint' : $b->getType();
+
             static $order = [
                 'retraction' => 1,
                 'correction' => 2,
@@ -155,16 +159,17 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                 'editorial' => 12,
                 'short-report' => 13,
                 'review-article' => 14,
+                'reviewed-preprint' => 15,
             ];
 
-            if ($order[$a->getType()] === $order[$b->getType()]) {
+            if ($order[$aType] === $order[$bType]) {
                 $aDate = $a instanceof HasPublishedDate ? $a->getPublishedDate() : new DateTimeImmutable('0000-00-00');
                 $bDate = $b instanceof HasPublishedDate ? $b->getPublishedDate() : new DateTimeImmutable('0000-00-00');
 
                 return $bDate <=> $aDate;
             }
 
-            return $order[$a->getType()] <=> $order[$b->getType()];
+            return $order[$aType] <=> $order[$bType];
         });
 
     $collections = $app['elife.api_sdk']->collections()
@@ -231,6 +236,12 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         $recommendations = append_if_not_exists($recommendations, $mostRecentWithSubject, 3 - $recommendations->count());
     }
 
+    foreach ($recommendations as $model) {
+        if ($model instanceof ReviewedPreprint && $type->getParameter('version') < 3) {
+            throw new HttpException(406, 'This recommendation requires version 3.');
+        }
+    }
+
     $content = [
         'total' => count($recommendations),
     ];
@@ -293,8 +304,8 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         $headers
     );
 })->before($app['negotiate.accept'](
-    'application/vnd.elife.recommendations+json; version=2',
-    'application/vnd.elife.recommendations+json; version=1'
+    'application/vnd.elife.recommendations+json; version=3',
+    'application/vnd.elife.recommendations+json; version=2'
 ));
 
 $app->after(function (Request $request, Response $response, Application $app) {

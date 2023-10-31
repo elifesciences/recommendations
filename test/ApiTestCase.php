@@ -110,7 +110,7 @@ abstract class ApiTestCase extends TestCase
                 [
                     'Accept' => implode(', ', [
                         (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 6),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 7),
                     ]),
                 ]
             ),
@@ -204,7 +204,7 @@ abstract class ApiTestCase extends TestCase
     {
         $response = new Response(
             200,
-            ['Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_RELATED, 1)],
+            ['Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_RELATED, 2)],
             json_encode(array_map([$this, 'normalize'], $articles))
         );
 
@@ -214,7 +214,7 @@ abstract class ApiTestCase extends TestCase
                 "http://api.elifesciences.org/articles/$id/related",
                 [
                     'Accept' => [
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_RELATED, 1),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_RELATED, 2),
                     ],
                 ]
             ),
