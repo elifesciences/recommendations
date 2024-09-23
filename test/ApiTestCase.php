@@ -245,6 +245,7 @@ abstract class ApiTestCase extends TestCase
             'types' => array_reduce([
                 'correction',
                 'editorial',
+                'expression-concern',
                 'feature',
                 'insight',
                 'research-advance',
