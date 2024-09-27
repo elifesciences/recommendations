@@ -33,7 +33,7 @@
     "require-dev": {
         "csa/guzzle-cache-middleware": "^1.0",
         "csa/guzzle-stopwatch-middleware": "^1.0",
-        "elife/api": "^2.26",
+        "elife/api": "^2.30",
         "elife/api-validator": "^1.0@dev",
         "justinrainbow/json-schema": "^5.2",
         "mindplay/composer-locator": "^2.1",

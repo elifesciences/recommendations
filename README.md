@@ -39,3 +39,19 @@ Run a smoke test:
 docker-compose up -d
 curl -v localhost:8080/ping
 ```
+
+## Dependencies
+
+To modify dependencies we need to use v1. To switch to v1 from v2 use the following commands:
+
+```
+composer --version
+composer self-update --1
+```
+
+To revert back to current version
+
+```
+composer self-update --rollback
+composer --version
+```
