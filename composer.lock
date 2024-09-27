@@ -294,12 +294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "901d8663ac1ef5dab5fb03a8025e743553140f71"
+                "reference": "fa98aa37bbe0ab28891de0a505aae7f54ae0bb30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/901d8663ac1ef5dab5fb03a8025e743553140f71",
-                "reference": "901d8663ac1ef5dab5fb03a8025e743553140f71",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/fa98aa37bbe0ab28891de0a505aae7f54ae0bb30",
+                "reference": "fa98aa37bbe0ab28891de0a505aae7f54ae0bb30",
                 "shasum": ""
             },
             "require": {
@@ -340,7 +340,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2024-09-23T10:31:58+00:00"
+            "time": "2024-09-27T09:14:39+00:00"
         },
         {
             "name": "elife/content-negotiator",
@@ -4481,20 +4481,6 @@
             "keywords": [
                 "phpcs",
                 "standards"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/PHPCSStandards",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/jrfnl",
-                    "type": "github"
-                },
-                {
-                    "url": "https://opencollective.com/php_codesniffer",
-                    "type": "open_collective"
-                }
             ],
             "time": "2020-10-23T02:01:07+00:00"
         },

@@ -109,15 +109,15 @@ abstract class ApiTestCase extends TestCase
                 "http://api.elifesciences.org/articles/$id",
                 [
                     'Accept' => implode(', ', [
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
-                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 7),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 4),
+                        (string) new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 8),
                     ]),
                 ]
             ),
             new Response(
                 200,
                 [
-                    'Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 3),
+                    'Content-Type' => (string) new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 4),
                 ],
                 json_encode($this->normalize($article, false))
             )
