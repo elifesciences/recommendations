@@ -24,18 +24,6 @@ elifePipeline {
     }
 
     elifeMainlineOnly {
-        stage 'End2end tests', {
-
-            elifeSpectrum(
-                deploy: [
-                    stackname: 'recommendations--end2end',
-                    revision: commit,
-                    folder: '/srv/recommendations'
-                ],
-                marker: 'recommendations'
-            )
-        }
-
         stage 'Deploy on continuumtest', {
             lock('recommendations--continuumtest') {
                 builderDeployRevision 'recommendations--continuumtest', commit
