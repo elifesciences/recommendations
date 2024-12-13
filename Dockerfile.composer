@@ -1,4 +1,4 @@
-FROM composer:2.2
+FROM composer:1.10
 
 ARG composer_dev_arg
 
