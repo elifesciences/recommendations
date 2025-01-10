@@ -2,6 +2,13 @@ version: '3'
 
 services:
     composer:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: composer
+            args:
+                php_version: ${PHP_VERSION}
+        command: /bin/bash
         volumes:
             - ./composer.json:/app/composer.json
             - ./composer.lock:/app/composer.lock
@@ -15,6 +22,7 @@ services:
             - vendor:/srv/recommendations/vendor
         environment:
             - APP_ENV=${APP_ENV}
-
+        depends_on:
+            - composer
 volumes:
     vendor:
