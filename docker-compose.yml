@@ -17,8 +17,10 @@ services:
                 php_version: ${PHP_VERSION}
         image: elifesciences/recommendations:${IMAGE_TAG}
         depends_on:
-            - composer
-            - api_dummy
+            composer:
+                condition: service_completed_successfully
+            api_dummy:
+                condition: service_healthy
     web:
         image: nginx:1.25.1-alpine
         volumes:
@@ -26,8 +28,14 @@ services:
         ports:
             - '8080:80'
         depends_on:
-            - fpm
+            fpm:
+                condition: service_healthy
     api_dummy:
         image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
         ports:
             - '${RECOMMENDATIONS_API_DUMMY_PORT}:8080'
+        healthcheck:
+            test: ["CMD-SHELL", "curl --silent --fail localhost:8080/articles || exit 1"]
+            interval: 2s
+            timeout: 2s
+            retries: 10
