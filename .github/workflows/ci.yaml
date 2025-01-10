@@ -48,7 +48,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: docker compose build .
+      - run: docker compose build fpm
         env:
             IMAGE_TAG: ${{ env.IMAGE_TAG }}
       - run: docker image ls
