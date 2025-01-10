@@ -15,6 +15,14 @@ services:
             - vendor:/srv/recommendations/vendor
         environment:
             - APP_ENV=${APP_ENV}
-
+        depends_on:
+            composer:
+                condition: service_completed_successfully
+            api_dummy:
+                condition: service_healthy
+    web:
+        depends_on:
+            fpm:
+                condition: service_healthy
 volumes:
     vendor:

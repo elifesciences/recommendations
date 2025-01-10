@@ -17,10 +17,8 @@ services:
                 php_version: ${PHP_VERSION}
         image: elifesciences/recommendations:${IMAGE_TAG}
         depends_on:
-            composer:
-                condition: service_completed_successfully
-            api_dummy:
-                condition: service_healthy
+            - composer
+            - api_dummy
     web:
         image: nginx:1.25.1-alpine
         volumes:
@@ -28,8 +26,7 @@ services:
         ports:
             - '8080:80'
         depends_on:
-            fpm:
-                condition: service_healthy
+            - fpm
     api_dummy:
         image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
         ports:

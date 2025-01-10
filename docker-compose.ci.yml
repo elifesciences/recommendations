@@ -23,7 +23,5 @@ services:
         environment:
             - APP_ENV=ci
         depends_on:
-            composer-dev:
-                condition: service_completed_successfully
-            fpm:
-                condition: service_healthy
+            - composer-dev
+            - fpm
