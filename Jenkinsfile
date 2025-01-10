@@ -8,8 +8,12 @@ elifePipeline {
 
     node('containers-jenkins-plugin') {
         stage 'Build image', {
-                checkout scm
-                dockerComposeBuild commit
+            checkout scm
+            commit = elifeGitRevision()
+            commitShort = elifeGitRevision().substring(0, 8)
+            branch = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+            timestamp = sh(script: 'date --utc +%Y%m%d.%H%M', returnStdout: true).trim()
+            dockerComposeBuild commit
         }
 
         stage 'Project tests', {
@@ -19,6 +23,7 @@ elifePipeline {
         elifeMainlineOnly {
             stage 'Push image', {
                 image = DockerImage.elifesciences(this, "recommendations", commit).push()
+                image.tag("${branch}-${commitShort}-${timestamp}").push()
             }
         }
     }
