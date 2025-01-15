@@ -1,7 +1,30 @@
-ARG image_tag=latest
 ARG php_version
-FROM elifesciences/recommendations_composer:${image_tag} AS composer
-FROM elifesciences/php_7.3_fpm:${php_version}
+
+
+
+# --- composer
+FROM composer:1.10 AS composer
+
+COPY composer.json \
+    composer.lock \
+    ./
+RUN composer --no-interaction install --no-dev --ignore-platform-reqs --no-autoloader --no-suggest --prefer-dist
+COPY src/ src/
+COPY test/ test/
+RUN composer --no-interaction dump-autoload --classmap-authoritative
+
+
+
+# --- composer_dev
+FROM composer AS composer_dev
+
+RUN composer --no-interaction install --ignore-platform-reqs --no-autoloader --no-suggest --prefer-dist
+RUN composer --no-interaction dump-autoload --classmap-authoritative
+
+
+
+# --- app
+FROM elifesciences/php_7.3_fpm:${php_version} AS app
 
 ENV PROJECT_FOLDER=/srv/recommendations
 ENV PHP_ENTRYPOINT=web/app.php
@@ -18,3 +41,33 @@ COPY --chown=elife:elife src/ src/
 
 USER www-data
 HEALTHCHECK --interval=10s --timeout=10s --retries=3 CMD assert_fpm /ping "pong"
+
+
+
+# --- ci
+FROM app AS ci
+
+USER root
+RUN mkdir -p build/ && \
+    touch .php_cs.cache && \
+    chown --recursive www-data:www-data build/ .php_cs.cache
+
+
+COPY --from=composer_dev /usr/bin/composer /usr/bin/composer
+
+COPY --chown=elife:elife \
+    phpunit.xml.dist \
+    phpcs.xml.dist \
+    project_tests.sh \
+    ./
+COPY --chown=elife:elife composer.json composer.lock ./
+COPY --from=composer_dev --chown=elife:elife /app/vendor/ vendor/
+COPY --chown=elife:elife test/ test/
+
+USER www-data
+CMD ["./project_tests.sh"]
+
+
+# --- default build target
+
+FROM app
