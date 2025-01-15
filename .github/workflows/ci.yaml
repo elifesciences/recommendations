@@ -48,18 +48,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: docker compose build
-        env:
-            IMAGE_TAG: ${{ env.IMAGE_TAG }}
-      - run: docker image ls
-      # - name: Build and push client image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     push: true
-      #     load: false
-      #     # Disabled until elifesciences/php or another image with ARM support can be used as a base
-      #     # platforms: linux/amd64,linux/arm64
-      #     target: app
-      #     tags: |
-      #       ${{ env.IMAGE_REPO }}:${{ github.sha }}
-      #       ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+      - name: Build and push client image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          load: false
+          # Disabled until elifesciences/php or another image with ARM support can be used as a base
+          # platforms: linux/amd64,linux/arm64
+          target: app
+          tags: |
+            ${{ env.IMAGE_REPO }}:${{ github.sha }}
+            ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
