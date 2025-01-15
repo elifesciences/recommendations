@@ -48,6 +48,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: get PHP_VERSION value
+        id: php_version
+        run: |
+            source .env
+            echo "php_version=$PHP_VERSION" | tee -a "$GITHUB_OUTPUT"
       - name: Build and push client image
         uses: docker/build-push-action@v6
         with:
@@ -56,6 +61,8 @@ jobs:
           # Disabled until elifesciences/php or another image with ARM support can be used as a base
           # platforms: linux/amd64,linux/arm64
           target: app
+          build-args: |
+            php_version=${{ steps.php_version.outputs.php_version }}
           tags: |
             ${{ env.IMAGE_REPO }}:${{ github.sha }}
             ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
