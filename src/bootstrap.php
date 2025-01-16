@@ -18,13 +18,16 @@ use eLife\ApiSdk\Model\ArticleHistory;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\HasPublishedDate;
+use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
+use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\Logging\Silex\LoggerProvider;
 use eLife\Ping\Silex\PingControllerProvider;
+use eLife\Recommendations\HttpClient as RecommendationsHttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use function GuzzleHttp\Promise\all;
@@ -106,6 +109,10 @@ if ($app['debug']) {
     });
 }
 
+$app->extend('elife.api_client', function (HttpClient $httpClient) use ($app) {
+    return new RecommendationsHttpClient($httpClient);
+});
+
 $app['elife.api_sdk'] = function () use ($app) {
     return new ApiSdk($app['elife.api_client']);
 };
@@ -132,33 +139,38 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $relations = $app['elife.api_sdk']->articles()
         ->getRelatedArticles($id)
-        ->sort(function (Article $a, Article $b) {
+        ->sort(function (Model $a, Model $b) {
+            $aType = $a instanceof ReviewedPreprint ? 'reviewed-preprint' : $a->getType();
+            $bType = $b instanceof ReviewedPreprint ? 'reviewed-preprint' : $b->getType();
+
             static $order = [
                 'retraction' => 1,
                 'correction' => 2,
-                'external-article' => 3,
-                'registered-report' => 4,
-                'replication-study' => 5,
-                'research-advance' => 6,
-                'scientific-correspondence' => 7,
-                'research-article' => 8,
-                'research-communication' => 8,
-                'tools-resources' => 9,
-                'feature' => 10,
-                'insight' => 11,
-                'editorial' => 12,
-                'short-report' => 13,
-                'review-article' => 14,
+                'expression-concern' => 3,
+                'external-article' => 4,
+                'registered-report' => 5,
+                'replication-study' => 6,
+                'research-advance' => 7,
+                'scientific-correspondence' => 8,
+                'research-article' => 9,
+                'research-communication' => 10,
+                'tools-resources' => 11,
+                'feature' => 12,
+                'insight' => 13,
+                'editorial' => 14,
+                'short-report' => 15,
+                'review-article' => 16,
+                'reviewed-preprint' => 17,
             ];
 
-            if ($order[$a->getType()] === $order[$b->getType()]) {
+            if ($order[$aType] === $order[$bType]) {
                 $aDate = $a instanceof HasPublishedDate ? $a->getPublishedDate() : new DateTimeImmutable('0000-00-00');
                 $bDate = $b instanceof HasPublishedDate ? $b->getPublishedDate() : new DateTimeImmutable('0000-00-00');
 
                 return $bDate <=> $aDate;
             }
 
-            return $order[$a->getType()] <=> $order[$b->getType()];
+            return $order[$aType] <=> $order[$bType];
         });
 
     $collections = $app['elife.api_sdk']->collections()
@@ -171,7 +183,9 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $mostRecentWithSubject = new PromiseSequence($article
         ->then(function (ArticleHistory $history) use ($app, $ignoreSelf) {
-            $article = $history->getVersions()[0];
+            $article = $history->getVersions()->filter(function ($version) {
+                return $version instanceof HasSubjects;
+            })->offsetGet(0);
 
             if ($article->getSubjects()->isEmpty()) {
                 return new EmptySequence();
@@ -221,6 +235,12 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
     $recommendations = $recommendations->append(...$podcastEpisodeChapters);
     if ($recommendations->count() < 3) {
         $recommendations = append_if_not_exists($recommendations, $mostRecentWithSubject, 3 - $recommendations->count());
+    }
+
+    foreach ($recommendations as $model) {
+        if ($model instanceof ReviewedPreprint && $type->getParameter('version') < 3) {
+            throw new HttpException(406, 'This recommendation requires version 3.');
+        }
     }
 
     $content = [
@@ -273,14 +293,20 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $headers = ['Content-Type' => $type->getNormalizedValue()];
 
+    $app['logger']->info('Calls made to ApiSdk: '.$app['elife.api_client']->count(), [
+        'count' => $app['elife.api_client']->count(),
+        'identifier' => $identifier->getType().'/'.$identifier->getId(),
+        'details' => $app['elife.api_client']->getDetails(),
+    ]);
+
     return new ApiResponse(
         $content,
         Response::HTTP_OK,
         $headers
     );
 })->before($app['negotiate.accept'](
-    'application/vnd.elife.recommendations+json; version=2',
-    'application/vnd.elife.recommendations+json; version=1'
+    'application/vnd.elife.recommendations+json; version=3',
+    'application/vnd.elife.recommendations+json; version=2'
 ));
 
 $app->after(function (Request $request, Response $response, Application $app) {
