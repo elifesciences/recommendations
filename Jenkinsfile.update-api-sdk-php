@@ -1,7 +1,0 @@
-elifeUpdatePipelineComposerPackage(
-    packageName: 'elife/api-sdk',
-    additionalPackageNames: ['elife/api', 'elife/api-client'],
-    stackname: 'recommendations--ci',
-    folder: '/srv/recommendations',
-    hostname: 'ci--recommendations.elife.internal'
-)
