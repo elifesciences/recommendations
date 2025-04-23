@@ -2,7 +2,6 @@
 
 namespace test\eLife\Recommendations;
 
-use ComposerLocator;
 use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\ArticlesClient;
@@ -45,7 +44,7 @@ abstract class ApiTestCase extends TestCase
     final public function setUpMock()
     {
         $this->validator = new JsonMessageValidator(
-            new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
+            new PathBasedSchemaFinder(\Composer\InstalledVersions::getInstallPath('elife/api').'/dist/model'),
             new Validator()
         );
         $this->storage = new ValidatingStorageAdapter(new InMemoryStorageAdapter(), $this->validator);

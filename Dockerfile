@@ -1,5 +1,5 @@
 # --- composer
-FROM composer:1.10 AS composer
+FROM composer:2.2 AS composer
 
 COPY composer.json \
     composer.lock \
