@@ -437,4 +437,11 @@ final class RecommendationsTest extends WebTestCase
         $this->assertJsonStringEqualsJson(['title' => 'article/1234 does not exist', 'type' => 'about:blank'], $response->getContent());
         $this->assertFalse($client->getResponse()->isCacheable());
     }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_500_if_an_api_fails()
+    {
+    }
 }
