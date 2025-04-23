@@ -10,13 +10,11 @@ COPY test/ test/
 RUN composer --no-interaction dump-autoload --classmap-authoritative
 
 
-
 # --- composer_dev
 FROM composer AS composer_dev
 
 RUN composer --no-interaction install --ignore-platform-reqs --no-autoloader --no-suggest --prefer-dist
 RUN composer --no-interaction dump-autoload --classmap-authoritative
-
 
 
 # --- app
@@ -38,6 +36,10 @@ COPY --chown=elife:elife src/ src/
 USER www-data
 HEALTHCHECK --interval=10s --timeout=10s --retries=3 CMD assert_fpm /ping "pong"
 
+# --- dev
+FROM app AS dev
+
+COPY --from=composer_dev --chown=elife:elife /app/vendor/ vendor/
 
 
 # --- ci

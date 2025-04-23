@@ -5,13 +5,15 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-            target: composer
+            target: composer_dev
         command: /bin/bash
         volumes:
             - ./composer.json:/app/composer.json
             - ./composer.lock:/app/composer.lock
             - vendor:/app/vendor
     fpm:
+        build:
+            target: dev
         volumes:
             - ./:/srv/recommendations
             - /srv/recommendations/build
