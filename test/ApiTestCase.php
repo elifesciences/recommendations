@@ -76,6 +76,24 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
+    final protected function mockTimeout(string $uri, array $headers = [])
+    {
+        $this->storage->save(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/$uri",
+                $headers
+            ),
+            new Response(
+                504,
+                ['Content-Type' => 'application/problem+json'],
+                json_encode([
+                    'title' => 'Gateway timeout',
+                ])
+            )
+        );
+    }
+
     final protected function mockArticleVersionsCall(string $id, array $versions)
     {
         $response = new Response(
