@@ -1,7 +1,3 @@
-ARG php_version
-
-
-
 # --- composer
 FROM composer:1.10 AS composer
 
@@ -24,7 +20,7 @@ RUN composer --no-interaction dump-autoload --classmap-authoritative
 
 
 # --- app
-FROM elifesciences/php_7.3_fpm:${php_version} AS app
+FROM ghcr.io/elifesciences/php:7.3-fpm AS app
 
 ENV PROJECT_FOLDER=/srv/recommendations
 ENV PHP_ENTRYPOINT=web/app.php

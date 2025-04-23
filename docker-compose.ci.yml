@@ -6,8 +6,6 @@ services:
             context: .
             dockerfile: Dockerfile
             target: ci
-            args:
-                php_version: ${PHP_VERSION}
         image: elifesciences/recommendations_ci:${IMAGE_TAG}
         environment:
             - APP_ENV=ci

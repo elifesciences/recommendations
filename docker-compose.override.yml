@@ -6,8 +6,6 @@ services:
             context: .
             dockerfile: Dockerfile
             target: composer
-            args:
-                php_version: ${PHP_VERSION}
         command: /bin/bash
         volumes:
             - ./composer.json:/app/composer.json

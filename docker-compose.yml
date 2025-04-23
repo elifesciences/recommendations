@@ -4,8 +4,6 @@ services:
     fpm:
         build:
             context: .
-            args:
-                php_version: ${PHP_VERSION}
             target: app
         image: elifesciences/recommendations:${IMAGE_TAG}
         depends_on:
@@ -19,6 +17,7 @@ services:
         depends_on:
             - fpm
     api_dummy:
-        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+        image: ghcr.io/elifesciences/api-dummy:20250326145633.0.0-ga75acee-14086465281-1
+        platform: "linux/amd64"
         ports:
             - '${RECOMMENDATIONS_API_DUMMY_PORT}:8080'
