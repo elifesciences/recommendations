@@ -16,7 +16,7 @@
         }
     },
     "require": {
-        "elife/api-client": "dev-master",
+        "elife/api-client": "^1.0",
         "elife/api-problem": "^1.1",
         "elife/api-sdk": "dev-master",
         "elife/content-negotiator": "^1.0",
