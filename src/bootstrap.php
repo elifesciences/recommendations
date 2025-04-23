@@ -135,9 +135,11 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
     $page = $request->query->get('page', 1);
     $perPage = $request->query->get('per-page', 20);
 
-    $article = $app['elife.api_sdk']->articles()->getHistory($id);
+    /** @var ApiSdk $appSdk  */
+    $appSdk = $app['elife.api_sdk'];
+    $article =  $appSdk->articles()->getHistory($id);
 
-    $relations = $app['elife.api_sdk']->articles()
+    $relations = $appSdk->articles()
         ->getRelatedArticles($id)
         ->sort(function (Model $a, Model $b) {
             $aType = $a instanceof ReviewedPreprint ? 'reviewed-preprint' : $a->getType();
@@ -173,7 +175,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
             return $order[$aType] <=> $order[$bType];
         });
 
-    $collections = $app['elife.api_sdk']->collections()
+    $collections = $appSdk->collections()
         ->containing(Identifier::article($id))
         ->slice(0, 100);
 
@@ -193,7 +195,9 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
             $subject = $article->getSubjects()[0];
 
-            return $app['elife.api_sdk']->search()
+            /** @var ApiSdk $appSdk  */
+            $appSdk = $app['elife.api_sdk'];
+            return $appSdk->search()
                 ->forType('editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources')
                 ->sortBy('date')
                 ->forSubject($subject->getId())
@@ -201,7 +205,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
                 ->filter($ignoreSelf);
         }));
 
-    $podcastEpisodeChapters = $app['elife.api_sdk']->podcastEpisodes()
+    $podcastEpisodeChapters = $appSdk->podcastEpisodes()
         ->containing(Identifier::article($id))
         ->slice(0, 100)
         ->reduce(function (Sequence $chapters, PodcastEpisode $episode) use ($id) {
