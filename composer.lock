@@ -392,16 +392,16 @@
         },
         {
             "name": "elife/content-negotiator",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/content-negotiator-php.git",
-                "reference": "f3dbb874f0ce51cf357174624dd20f7f215acff9"
+                "reference": "a9afdce22858bc4dab5270a4983b022d6376d910"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/content-negotiator-php/zipball/f3dbb874f0ce51cf357174624dd20f7f215acff9",
-                "reference": "f3dbb874f0ce51cf357174624dd20f7f215acff9",
+                "url": "https://api.github.com/repos/elifesciences/content-negotiator-php/zipball/a9afdce22858bc4dab5270a4983b022d6376d910",
+                "reference": "a9afdce22858bc4dab5270a4983b022d6376d910",
                 "shasum": ""
             },
             "require": {
@@ -443,9 +443,9 @@
             "description": "eLife Sciences content negotiator",
             "support": {
                 "issues": "https://github.com/elifesciences/content-negotiator-php/issues",
-                "source": "https://github.com/elifesciences/content-negotiator-php/tree/v1.2.0"
+                "source": "https://github.com/elifesciences/content-negotiator-php/tree/v1.2.1"
             },
-            "time": "2024-12-16T10:51:52+00:00"
+            "time": "2025-04-24T05:54:37+00:00"
         },
         {
             "name": "elife/logging-sdk",
@@ -5806,15 +5806,15 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "elife/api-sdk": 20,
-        "elife/logging-sdk": 20,
-        "elife/api-validator": 20
+        "elife/api-validator": 20,
+        "elife/logging-sdk": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "platform-overrides": {
         "php": "7.3.33"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }
