@@ -4,10 +4,10 @@ namespace test\eLife\Recommendations;
 
 use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use DateTimeImmutable;
-use eLife\ApiClient\ApiClient\ArticlesClient;
-use eLife\ApiClient\ApiClient\CollectionsClient;
-use eLife\ApiClient\ApiClient\PodcastClient;
-use eLife\ApiClient\ApiClient\SearchClient;
+use eLife\ApiSdk\ApiClient\ArticlesClient;
+use eLife\ApiSdk\ApiClient\CollectionsClient;
+use eLife\ApiSdk\ApiClient\PodcastClient;
+use eLife\ApiSdk\ApiClient\SearchClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\Collection;
