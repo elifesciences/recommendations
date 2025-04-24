@@ -437,4 +437,27 @@ final class RecommendationsTest extends WebTestCase
         $this->assertJsonStringEqualsJson(['title' => 'article/1234 does not exist', 'type' => 'about:blank'], $response->getContent());
         $this->assertFalse($client->getResponse()->isCacheable());
     }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_500_if_an_api_fails()
+    {
+        $client = static::createClient();
+
+        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
+        $this->mockRelatedArticlesCall('1234', []);
+        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
+        $types = ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'];
+        $typesQuery = implode('', array_map(function (string $type) {
+            return "&type[]=$type";
+        }, $types));
+        $this->mockTimeout("search?for=&page=1&per-page=5&sort=date&order=desc&subject[]=subject2$typesQuery&use-date=default", ['Accept' => 'application/vnd.elife.search+json; version=2']);
+
+        $client->request('GET', '/recommendations/article/1234');
+        $response = $client->getResponse();
+
+        $this->assertSame(500, $response->getStatusCode());
+    }
 }
