@@ -27,7 +27,7 @@
         "psr/log": "^1.0",
         "silex/silex": "^2.2",
         "symfony/http-foundation": "^3.3",
-        "symfony/http-kernel": "^3.3",
+        "symfony/http-kernel": "^4.0",
         "willdurand/negotiation": "^3.1"
     },
     "require-dev": {
