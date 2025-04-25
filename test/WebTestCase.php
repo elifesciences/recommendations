@@ -2,13 +2,12 @@
 
 namespace test\eLife\Recommendations;
 
-use Symfony\Component\BrowserKit\Client;
-use Symfony\Component\HttpKernel\Client as KernelClient;
+use Symfony\Component\HttpKernel\HttpKernelBrowser;
 
 abstract class WebTestCase extends ApplicationTestCase
 {
-    final protected function createClient() : Client
+    final protected function createClient() : HttpKernelBrowser
     {
-        return new KernelClient($this->getApp());
+        return new HttpKernelBrowser($this->getApp());
     }
 }
