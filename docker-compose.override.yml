@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
     composer:
         build:
@@ -23,6 +21,7 @@ services:
         environment:
             - APP_ENV=${APP_ENV}
         depends_on:
-            - composer
+            composer:
+                condition: service_completed_successfully
 volumes:
     vendor:
