@@ -183,28 +183,6 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
         return $article->getId() !== $id;
     };
 
-    $mostRecentWithSubject = new PromiseSequence($article
-        ->then(function (ArticleHistory $history) use ($app, $ignoreSelf) {
-            $article = $history->getVersions()->filter(function ($version) {
-                return $version instanceof HasSubjects;
-            })->offsetGet(0);
-
-            if ($article->getSubjects()->isEmpty()) {
-                return new EmptySequence();
-            }
-
-            $subject = $article->getSubjects()[0];
-
-            /** @var ApiSdk $appSdk  */
-            $appSdk = $app['elife.api_sdk'];
-            return $appSdk->search()
-                ->forType('editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources')
-                ->sortBy('date')
-                ->forSubject($subject->getId())
-                ->slice(0, 5)
-                ->filter($ignoreSelf);
-        }));
-
     $podcastEpisodeChapters = $appSdk->podcastEpisodes()
         ->containing(Identifier::article($id))
         ->slice(0, 100)
@@ -224,7 +202,7 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
     $recommendations = $relations;
 
     try {
-        all([$article, $relations, $collections, $podcastEpisodeChapters, $mostRecentWithSubject])->wait();
+        all([$article, $relations, $collections, $podcastEpisodeChapters])->wait();
     } catch (BadResponse $e) {
         switch ($e->getResponse()->getStatusCode()) {
             case Response::HTTP_GONE:
@@ -237,9 +215,6 @@ $app->get('/recommendations/{contentType}/{id}', function (Request $request, Acc
 
     $recommendations = $recommendations->append(...$collections);
     $recommendations = $recommendations->append(...$podcastEpisodeChapters);
-    if ($recommendations->count() < 3) {
-        $recommendations = append_if_not_exists($recommendations, $mostRecentWithSubject, 3 - $recommendations->count());
-    }
 
     foreach ($recommendations as $model) {
         if ($model instanceof ReviewedPreprint && $type->getParameter('version') < 3) {

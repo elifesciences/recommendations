@@ -180,148 +180,6 @@ final class RecommendationsTest extends WebTestCase
     /**
      * @test
      */
-    public function it_returns_3_most_recent_articles_with_first_subject_recommendations_for_an_article()
-    {
-        $client = static::createClient();
-
-        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
-        $this->mockRelatedArticlesCall('1234', []);
-        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
-        $this->MockArticlePoACall('1235', $insight = $this->createArticlePoA('1235', 'insight', [], null, false));
-        $this->MockArticlePoACall('1236', $shortReport = $this->createArticlePoA('1236', 'short-report', [], null, false));
-        $this->MockArticlePoACall('1237', $researchArticle = $this->createArticlePoA('1237', 'research-article', [], null, false));
-
-        $client->request('GET', '/recommendations/article/1234');
-        $response = $client->getResponse();
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
-        $this->assertResponseIsValid($response);
-        $this->assertJsonStringEqualsJson(
-            [
-                'total' => 3,
-                'items' => array_map([$this, 'normalize'], [$insight, $shortReport, $researchArticle]),
-            ],
-            $response->getContent()
-        );
-        $this->assertTrue($response->isCacheable());
-    }
-
-    /**
-     * @test
-     */
-    public function it_returns_fewer_recent_articles_with_first_subject_recommendations_if_there_are_already_some()
-    {
-        $client = static::createClient();
-
-        $episode1Chapter1 = $this->createPodcastEpisodeChapter(1, [$this->createArticlePoA('1234'), $this->createArticlePoA('1235')]);
-        $episode1 = $this->createPodcastEpisode(1, [$episode1Chapter1]);
-
-        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
-        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report')]);
-        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockPodcastEpisodeCall($episode1);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
-        $this->MockArticlePoACall('1235', $insight = $this->createArticlePoA('1235', 'insight', [], null, false));
-        $this->MockArticlePoACall('1236', $shortReport = $this->createArticlePoA('1236', 'short-report', [], null, false));
-        $this->MockArticlePoACall('1238', $researchArticle = $this->createArticlePoA('1238', 'research-article', [], null, false));
-
-        $client->request('GET', '/recommendations/article/1234');
-        $response = $client->getResponse();
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
-        $this->assertResponseIsValid($response);
-        $this->assertJsonStringEqualsJson(
-            [
-                'total' => 3,
-                'items' => array_map([$this, 'normalize'], [
-                    $insight, // from related articles
-                    $shortReport, // from related articles
-                    $researchArticle, // from subject
-                ]),
-            ],
-            $response->getContent()
-        );
-        $this->assertTrue($response->isCacheable());
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_return_any_recent_articles_with_first_subject_recommendations_if_there_are_already_three()
-    {
-        $client = static::createClient();
-
-        $episode1Chapter1 = $this->createPodcastEpisodeChapter(1, [$this->createArticlePoA('1234'), $this->createArticlePoA('1235')]);
-        $episode1 = $this->createPodcastEpisode(1, [$episode1Chapter1]);
-
-        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
-        $this->mockRelatedArticlesCall('1234', [$this->createArticlePoA('1235', 'insight')]);
-        $this->mockCollectionsCall(1, [$this->createCollection('1234')], 1, 100, [Identifier::article('1234')]);
-        $this->mockPodcastEpisodesCall(1, [$episode1], 1, 100, [Identifier::article('1234')]);
-        $this->mockPodcastEpisodeCall($episode1);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
-        $this->MockArticlePoACall('1235', $insight = $this->createArticlePoA('1235', 'insight', [], null, false));
-
-        $client->request('GET', '/recommendations/article/1234');
-        $response = $client->getResponse();
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
-        $this->assertResponseIsValid($response);
-        $this->assertJsonStringEqualsJson(
-            [
-                'total' => 3,
-                'items' => [
-                    $this->normalize($insight),
-                    $this->normalize($this->createCollection('1234')),
-                    $this->normalize(new PodcastEpisodeChapterModel($episode1, $episode1->getChapters()[0])),
-                ],
-            ],
-            $response->getContent()
-        );
-        $this->assertTrue($response->isCacheable());
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_recommend_itself()
-    {
-        $client = static::createClient();
-
-        $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
-        $this->mockRelatedArticlesCall('1234', []);
-        $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockSearchCall(1, [$this->createArticlePoA('1234', 'research-article'), $this->createArticlePoA('1235', 'insight')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
-        $this->MockArticlePoACall('1235', $insight = $this->createArticlePoA('1235', 'insight', [], null, false));
-
-        $client->request('GET', '/recommendations/article/1234');
-        $response = $client->getResponse();
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('application/vnd.elife.recommendations+json; version=3', $response->headers->get('Content-Type'));
-        $this->assertResponseIsValid($response);
-        $this->assertJsonStringEqualsJson(
-            [
-                'total' => 1,
-                'items' => [
-                    $this->normalize($insight),
-                ],
-            ],
-            $response->getContent()
-        );
-        $this->assertTrue($response->isCacheable());
-    }
-
-    /**
-     * @test
-     */
     public function it_does_not_duplicate_recommendations_for_an_article()
     {
         $client = static::createClient();
@@ -339,7 +197,6 @@ final class RecommendationsTest extends WebTestCase
         $this->mockPodcastEpisodesCall(0, [$episode2, $episode1], 1, 100, [Identifier::article('1234')]);
         $this->mockPodcastEpisodeCall($episode1);
         $this->mockPodcastEpisodeCall($episode2);
-        $this->mockSearchCall(0, [$this->createArticlePoA('1235', 'insight'), $this->createArticlePoA('1236', 'short-report'), $this->createArticlePoA('1238', 'research-article'), $this->createArticlePoA('1237', 'research-article')], 1, 5, ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'], ['subject2']);
         $this->MockArticlePoACall('1235', $insight = $this->createArticlePoA('1235', 'insight', [], null, false));
         $this->MockArticlePoACall('1236', $shortReport = $this->createArticlePoA('1236', 'short-report', [], null, false));
         $this->MockArticlePoACall('1237', $researchArticle = $this->createArticlePoA('1237', 'research-article', [], null, false));
@@ -448,12 +305,7 @@ final class RecommendationsTest extends WebTestCase
         $this->mockArticleVersionsCall('1234', [$this->createArticlePoA('1234', 'research-article', ['subject2', 'subject1'])]);
         $this->mockRelatedArticlesCall('1234', []);
         $this->mockCollectionsCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $this->mockPodcastEpisodesCall(0, [], 1, 100, [Identifier::article('1234')]);
-        $types = ['editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-communication', 'registered-report', 'replication-study', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources'];
-        $typesQuery = implode('', array_map(function (string $type) {
-            return "&type[]=$type";
-        }, $types));
-        $this->mockTimeout("search?for=&page=1&per-page=5&sort=date&order=desc&subject[]=subject2$typesQuery&use-date=default", ['Accept' => 'application/vnd.elife.search+json; version=2']);
+        $this->mockTimeout("podcast-episodes?page=1&per-page=100&order=desc&containing[]=article/1234", ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']);
 
         $client->request('GET', '/recommendations/article/1234');
         $response = $client->getResponse();
