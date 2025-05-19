@@ -1,6 +1,8 @@
 {
 	# Enable FrankenPHP
-	frankenphp
+	frankenphp {
+	    max_threads auto
+	}
 }
 
 :80 {
@@ -11,6 +13,7 @@
 	root web/
 
 	php_server {
+	    file_server off
 		try_files app_prod.php
 	}
 }

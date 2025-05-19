@@ -13,11 +13,11 @@ services:
         build:
             target: dev
         volumes:
-            - ./:/srv/recommendations
-            - /srv/recommendations/build
-            - /srv/recommendations/var
-            - .docker/config.php:/srv/recommendations/config.php
-            - vendor:/srv/recommendations/vendor
+            - ./:/app
+            - /app/build
+            - /app/var
+            - .docker/config.php:/app/config.php
+            - vendor:/app/vendor
         environment:
             - APP_ENV=${APP_ENV}
         depends_on:
