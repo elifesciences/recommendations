@@ -18,7 +18,7 @@ RUN composer --no-interaction dump-autoload --classmap-authoritative
 
 
 # --- app
-FROM ghcr.io/elifesciences/php:8.3-fpm AS app
+FROM ghcr.io/elifesciences/php:8.4-fpm AS app
 
 ENV PROJECT_FOLDER=/srv/recommendations
 ENV PHP_ENTRYPOINT=web/app.php
