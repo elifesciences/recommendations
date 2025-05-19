@@ -1,0 +1,16 @@
+{
+	# Enable FrankenPHP
+	frankenphp
+}
+
+localhost:80 {
+	log
+
+	encode zstd br gzip
+
+	root web/
+
+	php_server {
+		try_files app_prod.php
+	}
+}

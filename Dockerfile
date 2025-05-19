@@ -18,34 +18,29 @@ RUN composer --no-interaction dump-autoload --classmap-authoritative
 
 
 # --- app
-FROM ghcr.io/elifesciences/php:8.3-fpm AS app
+FROM dunglas/frankenphp:1.6.0-php8.3.21-bookworm AS app
 
-ENV PROJECT_FOLDER=/srv/recommendations
-ENV PHP_ENTRYPOINT=web/app.php
-WORKDIR ${PROJECT_FOLDER}
-
-USER root
 RUN mkdir -p build var && \
-    chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var
 
-COPY --chown=elife:elife web/ web/
-COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
-COPY --chown=elife:elife src/ src/
+COPY web/ web/
+COPY --from=composer /app/vendor/ vendor/
+COPY src/ src/
 
-USER www-data
-HEALTHCHECK --interval=10s --timeout=10s --retries=3 CMD assert_fpm /ping "pong"
+COPY Caddyfile /etc/frankenphp/Caddyfile
+RUN cp $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
+
+HEALTHCHECK --interval=10s --timeout=10s --retries=3 CMD bash -c '[[ "$(curl -k -s http://localhost/ping)" == "pong" ]]'
 
 # --- dev
 FROM app AS dev
 
-COPY --from=composer_dev --chown=elife:elife /app/vendor/ vendor/
+COPY --from=composer_dev /app/vendor/ vendor/
 
 
 # --- ci
 FROM app AS ci
 
-USER root
 RUN mkdir -p build/ && \
     touch .php_cs.cache && \
     chown --recursive www-data:www-data build/ .php_cs.cache
@@ -53,14 +48,14 @@ RUN mkdir -p build/ && \
 
 COPY --from=composer_dev /usr/bin/composer /usr/bin/composer
 
-COPY --chown=elife:elife \
+COPY \
     phpunit.xml.dist \
     phpcs.xml.dist \
     project_tests.sh \
     ./
-COPY --chown=elife:elife composer.json composer.lock ./
-COPY --from=composer_dev --chown=elife:elife /app/vendor/ vendor/
-COPY --chown=elife:elife test/ test/
+COPY composer.json composer.lock ./
+COPY --from=composer_dev /app/vendor/ vendor/
+COPY test/ test/
 
 USER www-data
 CMD ["./project_tests.sh"]
