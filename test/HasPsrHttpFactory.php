@@ -7,7 +7,7 @@ use Nyholm\Psr7;
 
 trait HasPsrHttpFactory
 {
-    final private function getPsrHttpFactory() : PsrHttpFactory
+    private function getPsrHttpFactory() : PsrHttpFactory
     {
         $nyholmPsrFactory = new Psr7\Factory\Psr17Factory();
         return new PsrHttpFactory(
