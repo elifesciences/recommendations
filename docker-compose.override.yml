@@ -9,7 +9,7 @@ services:
             - ./composer.json:/app/composer.json
             - ./composer.lock:/app/composer.lock
             - vendor:/app/vendor
-    fpm:
+    app:
         build:
             target: dev
         volumes:

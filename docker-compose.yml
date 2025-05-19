@@ -1,20 +1,13 @@
 services:
-    fpm:
+    app:
         build:
             context: .
             target: app
         image: elifesciences/recommendations:${IMAGE_TAG}
-        depends_on:
-            api_dummy:
-                condition: service_healthy
-    web:
-        image: nginx:1.28.0-alpine
-        volumes:
-            - ./.docker/nginx-default.conf:/etc/nginx/conf.d/default.conf
         ports:
             - '8080:80'
         depends_on:
-            fpm:
+            api_dummy:
                 condition: service_healthy
     api_dummy:
         image: ghcr.io/elifesciences/api-dummy:20250326145633.0.0-ga75acee-14086465281-1
