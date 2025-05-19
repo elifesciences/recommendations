@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 abstract class ApiTestCase extends TestCase
 {
-    use HasDiactorosFactory;
+    use HasPsrHttpFactory;
 
     /** @var InMemoryStorageAdapter */
     private $storage;
@@ -447,7 +447,7 @@ abstract class ApiTestCase extends TestCase
 
     final protected function assertResponseIsValid(HttpFoundationResponse $response)
     {
-        $this->assertMessageIsValid($this->getDiactorosFactory()->createResponse($response));
+        $this->assertMessageIsValid($this->getPsrHttpFactory()->createResponse($response));
     }
 
     final protected function assertMessageIsValid(MessageInterface $message)
