@@ -1,19 +1,18 @@
 {
 	# Enable FrankenPHP
 	frankenphp {
-	    max_threads auto
+		max_threads auto
+		worker ./web/worker.php 5
 	}
 }
 
-:80 {
+:8080 {
 	log
 
 	encode zstd br gzip
 
-	root web/
-
 	php_server {
-	    file_server off
-		try_files app_prod.php
+		file_server off
+		root ./web
 	}
 }
