@@ -14,9 +14,7 @@ $app = require __DIR__.'/../src/bootstrap.php';
 $handler = static function () use ($app) {
     // Called when a request is received,
     // superglobals, php://input and the like are reset
-    var_dump($_SERVER);
-    // $app->run();
-    // echo "boo";
+    $app->run();
 };
 
 $maxRequests = (int)($_SERVER['MAX_REQUESTS'] ?? 0);
