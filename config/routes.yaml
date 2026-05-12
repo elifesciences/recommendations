@@ -1,0 +1,9 @@
+ping:
+    path: /ping
+    controller: eLife\Ping\PingController::pingAction
+    methods: [GET, HEAD]
+
+recommendations:
+    path: /recommendations/{contentType}/{id}
+    controller: eLife\Recommendations\Controller\RecommendationsController::__invoke
+    methods: [GET]

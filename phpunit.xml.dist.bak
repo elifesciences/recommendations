@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="vendor/autoload.php">
+  <coverage>
+    <include>
+      <directory>src</directory>
+    </include>
+  </coverage>
   <testsuites>
     <testsuite name="eLife Recommendations">
       <directory>test</directory>
@@ -13,9 +18,4 @@
     <env name="API_TIMEOUT" value="1"/>
     <env name="DEFAULT_URI" value="http://localhost"/>
   </php>
-  <source>
-    <include>
-      <directory>src</directory>
-    </include>
-  </source>
 </phpunit>

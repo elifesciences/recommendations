@@ -3,36 +3,13 @@
 namespace test\eLife\Recommendations;
 
 use eLife\ApiSdk\ApiSdk;
-use GuzzleHttp\HandlerStack;
 use function GuzzleHttp\json_encode;
-use Silex\Application;
 
 abstract class ApplicationTestCase extends ApiTestCase
 {
-    private $app;
-
-    /**
-     * @before
-     */
-    final public function setUpApp()
+    final protected function getApiSdk(): ApiSdk
     {
-        $this->app = require __DIR__.'/../src/bootstrap.php';
-        $this->app['api.uri'] = 'http://api.elifesciences.org/';
-        $this->app->extend('elife.guzzle_client.handler', function (HandlerStack $stack) {
-            $stack->push($this->getMock());
-
-            return $stack;
-        });
-    }
-
-    final protected function getApp() : Application
-    {
-        return $this->app;
-    }
-
-    final protected function getApiSdk() : ApiSdk
-    {
-        return $this->app['elife.api_sdk'];
+        return static::getContainer()->get(ApiSdk::class);
     }
 
     final protected function assertJsonStringEqualsJson(array $expectedJson, string $actualJson, $message = '')

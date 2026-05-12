@@ -2,8 +2,6 @@
 
 namespace test\eLife\Recommendations;
 
-use Csa\GuzzleHttp\Middleware\Cache\Adapter\StorageAdapterInterface;
-use Csa\GuzzleHttp\Middleware\Cache\CacheMiddleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -13,10 +11,10 @@ final class InMemoryStorageAdapter implements StorageAdapterInterface
     private $requestHeadersBlacklist = [
         'User-Agent',
         'Host',
-        CacheMiddleware::DEBUG_HEADER,
+        'X-Guzzle-Cache',
     ];
     private $responseHeadersBlacklist = [
-        CacheMiddleware::DEBUG_HEADER,
+        'X-Guzzle-Cache',
     ];
 
     public function __construct(array $requestHeadersBlacklist = [], array $responseHeadersBlacklist = [])
@@ -29,7 +27,7 @@ final class InMemoryStorageAdapter implements StorageAdapterInterface
         }
     }
 
-    public function fetch(RequestInterface $request)
+    public function fetch(RequestInterface $request): ?ResponseInterface
     {
         $key = $this->getKey($request);
 
@@ -40,7 +38,7 @@ final class InMemoryStorageAdapter implements StorageAdapterInterface
         return $this->array[$key];
     }
 
-    public function save(RequestInterface $request, ResponseInterface $response)
+    public function save(RequestInterface $request, ResponseInterface $response): void
     {
         $key = $this->getKey($request);
 

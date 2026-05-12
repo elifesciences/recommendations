@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+parameters:
+    app.api_uri: '%env(string:API_URI)%'
+    app.api_timeout: '%env(float:API_TIMEOUT)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/Kernel.php'
+
+    eLife\Recommendations\:
+        resource: '../src/'
+        exclude: '../src/{Kernel.php,bootstrap.php,functions.php,ApiResponse.php}'
+
+    eLife\Ping\PingController:
+        tags: ['controller.service_arguments']
+
+    eLife\Recommendations\Controller\RecommendationsController:
+        arguments:
+            $logger: '@elife.logger'
+
+    GuzzleHttp\HandlerStack:
+        factory: ['GuzzleHttp\HandlerStack', 'create']
+        public: true
+
+    GuzzleHttp\Client:
+        arguments:
+            $config:
+                base_uri: '%app.api_uri%'
+                connect_timeout: 0.5
+                handler: '@GuzzleHttp\HandlerStack'
+                timeout: '%app.api_timeout%'
+
+    eLife\ApiClient\HttpClient\Guzzle6HttpClient:
+        arguments:
+            - '@GuzzleHttp\Client'
+
+    eLife\ApiClient\HttpClient: '@eLife\ApiClient\HttpClient\Guzzle6HttpClient'
+
+    eLife\ApiSdk\ApiSdk:
+        arguments:
+            - '@eLife\Recommendations\HttpClient'
+        public: true
+
+    Negotiation\Negotiator: ~
+
+    eLife\ContentNegotiator\ContentNegotiator:
+        arguments:
+            - '@Negotiation\Negotiator'
+            - 'Accept'
+            - '_accept'

@@ -2,11 +2,11 @@
 
 namespace test\eLife\Recommendations;
 
+use PHPUnit\Framework\Attributes\Test;
+
 final class PingTest extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_200_pong_when_the_application_is_correctly_setup()
     {
         $client = static::createClient();

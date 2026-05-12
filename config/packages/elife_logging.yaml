@@ -1,0 +1,4 @@
+elife_logging:
+    path: '%kernel.logs_dir%'
+    channel: 'recommendations'
+    level: 'info'

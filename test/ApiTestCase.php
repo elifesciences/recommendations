@@ -2,7 +2,6 @@
 
 namespace test\eLife\Recommendations;
 
-use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use DateTimeImmutable;
 use eLife\ApiSdk\ApiClient\ArticlesClient;
 use eLife\ApiSdk\ApiClient\CollectionsClient;
@@ -17,15 +16,16 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
+use PHPUnit\Framework\Attributes\Before as Before;
 use function GuzzleHttp\json_encode;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use JsonSchema\Validator;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
-abstract class ApiTestCase extends TestCase
+abstract class ApiTestCase extends KernelTestCase
 {
     use HasPsrHttpFactory;
 
@@ -38,9 +38,7 @@ abstract class ApiTestCase extends TestCase
     /** @var JsonMessageValidator */
     private $validator;
 
-    /**
-     * @before
-     */
+    #[Before]
     final public function setUpMock()
     {
         $this->validator = new JsonMessageValidator(

@@ -2,7 +2,6 @@
 
 namespace test\eLife\Recommendations;
 
-use Csa\GuzzleHttp\Middleware\Cache\Adapter\StorageAdapterInterface;
 use eLife\ApiValidator\Exception\InvalidMessage;
 use eLife\ApiValidator\MessageValidator;
 use function GuzzleHttp\json_decode;
@@ -23,12 +22,12 @@ final class ValidatingStorageAdapter implements StorageAdapterInterface
         $this->validator = $validator;
     }
 
-    public function fetch(RequestInterface $request)
+    public function fetch(RequestInterface $request): ?ResponseInterface
     {
         return $this->storageAdapter->fetch($request);
     }
 
-    public function save(RequestInterface $request, ResponseInterface $response)
+    public function save(RequestInterface $request, ResponseInterface $response): void
     {
         try {
             $this->validator->validate($request);

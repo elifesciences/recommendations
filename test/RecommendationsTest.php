@@ -5,14 +5,15 @@ namespace test\eLife\Recommendations;
 use DateTimeImmutable;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class RecommendationsTest extends WebTestCase
 {
-    /**
-     * @test
-     * @dataProvider typeProvider
-     */
+
+    #[Test]
+    #[DataProvider('typeProvider')]
     public function it_negotiates_type(string $type, int $statusCode)
     {
         $client = static::createClient();
@@ -27,7 +28,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertSame($statusCode, $response->getStatusCode());
     }
 
-    public function typeProvider() : Traversable
+    public static function typeProvider() : Traversable
     {
         $types = [
             'application/vnd.elife.recommendations+json' => 200,
@@ -44,9 +45,7 @@ final class RecommendationsTest extends WebTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_empty_recommendations_for_an_article()
     {
         $client = static::createClient();
@@ -66,9 +65,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertTrue($response->isCacheable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_order_related_article_recommendations_for_an_article()
     {
         $client = static::createClient();
@@ -111,9 +108,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertTrue($response->isCacheable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_collection_recommendations_for_an_article()
     {
         $client = static::createClient();
@@ -142,9 +137,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertTrue($response->isCacheable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_podcast_episode_chapter_recommendations_for_an_article()
     {
         $client = static::createClient();
@@ -177,9 +170,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertTrue($response->isCacheable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_duplicate_recommendations_for_an_article()
     {
         $client = static::createClient();
@@ -226,10 +217,8 @@ final class RecommendationsTest extends WebTestCase
         $this->assertTrue($response->isCacheable());
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_returns_a_404_for_an_invalid_page(string $page)
     {
         $client = static::createClient();
@@ -249,16 +238,14 @@ final class RecommendationsTest extends WebTestCase
         $this->assertFalse($response->isCacheable());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', '2', 'foo'] as $page) {
             yield 'page '.$page => [$page];
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_a_400_for_a_non_article()
     {
         $client = static::createClient();
@@ -273,9 +260,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertFalse($response->isCacheable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()
     {
         $client = static::createClient();
@@ -295,9 +280,7 @@ final class RecommendationsTest extends WebTestCase
         $this->assertFalse($client->getResponse()->isCacheable());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_a_500_if_an_api_fails()
     {
         $client = static::createClient();

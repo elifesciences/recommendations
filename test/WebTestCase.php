@@ -2,12 +2,16 @@
 
 namespace test\eLife\Recommendations;
 
-use Symfony\Component\HttpKernel\HttpKernelBrowser;
+use GuzzleHttp\HandlerStack;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 abstract class WebTestCase extends ApplicationTestCase
 {
-    final protected function createClient() : HttpKernelBrowser
+    final protected function createClient(): KernelBrowser
     {
-        return new HttpKernelBrowser($this->getApp());
+        static::bootKernel();
+        static::getContainer()->get(HandlerStack::class)->push($this->getMock());
+
+        return new KernelBrowser(static::$kernel);
     }
 }

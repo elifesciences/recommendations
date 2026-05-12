@@ -12,7 +12,7 @@ services:
         volumes:
             - ./.docker/nginx-default.conf:/etc/nginx/conf.d/default.conf
         ports:
-            - '8080:80'
+            - '8082:80'
         depends_on:
             fpm:
                 condition: service_healthy
