@@ -21,7 +21,7 @@ RUN composer --no-interaction dump-autoload --classmap-authoritative
 FROM ghcr.io/elifesciences/php:8.3-fpm AS app
 
 ENV PROJECT_FOLDER=/srv/recommendations
-ENV PHP_ENTRYPOINT=web/app.php
+ENV PHP_ENTRYPOINT=public/index.php
 WORKDIR ${PROJECT_FOLDER}
 
 USER root
@@ -29,7 +29,8 @@ RUN mkdir -p build var && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var
 
-COPY --chown=elife:elife web/ web/
+COPY --chown=elife:elife public/ public/
+COPY --chown=elife:elife config/ config/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
 

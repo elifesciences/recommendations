@@ -14,7 +14,7 @@ services:
 
     eLife\Recommendations\:
         resource: '../src/'
-        exclude: '../src/{Kernel.php,bootstrap.php,functions.php,ApiResponse.php}'
+        exclude: '../src/{Kernel.php,functions.php,ApiResponse.php}'
 
     eLife\Ping\PingController:
         tags: ['controller.service_arguments']

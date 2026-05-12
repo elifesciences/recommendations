@@ -16,10 +16,11 @@ services:
             - ./:/srv/recommendations
             - /srv/recommendations/build
             - /srv/recommendations/var
-            - .docker/config.php:/srv/recommendations/config.php
             - vendor:/srv/recommendations/vendor
         environment:
             - APP_ENV=${APP_ENV}
+            - API_URI=${API_URI}
+            - API_TIMEOUT=${API_TIMEOUT}
         depends_on:
             composer:
                 condition: service_completed_successfully
