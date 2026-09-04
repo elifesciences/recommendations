@@ -35,7 +35,7 @@
         "csa/guzzle-stopwatch-middleware": "^1.0",
         "elife/api": "^2.30",
         "elife/api-validator": "^1.0@dev",
-        "justinrainbow/json-schema": "^5.2",
+        "justinrainbow/json-schema": "^6.0",
         "phpunit/phpunit": "^9.2",
         "silexandfriends/web-profiler": "^3.1@DEV",
         "squizlabs/php_codesniffer": "^3.5",
