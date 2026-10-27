@@ -28,7 +28,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Project Tests
         run: docker compose -f docker-compose.yml -f docker-compose.ci.yml run ci
   build-and-push:
@@ -38,7 +38,7 @@ jobs:
     env:
       IMAGE_TAG: ${{ github.ref == 'refs/heads/master' && needs.generate-version.outputs.trunkver || format('{0}-{1}', github.head_ref || github.ref_name, needs.generate-version.outputs.trunkver) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
