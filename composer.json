@@ -27,7 +27,7 @@
         "psr/log": "^1.0",
         "silexandfriends/silex": "^3.1",
         "symfony/http-foundation": "^5.4",
-        "symfony/http-kernel": "^5.4",
+        "symfony/http-kernel": "^8.0",
         "willdurand/negotiation": "^3.1"
     },
     "require-dev": {
@@ -39,8 +39,8 @@
         "phpunit/phpunit": "^9.2",
         "silexandfriends/web-profiler": "^3.1@DEV",
         "squizlabs/php_codesniffer": "^3.5",
-        "symfony/browser-kit": "^5.4",
-        "symfony/psr-http-message-bridge": "^2.0",
+        "symfony/browser-kit": "^8.0",
+        "symfony/psr-http-message-bridge": "^8.0",
         "nyholm/psr7": "^1.1"
     },
     "config": {
